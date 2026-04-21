@@ -1,0 +1,21 @@
+node_modules
+dist
+.env
+.env.local
+*.log
+.DS_Store
+.vscode
+.idea
+coverage
+playwright-report
+test-results
+
+# Docker volumes (should never commit)
+docker/data
+
+# Deloitte contracts — NEVER commit
+samples/user/**
+!samples/user/.gitkeep
+
+# Fixtures committed — explicit allow
+!fixtures/**
