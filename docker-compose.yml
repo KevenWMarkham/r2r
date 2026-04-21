@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: noah-postgres
+    environment:
+      POSTGRES_DB: noah
+      POSTGRES_USER: noah
+      POSTGRES_PASSWORD: noah
+    ports:
+      - "5434:5432"
+    volumes:
+      - noah_pgdata:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/00-init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U noah -d noah"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  adminer:
+    image: adminer:latest
+    container_name: noah-adminer
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8081:8080"
+    profiles:
+      - tools
+
+volumes:
+  noah_pgdata:
