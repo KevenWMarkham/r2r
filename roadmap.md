@@ -24,10 +24,10 @@ Check off items as completed. Keep this in sync with commits (one backlog item p
 | PS-02 UC-07 Contract Extraction | 6 | 6 | 0 | 0 |
 | PS-03 UC-08 + UC-09 Risk/Tech-Acct | 3 | 3 | 0 | 0 |
 | PS-04 UC-10 Accrual/JE + Demo Polish | 6 | 6 | 0 | 0 |
-| PS-05 UC-18 + UC-20 Narrative | 6 | 0 | 0 | 0 |
+| PS-05 UC-18 + UC-20 Narrative | 6 | 6 | 0 | 0 |
 | PS-06 Canned Mode + Pages | 4 | 0 | 0 | 0 |
 | PS-Final Packaging & QA | 5 | 0 | 0 | 0 |
-| **Total** | **46** | **31** | **0** | **0** |
+| **Total** | **46** | **37** | **0** | **0** |
 
 ---
 
@@ -81,12 +81,12 @@ Check off items as completed. Keep this in sync with commits (one backlog item p
 
 ## PS-05 — Narrative Agent (UC-18, UC-20)
 
-- [ ] **BL.23** — Seed P&L dataset: 12–15 line items, current vs prior period, variance $ and %, entity split (NA/EMEA/GC/APLA), drivers string. Rich enough that Qwen can ground without fabricating.
-- [ ] **BL.24** — Variance commentary agent (UC-18): Qwen produces 2–3 sentence prose per line item grounded ONLY in supplied numbers; returns `{commentary, key_drivers[], risk_flags[], confidence}`.
-- [ ] **BL.25** — Executive summary agent (UC-20): takes close metrics + top variances + risks → `{headline, key_highlights[], risks[], recommendation}`. Board-ready tone.
-- [ ] **BL.26** — Adapter extension: `generateVarianceCommentary` + `generateExecutiveSummary` on Agent interface; LiveAgent wires events.
-- [ ] **BL.27** — Narrative screen (Variance Commentary tab): P&L grid + per-row Generate button + `CommentaryPanel` with streaming-style prose, drivers, risk flags, Copy-to-Clipboard, Accept/Edit.
-- [ ] **BL.28** — Exec Summary tab + Cockpit integration: Narrative screen second tab; Close Cockpit shows "Generate Close Narrative" at Gate phase → navigates to `/narrative?tab=exec&autorun`. Matches Demo Moment 4.
+- [x] **BL.23** — Seed P&L dataset: 13 line items across Revenue / COGS / Opex / Below-Line, current vs prior period, variance $ and %, entity split (NA/EMEA/GC/APLA), drivers string. Plus `topVariancesByDollar()` + `pnlAggregates()` helpers. ✅ 2026-04-21 (`src/data/seed-pnl.ts`)
+- [x] **BL.24** — Variance commentary agent (UC-18): Qwen produces 2–3 sentence prose grounded ONLY in supplied numbers; returns `{commentary, key_drivers[], risk_flags[], confidence}`. Graceful Ollama-failure fallback. ✅ 2026-04-21
+- [x] **BL.25** — Executive summary agent (UC-20): takes close metrics + top variances + risks → `{headline, key_highlights[], risks[], recommendation}`. Board-ready tone. ✅ 2026-04-21
+- [x] **BL.26** — Adapter extension: `generateVarianceCommentary` + `generateExecutiveSummary` on Agent interface; LiveAgent emits `narrative-variance` + `narrative-exec` step events. ✅ 2026-04-21
+- [x] **BL.27** — Narrative screen (Variance Commentary tab): `VarianceTable` (13 rows, sortable, per-row Generate + Generate All) + `CommentaryPanel` with prose, drivers, risk flags, confidence badge, Copy-to-Clipboard. ✅ 2026-04-21
+- [x] **BL.28** — Exec Summary tab + Cockpit integration: Narrative route with two tabs; `ExecSummaryCard` renders headline + highlights + risks + recommendation + Copy/Print. Close Cockpit renders "Generate Close Narrative" button at Gate phase → navigates to `/narrative?tab=exec&autorun=true` which auto-triggers generation. ✅ 2026-04-21
 
 ## PS-06 — Canned Mode + GitHub Pages
 

@@ -1,9 +1,10 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useCloseStore } from "@/store/closeStore";
 import PhaseGrid from "@/components/PhaseGrid";
 import EntityList from "@/components/EntityList";
 import EventLog from "@/components/EventLog";
-import { Play, Pause, RotateCcw } from "lucide-react";
+import { Play, Pause, RotateCcw, FileText } from "lucide-react";
 
 const TICK_MS = 1500;
 
@@ -75,9 +76,20 @@ export default function CloseCockpit() {
               <span className="font-display font-bold uppercase tracking-[1px] text-sm">
                 Close Progress
               </span>
-              <span className="font-mono text-xs text-brand-text-dim">
-                DAY {day} / 6 {activePhase ? `· ${activePhase.toUpperCase()}` : ""}
-              </span>
+              <div className="flex items-center gap-3">
+                {activePhase === "gate" && (
+                  <Link
+                    to="/narrative?tab=exec&autorun=true"
+                    className="font-display text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 bg-brand-accent text-black hover:opacity-80 flex items-center gap-1 animate-pulse"
+                  >
+                    <FileText size={11} />
+                    Generate Close Narrative
+                  </Link>
+                )}
+                <span className="font-mono text-xs text-brand-text-dim">
+                  DAY {day} / 6 {activePhase ? `· ${activePhase.toUpperCase()}` : ""}
+                </span>
+              </div>
             </div>
             <div className="w-full h-1 bg-brand-surface-alt mb-4 overflow-hidden">
               <div

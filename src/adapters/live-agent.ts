@@ -2,10 +2,18 @@ import { extractAttributes as runExtract } from "@/agents/extractor";
 import { scoreRisk as runScoreRisk } from "@/agents/risk";
 import { flagTechnicalAccounting as runFlagTech } from "@/agents/tech-accounting";
 import { runAccrualPipeline, AccrualGapError, type AccrualPipelineResult } from "@/agents/accrual";
+import {
+  generateVarianceCommentary as runVarianceCommentary,
+  generateExecutiveSummary as runExecutiveSummary,
+  type VarianceCommentary,
+  type ExecutiveSummary,
+  type ExecInputs,
+} from "@/agents/narrative";
 import { patchMetabase, recordAudit } from "@/lib/api-client";
 import type { ContractAttributes } from "@/agents/contract-schema";
 import type { RiskResult } from "@/agents/risk";
 import type { TechAccountingFlags } from "@/agents/tech-accounting";
+import type { PnLLine } from "@/data/seed-pnl";
 import type { Agent, AgentCallbacks, AgentStep, ExtractOutcome } from "./agent-interface";
 
 export class LiveAgent implements Agent {
@@ -121,6 +129,26 @@ export class LiveAgent implements Agent {
         }
         throw e;
       }
+    });
+  }
+
+  async generateVarianceCommentary(
+    line: PnLLine,
+    cb?: AgentCallbacks
+  ): Promise<VarianceCommentary> {
+    return this.runStep("narrative-variance", cb, async () => {
+      const result = await runVarianceCommentary(line);
+      return { outcome: result, detail: `${line.lineItem}: confidence ${result.confidence.toFixed(2)}` };
+    });
+  }
+
+  async generateExecutiveSummary(
+    inputs: ExecInputs,
+    cb?: AgentCallbacks
+  ): Promise<ExecutiveSummary> {
+    return this.runStep("narrative-exec", cb, async () => {
+      const result = await runExecutiveSummary(inputs);
+      return { outcome: result };
     });
   }
 

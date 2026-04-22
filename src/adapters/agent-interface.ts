@@ -2,6 +2,8 @@ import type { ContractAttributes } from "@/agents/contract-schema";
 import type { RiskResult } from "@/agents/risk";
 import type { TechAccountingFlags } from "@/agents/tech-accounting";
 import type { AccrualPipelineResult } from "@/agents/accrual";
+import type { VarianceCommentary, ExecutiveSummary, ExecInputs } from "@/agents/narrative";
+import type { PnLLine } from "@/data/seed-pnl";
 
 export type AgentStep =
   | "extract"
@@ -64,4 +66,10 @@ export interface Agent {
     opts?: { periodEnd?: Date; billedToDate?: number },
     cb?: AgentCallbacks
   ): Promise<AccrualPipelineResult>;
+
+  /** UC-18 — Variance commentary per P&L line item. */
+  generateVarianceCommentary(line: PnLLine, cb?: AgentCallbacks): Promise<VarianceCommentary>;
+
+  /** UC-20 — Executive close narrative. */
+  generateExecutiveSummary(inputs: ExecInputs, cb?: AgentCallbacks): Promise<ExecutiveSummary>;
 }
