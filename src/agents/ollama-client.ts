@@ -1,8 +1,14 @@
-import { OLLAMA_URL, QWEN_MODEL } from "@/config/env";
+// Unified LLM client — dispatches to Ollama (local Qwen) or Claude API.
+// Kept as `ollama-client.ts` so existing agent imports don't churn; the name
+// is historical. `OllamaError` is re-used as the generic error type so agent
+// error-handling doesn't need per-provider branches.
+import { OLLAMA_URL, QWEN_MODEL, IS_ANTHROPIC } from "@/config/env";
+import { chatJSONClaude, checkHealthClaude, ClaudeError } from "./claude-client";
 
 export class OllamaError extends Error {}
 
 export async function checkHealth(): Promise<boolean> {
+  if (IS_ANTHROPIC) return checkHealthClaude();
   try {
     const r = await fetch(`${OLLAMA_URL}/api/tags`);
     return r.ok;
@@ -19,6 +25,15 @@ export interface ChatArgs {
 }
 
 export async function chatJSON<T = unknown>(args: ChatArgs): Promise<T> {
+  if (IS_ANTHROPIC) {
+    try {
+      return await chatJSONClaude<T>(args);
+    } catch (e) {
+      if (e instanceof ClaudeError) throw new OllamaError(`[Claude] ${e.message}`);
+      throw e;
+    }
+  }
+
   const body = {
     model: QWEN_MODEL,
     stream: false,

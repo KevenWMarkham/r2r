@@ -12,8 +12,27 @@ Plus a **scripted close-cycle simulation** and **canned Acme public demo** deplo
 
 | Mode | What it's for | Stack | Setup |
 |---|---|---|---|
-| **Live (Nike theme)** | Internal demo on your laptop; real Qwen extraction against your contracts | React + Express + Postgres + Ollama | ~5 min, one-time |
+| **Live (Nike theme)** | Internal demo on your laptop; real LLM extraction against your contracts | React + Express + Postgres + LLM backend | ~5 min, one-time |
 | **Canned (Acme theme)** | Public/shareable link; pre-baked agent outputs | React static bundle only | Zero — visit the Pages URL |
+
+### LLM backend (live mode)
+
+Set via `VITE_LLM_PROVIDER` in `.env`:
+
+| Provider | Latency | Quality | Cost | Setup |
+|---|---|---|---|---|
+| `ollama` (default) | 1–5 min on CPU Qwen 7B; ~5–15s on GPU VPS | 21/27 @ 0.78 | free local / ~$0.50/hr GPU VPS | Ollama + `qwen2.5:7b` pulled |
+| `anthropic` | 3–8s per call | ~26/27 @ 0.92+ | ~$0.01–0.04 / contract | Paid Anthropic API key |
+
+Switch to Claude API by editing `.env`:
+```
+VITE_LLM_PROVIDER=anthropic
+VITE_ANTHROPIC_API_KEY=sk-ant-api03-...
+VITE_ANTHROPIC_MODEL=claude-haiku-4-5
+```
+Then restart Vite. The `ModeBanner` changes to violet to indicate Claude is active.
+
+**Security note:** Anthropic calls happen directly from the browser via `anthropic-dangerous-direct-browser-access: true` — acceptable for a personal demo laptop but not for Pages deploy. For production, proxy through the server.
 
 ---
 
