@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --brand-bg: #000000;
+    --brand-surface: #0d0d0d;
+    --brand-surface-alt: #1a1a1a;
+    --brand-accent: #C8FF00;
+    --brand-accent-dim: rgba(200, 255, 0, 0.12);
+    --brand-accent-glow: rgba(200, 255, 0, 0.25);
+    --brand-text: #ffffff;
+    --brand-text-muted: #b0b0b0;
+    --brand-text-dim: #707070;
+    --brand-border: #2e2e2e;
+    --status-green: #10b981;
+    --status-amber: #f59e0b;
+    --status-red: #ef4444;
+    --status-purple: #8b5cf6;
+    --status-cyan: #06b6d4;
+    --brand-font-display: "Barlow Condensed", sans-serif;
+    --brand-font-body: "Barlow", sans-serif;
+    --brand-font-mono: "JetBrains Mono", monospace;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--brand-font-body);
+    background: var(--brand-bg);
+    color: var(--brand-text);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  .pulse-dot {
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}

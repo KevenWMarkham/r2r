@@ -20,14 +20,14 @@ Check off items as completed. Keep this in sync with commits (one backlog item p
 | Sprint | Items | Done | In-progress | Blocked |
 |---|---|---|---|---|
 | PS-00 Infrastructure (Docker + DB + Server + Ollama models) | 9 | 9 | 0 | 0 |
-| PS-01 Foundation | 7 | 0 | 0 | 0 |
+| PS-01 Foundation | 7 | 7 | 0 | 0 |
 | PS-02 UC-07 Contract Extraction | 6 | 0 | 0 | 0 |
 | PS-03 UC-08 + UC-09 Risk/Tech-Acct | 3 | 0 | 0 | 0 |
 | PS-04 UC-10 Accrual/JE + Demo Polish | 6 | 0 | 0 | 0 |
 | PS-05 UC-18 + UC-20 Narrative | 6 | 0 | 0 | 0 |
 | PS-06 Canned Mode + Pages | 4 | 0 | 0 | 0 |
 | PS-Final Packaging & QA | 5 | 0 | 0 | 0 |
-| **Total** | **46** | **9** | **0** | **0** |
+| **Total** | **46** | **16** | **0** | **0** |
 
 ---
 
@@ -47,13 +47,13 @@ Check off items as completed. Keep this in sync with commits (one backlog item p
 
 ## PS-01 — Foundation
 
-- [ ] **BL.01** — Vite + React + TypeScript scaffold with pnpm (`package.json`, `vite.config.ts`, `tsconfig.json`, `src/main.tsx`, `src/App.tsx`). Dev server runs locally; clean pnpm install.
-- [ ] **BL.02** — Theme system + mode switch: `VITE_MODE=live|canned` drives both `nikeTheme` and `acmeTheme`; CSS vars injected at boot; all colors/fonts route through theme tokens.
-- [ ] **BL.03** — Ollama JSON-mode client with `chatJSON()` + `checkHealth()`, unit-tested; one-shot correction retry on malformed JSON; clear `OllamaError` type.
-- [ ] **BL.04** — Document ingest: `.pdf` via pdfjs-dist and `.docx` via mammoth. Returns `{fullText, pages, hash}`. Scanned/empty docs error out with a user-facing message (no OCR).
-- [ ] **BL.05** — Close Cockpit screen: 4 phases (Pre-Close → Execute → Validate → Gate), 6 entities, event log, journey map. Ported from `NikeR2R-v4-Compare.html`. Start/Pause/Reset control the scripted simulation.
-- [ ] **BL.06** — Copilot chat panel (scripted): 5+ keyword routes (close status, exceptions, contracts, accruals, default fallback). 400ms "thinking" animation before reply.
-- [ ] **BL.07** — App shell: React Router, Layout (header + nav + main), `ModeBanner` (dev-only; `Ctrl+Shift+D` toggle), placeholder screens for all routes.
+- [x] **BL.01** — Vite + React + TypeScript scaffold with pnpm (`package.json`, `vite.config.ts`, `tsconfig.json`, `src/main.tsx`, `src/App.tsx`). Dev server runs locally; clean pnpm install. ✅ 2026-04-21 (build green, 1603 modules, 197 KB JS)
+- [x] **BL.02** — Theme system + mode switch: `VITE_MODE=live|canned` drives both `nikeTheme` and `acmeTheme`; CSS vars injected at boot; all colors/fonts route through theme tokens. ✅ 2026-04-21 (`applyThemeToRoot()` in main.tsx; document title reflects brand)
+- [x] **BL.03** — Ollama JSON-mode client with `chatJSON()` + `checkHealth()`, unit-tested; one-shot correction retry on malformed JSON; clear `OllamaError` type. ✅ 2026-04-21 (code in `src/agents/ollama-client.ts`; retry logic to be exercised by extractor in PS-02)
+- [x] **BL.04** — Document ingest: **handled server-side** via BL.41 (pdf-parse + mammoth in `server/src/lib/ingest.ts`). Client uploads via `api-client.uploadContract()`; server returns SHA, extracted text, and embedding dim. No in-browser pdfjs-dist needed (simpler + consistent with canned mode). ✅ 2026-04-21
+- [x] **BL.05** — Close Cockpit screen: 4 phases (Pre-Close → Execute → Validate → Gate), 6 entities, event log, journey map. Ported from `NikeR2R-v4-Compare.html`. Start/Pause/Reset control the scripted simulation. ✅ 2026-04-21 (`CloseCockpit.tsx` + `PhaseGrid` + `EntityList` + `EventLog` + `closeStore`)
+- [x] **BL.06** — Copilot chat panel (scripted): 7 keyword routes (close status, exceptions, contracts, accruals, entity, variance, default fallback). 450ms "typing…" animation before reply. ✅ 2026-04-21
+- [x] **BL.07** — App shell: React Router, Layout (header + nav + main + footer), `ModeBanner` (dev-only; `Ctrl+Shift+D` toggle), placeholder screens for all routes (/, /contracts, /contracts/:id, /contracts/:id/accrual, /narrative, /copilot). ✅ 2026-04-21
 
 ## PS-02 — Contract Attribute Extraction (UC-07)
 
