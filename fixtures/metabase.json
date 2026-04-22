@@ -1,0 +1,486 @@
+{
+  "generated_at": "2026-04-21T00:00:00Z",
+  "mode": "synthetic-seed",
+  "note": "Pre-populated synthetic fixtures for the canned GitHub Pages demo. Run `pnpm generate-fixtures` server-side to replace with real Qwen outputs.",
+  "contracts": [
+    {
+      "id": "acme-contract-1",
+      "filename": "Contract_1_Advertising_Campaign.docx",
+      "file_type": "docx",
+      "byte_size": 12485,
+      "source": "sample_acme",
+      "uploaded_at": "2026-04-21T00:00:00Z",
+      "updated_at": "2026-04-21T00:00:00Z",
+      "counterparty": "Wieden+Kennedy LLC",
+      "tcv": "$8,400,000",
+      "lease_flagged": false,
+      "derivative_flagged": false,
+      "risk_score": 62,
+      "risk_category": "Medium",
+      "risk_reasons": [
+        "TCV > $5M ($8.4M)",
+        "No liability cap",
+        "Exclusivity clause creates concentration risk in creative-services category"
+      ],
+      "tech_acct_flags": {
+        "lease": { "flagged": false, "standard": null, "reasoning": "No identified asset under Acme's control." },
+        "derivative": { "flagged": false, "standard": null, "reasoning": "No pricing indexed to financial variables." },
+        "expense_method": "straight-line",
+        "requires_senior_review": false
+      },
+      "agent_status": { "extract": "done", "risk": "done", "techAcct": "done", "accrual": "done" },
+      "attributes": {
+        "counterparty": { "value": "Wieden+Kennedy LLC", "confidence": 1.0, "source_page": 1 },
+        "contract_type": { "value": "Master Services Agreement with SOW", "confidence": 1.0, "source_page": 1 },
+        "effective_date": { "value": "2026-02-01", "confidence": 1.0, "source_page": 1 },
+        "expiration_date": { "value": "2028-01-31", "confidence": 0.95, "source_page": 2 },
+        "total_contract_value": { "value": 8400000, "confidence": 1.0, "source_page": 2 },
+        "currency": { "value": "USD", "confidence": 1.0, "source_page": 2 },
+        "payment_terms": { "value": "Net 30", "confidence": 0.9, "source_page": 2 },
+        "billing_frequency": { "value": "monthly", "confidence": 1.0, "source_page": 2 },
+        "fee_schedule": { "value": "$350,000 monthly retainer", "confidence": 0.95, "source_page": 2 },
+        "service_description": { "value": "Brand creative and campaign development services", "confidence": 0.95, "source_page": 1 },
+        "service_start_date": { "value": "2026-02-01", "confidence": 1.0, "source_page": 1 },
+        "service_end_date": { "value": "2028-01-31", "confidence": 0.95, "source_page": 2 },
+        "auto_renewal": { "value": false, "confidence": 0.8, "source_page": 3 },
+        "termination_notice_days": { "value": 60, "confidence": 0.9, "source_page": 3 },
+        "governing_law": { "value": "Oregon", "confidence": 0.85, "source_page": 4 },
+        "indemnification_present": { "value": true, "confidence": 0.9, "source_page": 3 },
+        "liability_cap": { "value": false, "confidence": 0.75, "source_page": 3 },
+        "lease_component": { "value": false, "confidence": 0.95, "source_page": null },
+        "embedded_derivative": { "value": false, "confidence": 0.95, "source_page": null },
+        "expense_recognition_method": { "value": "straight-line", "confidence": 0.9, "source_page": null },
+        "performance_obligations": { "value": "Creative strategy, concept development, production oversight", "confidence": 0.85, "source_page": 1 },
+        "pricing_variability": { "value": "Fixed retainer + T&M overages above 150 hours/month", "confidence": 0.8, "source_page": 2 },
+        "minimum_commitment": { "value": "$350,000 monthly retainer", "confidence": 0.9, "source_page": 2 },
+        "exclusivity_clause": { "value": true, "confidence": 0.85, "source_page": 3 },
+        "ip_ownership": { "value": "Acme owns work product upon payment", "confidence": 0.9, "source_page": 3 },
+        "confidentiality_term": { "value": "5 years post-termination", "confidence": 0.9, "source_page": 4 },
+        "change_order_mechanism": { "value": "Written Change Order required", "confidence": 0.85, "source_page": 3 }
+      },
+      "proposed_je": {
+        "id": "JE-acme-con-2026-04",
+        "contractId": "acme-contract-1",
+        "period": "2026-04",
+        "description": "Accrual — Wieden+Kennedy LLC",
+        "lines": [
+          { "account": "6810", "accountName": "Services Expense", "debit": 350000, "credit": 0 },
+          { "account": "2310", "accountName": "Accrued Liabilities", "debit": 0, "credit": 350000 }
+        ],
+        "totalDebits": 350000,
+        "totalCredits": 350000,
+        "reversalDate": "2026-05-01",
+        "supportingCalc": "Straight-line: $350,000/month × 1.0 month elapsed (Feb-Apr service period) = $1,050,000 earned. Less $700,000 already billed (GR/IR): period accrual = $350,000.",
+        "clauseRefs": [
+          { "field": "total_contract_value", "page": 2 },
+          { "field": "fee_schedule", "page": 2 },
+          { "field": "service_start_date", "page": 1 },
+          { "field": "service_end_date", "page": 2 }
+        ]
+      },
+      "accrual_detail": {
+        "inputs": {
+          "fee_schedule_description": "$350,000 monthly retainer for 24-month term",
+          "total_fee_amount_string": "$8,400,000",
+          "currency": "USD",
+          "service_start_date": "2026-02-01",
+          "service_end_date": "2028-01-31",
+          "billing_frequency": "monthly",
+          "expense_recognition_method": "straight-line",
+          "missing": []
+        },
+        "calc": {
+          "periodAccrual": 350000,
+          "accruedCumulative": 1050000,
+          "monthlyRate": 350000,
+          "serviceMonths": 24,
+          "monthsElapsed": 3,
+          "reasoning": "Straight-line: $350,000/month × 3.0 months elapsed through 2026-04-30 = $1,050,000 earned. Less $700,000 already billed (GR/IR): period accrual = $350,000."
+        }
+      }
+    },
+    {
+      "id": "acme-contract-2",
+      "filename": "Contract_2_Professional_Services_Outsourcing.docx",
+      "file_type": "docx",
+      "byte_size": 12850,
+      "source": "sample_acme",
+      "uploaded_at": "2026-04-21T00:00:00Z",
+      "updated_at": "2026-04-21T00:00:00Z",
+      "counterparty": "Accenture LLP",
+      "tcv": "$24,000,000",
+      "lease_flagged": false,
+      "derivative_flagged": false,
+      "risk_score": 78,
+      "risk_category": "High",
+      "risk_reasons": [
+        "TCV > $10M ($24.0M)",
+        "Auto-renewal provision",
+        "No liability cap",
+        "Vendor concentration — top finance BPO provider"
+      ],
+      "tech_acct_flags": {
+        "lease": { "flagged": false, "standard": null, "reasoning": "Services engagement; no identifiable leased asset." },
+        "derivative": { "flagged": false, "standard": null, "reasoning": "Fees are fixed + T&M; no financial-variable indexing." },
+        "expense_method": "straight-line",
+        "requires_senior_review": false
+      },
+      "agent_status": { "extract": "done", "risk": "done", "techAcct": "done", "accrual": "done" },
+      "attributes": {
+        "counterparty": { "value": "Accenture LLP", "confidence": 1.0, "source_page": 1 },
+        "contract_type": { "value": "Managed Services Agreement", "confidence": 1.0, "source_page": 1 },
+        "effective_date": { "value": "2026-01-01", "confidence": 1.0, "source_page": 1 },
+        "expiration_date": { "value": "2028-12-31", "confidence": 1.0, "source_page": 2 },
+        "total_contract_value": { "value": 24000000, "confidence": 1.0, "source_page": 2 },
+        "currency": { "value": "USD", "confidence": 1.0, "source_page": 2 },
+        "payment_terms": { "value": "Net 45", "confidence": 0.9, "source_page": 2 },
+        "billing_frequency": { "value": "monthly", "confidence": 1.0, "source_page": 2 },
+        "fee_schedule": { "value": "$667,000 monthly base + T&M overages", "confidence": 0.9, "source_page": 2 },
+        "service_description": { "value": "Finance back-office BPO (AP, AR, month-end support)", "confidence": 0.9, "source_page": 1 },
+        "service_start_date": { "value": "2026-01-01", "confidence": 1.0, "source_page": 1 },
+        "service_end_date": { "value": "2028-12-31", "confidence": 1.0, "source_page": 2 },
+        "auto_renewal": { "value": true, "confidence": 0.9, "source_page": 3 },
+        "termination_notice_days": { "value": 180, "confidence": 0.9, "source_page": 3 },
+        "governing_law": { "value": "Delaware", "confidence": 0.95, "source_page": 4 },
+        "indemnification_present": { "value": true, "confidence": 0.95, "source_page": 3 },
+        "liability_cap": { "value": false, "confidence": 0.8, "source_page": 3 },
+        "lease_component": { "value": false, "confidence": 0.95, "source_page": null },
+        "embedded_derivative": { "value": false, "confidence": 0.95, "source_page": null },
+        "expense_recognition_method": { "value": "straight-line", "confidence": 0.9, "source_page": null },
+        "performance_obligations": { "value": "AP processing, AR collections, close support per defined SLAs", "confidence": 0.85, "source_page": 1 },
+        "pricing_variability": { "value": "Fixed base + volume-based overage band", "confidence": 0.85, "source_page": 2 },
+        "minimum_commitment": { "value": "$8M annual floor", "confidence": 0.85, "source_page": 2 },
+        "exclusivity_clause": { "value": false, "confidence": 0.8, "source_page": null },
+        "ip_ownership": { "value": "Acme retains data + workflow IP; vendor retains platform IP", "confidence": 0.85, "source_page": 3 },
+        "confidentiality_term": { "value": "7 years post-termination", "confidence": 0.9, "source_page": 4 },
+        "change_order_mechanism": { "value": "Written amendment + Steering Committee approval", "confidence": 0.85, "source_page": 3 }
+      },
+      "proposed_je": {
+        "id": "JE-acme-con-2026-04",
+        "contractId": "acme-contract-2",
+        "period": "2026-04",
+        "description": "Accrual — Accenture LLP",
+        "lines": [
+          { "account": "6810", "accountName": "Services Expense", "debit": 667000, "credit": 0 },
+          { "account": "2310", "accountName": "Accrued Liabilities", "debit": 0, "credit": 667000 }
+        ],
+        "totalDebits": 667000,
+        "totalCredits": 667000,
+        "reversalDate": "2026-05-01",
+        "supportingCalc": "Straight-line: $667,000/month × 4.0 months elapsed = $2,668,000 earned. Less $2,001,000 already billed: period accrual = $667,000.",
+        "clauseRefs": [
+          { "field": "total_contract_value", "page": 2 },
+          { "field": "fee_schedule", "page": 2 },
+          { "field": "billing_frequency", "page": 2 }
+        ]
+      },
+      "accrual_detail": {
+        "inputs": {
+          "fee_schedule_description": "$667,000 monthly base + T&M overages; 36-month term",
+          "total_fee_amount_string": "$24,000,000",
+          "currency": "USD",
+          "service_start_date": "2026-01-01",
+          "service_end_date": "2028-12-31",
+          "billing_frequency": "monthly",
+          "expense_recognition_method": "straight-line",
+          "missing": []
+        },
+        "calc": {
+          "periodAccrual": 667000,
+          "accruedCumulative": 2668000,
+          "monthlyRate": 667000,
+          "serviceMonths": 36,
+          "monthsElapsed": 4,
+          "reasoning": "Straight-line: $667,000/month × 4.0 months elapsed through 2026-04-30 = $2,668,000 earned. Less $2,001,000 already billed: period accrual = $667,000."
+        }
+      }
+    },
+    {
+      "id": "acme-contract-3",
+      "filename": "Contract_3_Insurance_MultiYear.docx",
+      "file_type": "docx",
+      "byte_size": 12485,
+      "source": "sample_acme",
+      "uploaded_at": "2026-04-21T00:00:00Z",
+      "updated_at": "2026-04-21T00:00:00Z",
+      "counterparty": "Chubb Commercial Insurance",
+      "tcv": "$15,000,000",
+      "lease_flagged": false,
+      "derivative_flagged": false,
+      "risk_score": 58,
+      "risk_category": "Medium",
+      "risk_reasons": [
+        "TCV > $10M ($15.0M)",
+        "Multi-year term with prepaid premium",
+        "Indemnification obligations to insurer"
+      ],
+      "tech_acct_flags": {
+        "lease": { "flagged": false, "standard": null, "reasoning": "Insurance contract; no right-to-use asset." },
+        "derivative": { "flagged": false, "standard": null, "reasoning": "Premium is fixed; no financial-variable indexing." },
+        "expense_method": "straight-line",
+        "requires_senior_review": false
+      },
+      "agent_status": { "extract": "done", "risk": "done", "techAcct": "done", "accrual": "done" },
+      "attributes": {
+        "counterparty": { "value": "Chubb Commercial Insurance", "confidence": 1.0, "source_page": 1 },
+        "contract_type": { "value": "Multi-Year Property & Casualty Insurance Policy", "confidence": 1.0, "source_page": 1 },
+        "effective_date": { "value": "2026-01-01", "confidence": 1.0, "source_page": 1 },
+        "expiration_date": { "value": "2028-12-31", "confidence": 1.0, "source_page": 1 },
+        "total_contract_value": { "value": 15000000, "confidence": 1.0, "source_page": 2 },
+        "currency": { "value": "USD", "confidence": 1.0, "source_page": 2 },
+        "payment_terms": { "value": "Annual prepayment", "confidence": 0.9, "source_page": 2 },
+        "billing_frequency": { "value": "annual", "confidence": 1.0, "source_page": 2 },
+        "fee_schedule": { "value": "$5,000,000 annual premium; prepaid at each anniversary", "confidence": 0.9, "source_page": 2 },
+        "service_description": { "value": "Property and casualty coverage for global operations", "confidence": 0.9, "source_page": 1 },
+        "service_start_date": { "value": "2026-01-01", "confidence": 1.0, "source_page": 1 },
+        "service_end_date": { "value": "2028-12-31", "confidence": 1.0, "source_page": 1 },
+        "auto_renewal": { "value": false, "confidence": 0.85, "source_page": 3 },
+        "termination_notice_days": { "value": 90, "confidence": 0.9, "source_page": 3 },
+        "governing_law": { "value": "New York", "confidence": 0.95, "source_page": 4 },
+        "indemnification_present": { "value": true, "confidence": 0.95, "source_page": 3 },
+        "liability_cap": { "value": true, "confidence": 0.9, "source_page": 3 },
+        "lease_component": { "value": false, "confidence": 0.95, "source_page": null },
+        "embedded_derivative": { "value": false, "confidence": 0.95, "source_page": null },
+        "expense_recognition_method": { "value": "straight-line", "confidence": 0.95, "source_page": null },
+        "performance_obligations": { "value": "Coverage per Declarations + claim handling", "confidence": 0.9, "source_page": 1 },
+        "pricing_variability": { "value": "Fixed premium; subject to loss-experience adjustment at renewal", "confidence": 0.85, "source_page": 2 },
+        "minimum_commitment": { "value": "$15M over 3 years", "confidence": 0.9, "source_page": 2 },
+        "exclusivity_clause": { "value": false, "confidence": 0.9, "source_page": null },
+        "ip_ownership": { "value": null, "confidence": 0.1, "source_page": null },
+        "confidentiality_term": { "value": "Policy term + 5 years", "confidence": 0.85, "source_page": 4 },
+        "change_order_mechanism": { "value": "Endorsement process", "confidence": 0.85, "source_page": 3 }
+      },
+      "proposed_je": {
+        "id": "JE-acme-con-2026-04",
+        "contractId": "acme-contract-3",
+        "period": "2026-04",
+        "description": "Accrual — Chubb Commercial Insurance",
+        "lines": [
+          { "account": "6820", "accountName": "Insurance Expense", "debit": 416667, "credit": 0 },
+          { "account": "1450", "accountName": "Prepaid Insurance", "debit": 0, "credit": 416667 }
+        ],
+        "totalDebits": 416667,
+        "totalCredits": 416667,
+        "reversalDate": "2026-05-01",
+        "supportingCalc": "Straight-line amortization of annual premium: $5,000,000 / 12 = $416,667/month. April 2026 recognition = $416,667. Offsets prepaid insurance asset.",
+        "clauseRefs": [
+          { "field": "total_contract_value", "page": 2 },
+          { "field": "fee_schedule", "page": 2 },
+          { "field": "service_start_date", "page": 1 }
+        ]
+      },
+      "accrual_detail": {
+        "inputs": {
+          "fee_schedule_description": "$5,000,000 annual premium prepaid at each anniversary",
+          "total_fee_amount_string": "$15,000,000",
+          "currency": "USD",
+          "service_start_date": "2026-01-01",
+          "service_end_date": "2028-12-31",
+          "billing_frequency": "annual",
+          "expense_recognition_method": "straight-line",
+          "missing": []
+        },
+        "calc": {
+          "periodAccrual": 416667,
+          "accruedCumulative": 1666667,
+          "monthlyRate": 416667,
+          "serviceMonths": 36,
+          "monthsElapsed": 4,
+          "reasoning": "Straight-line amortization of $5M annual prepaid premium = $416,667/month. 4 months elapsed YTD = $1,666,667 expensed. April period expense: $416,667."
+        }
+      }
+    },
+    {
+      "id": "acme-contract-4",
+      "filename": "Contract_4_Construction_Retail_Remodel.docx",
+      "file_type": "docx",
+      "byte_size": 13648,
+      "source": "sample_acme",
+      "uploaded_at": "2026-04-21T00:00:00Z",
+      "updated_at": "2026-04-21T00:00:00Z",
+      "counterparty": "Turner Construction",
+      "tcv": "$12,500,000",
+      "lease_flagged": false,
+      "derivative_flagged": false,
+      "risk_score": 82,
+      "risk_category": "High",
+      "risk_reasons": [
+        "TCV > $10M ($12.5M)",
+        "Fixed-price construction with scope creep risk",
+        "Performance bonds required",
+        "Multiple milestone-based draws — schedule slippage penalty exposure"
+      ],
+      "tech_acct_flags": {
+        "lease": { "flagged": false, "standard": null, "reasoning": "Acme owns the underlying real estate; construction is capex, not a lease." },
+        "derivative": { "flagged": false, "standard": null, "reasoning": "Fixed-price milestones; no financial-variable indexing." },
+        "expense_method": "direct-association",
+        "requires_senior_review": true
+      },
+      "agent_status": { "extract": "done", "risk": "done", "techAcct": "done", "accrual": "done" },
+      "attributes": {
+        "counterparty": { "value": "Turner Construction", "confidence": 1.0, "source_page": 1 },
+        "contract_type": { "value": "Fixed-Price Construction Agreement — Retail Store Remodel", "confidence": 1.0, "source_page": 1 },
+        "effective_date": { "value": "2026-03-01", "confidence": 1.0, "source_page": 1 },
+        "expiration_date": { "value": "2026-12-31", "confidence": 1.0, "source_page": 2 },
+        "total_contract_value": { "value": 12500000, "confidence": 1.0, "source_page": 2 },
+        "currency": { "value": "USD", "confidence": 1.0, "source_page": 2 },
+        "payment_terms": { "value": "Milestone-based, Net 30 from certified draw", "confidence": 0.9, "source_page": 2 },
+        "billing_frequency": { "value": "milestone", "confidence": 0.95, "source_page": 2 },
+        "fee_schedule": { "value": "5 milestone draws: 10%/20%/30%/30%/10%", "confidence": 0.9, "source_page": 2 },
+        "service_description": { "value": "Remodel of 42 retail stores — demo, buildout, fixtures, commissioning", "confidence": 0.9, "source_page": 1 },
+        "service_start_date": { "value": "2026-03-01", "confidence": 1.0, "source_page": 1 },
+        "service_end_date": { "value": "2026-12-31", "confidence": 0.95, "source_page": 2 },
+        "auto_renewal": { "value": false, "confidence": 0.95, "source_page": null },
+        "termination_notice_days": { "value": 30, "confidence": 0.85, "source_page": 3 },
+        "governing_law": { "value": "Oregon", "confidence": 0.9, "source_page": 4 },
+        "indemnification_present": { "value": true, "confidence": 0.95, "source_page": 3 },
+        "liability_cap": { "value": false, "confidence": 0.8, "source_page": 3 },
+        "lease_component": { "value": false, "confidence": 0.9, "source_page": null },
+        "embedded_derivative": { "value": false, "confidence": 0.95, "source_page": null },
+        "expense_recognition_method": { "value": "direct-association", "confidence": 0.85, "source_page": null },
+        "performance_obligations": { "value": "Turnkey delivery of 42 stores per milestone schedule", "confidence": 0.9, "source_page": 1 },
+        "pricing_variability": { "value": "Fixed; change orders through separate process", "confidence": 0.85, "source_page": 3 },
+        "minimum_commitment": { "value": "$12.5M fixed", "confidence": 0.9, "source_page": 2 },
+        "exclusivity_clause": { "value": false, "confidence": 0.85, "source_page": null },
+        "ip_ownership": { "value": "Acme owns constructed improvements + designs", "confidence": 0.85, "source_page": 3 },
+        "confidentiality_term": { "value": "2 years post-completion", "confidence": 0.85, "source_page": 4 },
+        "change_order_mechanism": { "value": "Written Change Order + PM signoff + 48-hr escalation", "confidence": 0.9, "source_page": 3 }
+      },
+      "proposed_je": {
+        "id": "JE-acme-con-2026-04",
+        "contractId": "acme-contract-4",
+        "period": "2026-04",
+        "description": "Accrual — Turner Construction (Store Remodel)",
+        "lines": [
+          { "account": "1810", "accountName": "Construction in Progress", "debit": 2500000, "credit": 0 },
+          { "account": "2310", "accountName": "Accrued Liabilities", "debit": 0, "credit": 2500000 }
+        ],
+        "totalDebits": 2500000,
+        "totalCredits": 2500000,
+        "reversalDate": "2026-05-01",
+        "supportingCalc": "Milestone-2 (20% draw) certified April 28. $2,500,000 earned and not yet invoiced. Capitalized to CIP pending commissioning.",
+        "clauseRefs": [
+          { "field": "fee_schedule", "page": 2 },
+          { "field": "performance_obligations", "page": 1 }
+        ]
+      },
+      "accrual_detail": {
+        "inputs": {
+          "fee_schedule_description": "5 milestone draws: 10%/20%/30%/30%/10% of $12.5M",
+          "total_fee_amount_string": "$12,500,000",
+          "currency": "USD",
+          "service_start_date": "2026-03-01",
+          "service_end_date": "2026-12-31",
+          "billing_frequency": "milestone",
+          "expense_recognition_method": "direct-association",
+          "missing": []
+        },
+        "calc": {
+          "periodAccrual": 2500000,
+          "accruedCumulative": 3750000,
+          "monthlyRate": 0,
+          "serviceMonths": 10,
+          "monthsElapsed": 2,
+          "reasoning": "Direct-association per milestone certification. Milestones 1 + 2 certified (10% + 20% = $3,750,000 cumulative). April 2026 accrual: milestone 2 earned but unbilled = $2,500,000."
+        }
+      }
+    },
+    {
+      "id": "acme-contract-5",
+      "filename": "Contract_5_AWS_Enterprise.docx",
+      "file_type": "docx",
+      "byte_size": 14222,
+      "source": "sample_acme",
+      "uploaded_at": "2026-04-21T00:00:00Z",
+      "updated_at": "2026-04-21T00:00:00Z",
+      "counterparty": "Amazon Web Services, Inc.",
+      "tcv": "$45,000,000",
+      "lease_flagged": false,
+      "derivative_flagged": true,
+      "risk_score": 85,
+      "risk_category": "High",
+      "risk_reasons": [
+        "TCV > $10M ($45.0M)",
+        "Auto-renewal provision",
+        "Embedded pricing escalator indexed to CPI-U (ASC 815 review)",
+        "Data-sovereignty obligations span 4 regions",
+        "Minimum-commitment structure with true-up"
+      ],
+      "tech_acct_flags": {
+        "lease": { "flagged": false, "standard": null, "reasoning": "Cloud consumption; no identified physical asset Acme controls." },
+        "derivative": { "flagged": true, "standard": "ASC 815", "reasoning": "Pricing contains CPI-U indexed escalator capped at 6% — requires embedded-derivative evaluation and potential bifurcation." },
+        "expense_method": "straight-line",
+        "requires_senior_review": true
+      },
+      "agent_status": { "extract": "done", "risk": "done", "techAcct": "done", "accrual": "done" },
+      "attributes": {
+        "counterparty": { "value": "Amazon Web Services, Inc.", "confidence": 1.0, "source_page": 1 },
+        "contract_type": { "value": "Enterprise Cloud Services Agreement", "confidence": 1.0, "source_page": 1 },
+        "effective_date": { "value": "2026-01-01", "confidence": 1.0, "source_page": 1 },
+        "expiration_date": { "value": "2028-12-31", "confidence": 1.0, "source_page": 2 },
+        "total_contract_value": { "value": 45000000, "confidence": 0.95, "source_page": 2 },
+        "currency": { "value": "USD", "confidence": 1.0, "source_page": 2 },
+        "payment_terms": { "value": "Monthly; Net 30", "confidence": 0.9, "source_page": 2 },
+        "billing_frequency": { "value": "monthly", "confidence": 1.0, "source_page": 2 },
+        "fee_schedule": { "value": "$1.25M monthly minimum + usage overages; CPI escalator annually", "confidence": 0.9, "source_page": 2 },
+        "service_description": { "value": "AWS EC2/S3/RDS/Lambda + premium support across 4 regions", "confidence": 0.9, "source_page": 1 },
+        "service_start_date": { "value": "2026-01-01", "confidence": 1.0, "source_page": 1 },
+        "service_end_date": { "value": "2028-12-31", "confidence": 1.0, "source_page": 2 },
+        "auto_renewal": { "value": true, "confidence": 0.95, "source_page": 3 },
+        "termination_notice_days": { "value": 180, "confidence": 0.9, "source_page": 3 },
+        "governing_law": { "value": "Washington", "confidence": 0.95, "source_page": 4 },
+        "indemnification_present": { "value": true, "confidence": 0.95, "source_page": 3 },
+        "liability_cap": { "value": true, "confidence": 0.85, "source_page": 3 },
+        "lease_component": { "value": false, "confidence": 0.9, "source_page": null },
+        "embedded_derivative": { "value": true, "confidence": 0.85, "source_page": 2 },
+        "expense_recognition_method": { "value": "straight-line", "confidence": 0.85, "source_page": null },
+        "performance_obligations": { "value": "Uptime SLA + support response; single performance obligation", "confidence": 0.85, "source_page": 1 },
+        "pricing_variability": { "value": "CPI-U indexed escalator capped 6% annually", "confidence": 0.9, "source_page": 2 },
+        "minimum_commitment": { "value": "$15M annual minimum spend with true-up", "confidence": 0.9, "source_page": 2 },
+        "exclusivity_clause": { "value": false, "confidence": 0.9, "source_page": null },
+        "ip_ownership": { "value": "Acme retains data; AWS retains platform", "confidence": 0.9, "source_page": 3 },
+        "confidentiality_term": { "value": "5 years post-termination", "confidence": 0.9, "source_page": 4 },
+        "change_order_mechanism": { "value": "Click-through order forms for adds; written amendment for commercial terms", "confidence": 0.85, "source_page": 3 }
+      },
+      "proposed_je": {
+        "id": "JE-acme-con-2026-04",
+        "contractId": "acme-contract-5",
+        "period": "2026-04",
+        "description": "Accrual — Amazon Web Services",
+        "lines": [
+          { "account": "6840", "accountName": "Cloud Infrastructure Expense", "debit": 1250000, "credit": 0 },
+          { "account": "2310", "accountName": "Accrued Liabilities", "debit": 0, "credit": 1250000 }
+        ],
+        "totalDebits": 1250000,
+        "totalCredits": 1250000,
+        "reversalDate": "2026-05-01",
+        "supportingCalc": "Straight-line: $1,250,000/month minimum commitment. 4 months elapsed = $5,000,000 earned. Billed through March = $3,750,000. April accrual = $1,250,000.",
+        "clauseRefs": [
+          { "field": "total_contract_value", "page": 2 },
+          { "field": "fee_schedule", "page": 2 },
+          { "field": "embedded_derivative", "page": 2 }
+        ]
+      },
+      "accrual_detail": {
+        "inputs": {
+          "fee_schedule_description": "$1.25M monthly minimum + usage overages; CPI escalator annually capped 6%",
+          "total_fee_amount_string": "$45,000,000",
+          "currency": "USD",
+          "service_start_date": "2026-01-01",
+          "service_end_date": "2028-12-31",
+          "billing_frequency": "monthly",
+          "expense_recognition_method": "straight-line",
+          "missing": []
+        },
+        "calc": {
+          "periodAccrual": 1250000,
+          "accruedCumulative": 5000000,
+          "monthlyRate": 1250000,
+          "serviceMonths": 36,
+          "monthsElapsed": 4,
+          "reasoning": "Straight-line minimum: $1,250,000/month × 4 months = $5,000,000 earned. Less $3,750,000 billed through March: period accrual = $1,250,000. NOTE: ASC 815 embedded-derivative review required before Q3 escalator effective date."
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "generated_at": "2026-04-21T00:00:00Z",
+  "mode": "synthetic-seed",
+  "note": "Pre-populated narrative fixtures for the canned Pages demo. Keys match seed-pnl.ts line IDs; exec key is reserved for the close summary.",
+  "variance": {
+    "rev-dtc": {
+      "commentary": "Direct-to-Consumer revenue rose $135M (+5.0%) to $2.85B, led by 3% volume growth and a 2% price uplift across premium lines. FX was a modest 0.5% headwind but mix improvement of 0.5% largely neutralized it. Performance aligns with the channel-investment thesis; no one-time items flagged.",
+      "key_drivers": ["Volume +3%", "Price +2%", "Mix +0.5%", "FX -0.5%"],
+      "risk_flags": [],
+      "confidence": 0.92
+    },
+    "rev-wholesale": {
+      "commentary": "Wholesale revenue declined $175M (-4.1%) to $4.12B, driven by -2% volume contraction tied to key-account destocking in North America. EMEA remained resilient. No accounting or disclosure concerns, but concentration exposure to top 3 accounts warrants continued monitoring.",
+      "key_drivers": ["Volume -2%", "NA key-account destocking"],
+      "risk_flags": ["Concentration risk — top 3 accounts"],
+      "confidence": 0.9
+    },
+    "rev-licensing": {
+      "commentary": "Licensing & royalty revenue grew $14M (+10.9%) to $142M, propelled by new licensee expansion in Greater China and favorable royalty-rate mix. Growth is consistent with prior quarters' trajectory; no disclosure triggers identified.",
+      "key_drivers": ["GC licensee expansion", "Favorable royalty-rate mix"],
+      "risk_flags": [],
+      "confidence": 0.88
+    },
+    "cogs-product": {
+      "commentary": "Product cost of sales increased $125M (+3.4%) to $3.84B despite 1.5% material deflation, as higher freight rates and a shift toward premium SKUs offset input savings. Margin compression is modest but trending; procurement should validate freight-cost trajectory for Q3.",
+      "key_drivers": ["Freight rates +8%", "Premium mix shift"],
+      "risk_flags": ["Material deflation may reverse; monitor commodity exposure"],
+      "confidence": 0.9
+    },
+    "cogs-logistics": {
+      "commentary": "Logistics and distribution costs decreased $35M (-8.3%) to $385M, benefiting from lower ocean freight rates and improved DC throughput in EMEA. Favorable variance reflects operational wins; trend expected to stabilize in H2.",
+      "key_drivers": ["Ocean freight -12%", "EMEA DC throughput +6%"],
+      "risk_flags": [],
+      "confidence": 0.93
+    },
+    "opex-demand-creation": {
+      "commentary": "Demand creation expense grew $130M (+12.4%) to $1.18B, reflecting front-loaded campaign investment for the Q2 product launch and an 18% YoY increase in digital spend. Spend is above plan; ROAS measurement will be critical at the next variance review.",
+      "key_drivers": ["Campaign launch investment", "Digital spend +18%"],
+      "risk_flags": ["Above plan — validate ROAS against campaign KPIs"],
+      "confidence": 0.88
+    },
+    "opex-sga": {
+      "commentary": "Selling, general, and administrative expense grew $53M (+3.1%) to $1.75B, consistent with FX-neutral wage inflation (~3%) and a planned 4% corporate headcount investment. No unusual items identified.",
+      "key_drivers": ["Headcount investment +4%", "Wage inflation ~3%"],
+      "risk_flags": [],
+      "confidence": 0.94
+    },
+    "opex-rd": {
+      "commentary": "Research, design, and development expense rose $16M (+9.9%) to $178M, driven by the innovation center expansion and a new materials science initiative. Growth rate is above aggregate opex (~3%); strategic rather than operational.",
+      "key_drivers": ["Innovation center ramp", "Materials science initiative"],
+      "risk_flags": [],
+      "confidence": 0.9
+    },
+    "opex-store-ops": {
+      "commentary": "Store operations expense grew $17M (+4.3%) to $412M, with lease expense up 4% from renewals and labor up 3% at minimum-wage locations. Increases align with prior guidance; no disclosure triggers.",
+      "key_drivers": ["Lease renewals +4%", "Minimum-wage labor +3%"],
+      "risk_flags": [],
+      "confidence": 0.92
+    },
+    "opex-da": {
+      "commentary": "Depreciation and amortization rose $16M (+8.1%) to $214M, reflecting technology modernization capex coming online and DC automation rollouts. Trajectory matches the capex plan communicated in the FY budget.",
+      "key_drivers": ["Tech modernization in-service", "DC automation"],
+      "risk_flags": [],
+      "confidence": 0.93
+    },
+    "below-interest": {
+      "commentary": "Net interest expense rose $13M (+37.1%) to $48M on higher short-term borrowings and an elevated rate environment. Movement is consistent with treasury's funding strategy; no refinancing events this quarter.",
+      "key_drivers": ["Short-term borrowings +25%", "Rate environment"],
+      "risk_flags": ["Review whether to lock longer-duration debt"],
+      "confidence": 0.9
+    },
+    "below-other": {
+      "commentary": "Other income/(expense) swung $40M unfavorably to ($22M), driven by FX translation losses on APLA exposure and the prior-period gain on an asset sale not repeating. Majority of variance is non-operating.",
+      "key_drivers": ["APLA FX losses", "No repeat of prior asset-sale gain"],
+      "risk_flags": ["FX exposure may persist — treasury to evaluate hedging"],
+      "confidence": 0.87
+    },
+    "below-tax": {
+      "commentary": "Income tax expense declined $14M (-5.8%) to $228M with an effective rate of 20.8% vs 21.6% prior, aided by discrete benefits in EMEA. Rate trend favorable; discrete items should be disclosed per SEC guidance.",
+      "key_drivers": ["Effective rate 20.8% vs 21.6%", "EMEA discrete benefits"],
+      "risk_flags": ["Ensure discrete-item disclosure in 10-Q"],
+      "confidence": 0.91
+    }
+  },
+  "exec": {
+    "headline": "Q2 FY26 close completed in 5.2 days — 35% ahead of target — with DTC strength offsetting wholesale destocking.",
+    "key_highlights": [
+      "Close cycle: 5.2 days vs 8-day target; auto-certification rate 82%",
+      "Direct-to-Consumer revenue +$135M (+5.0%) on volume + price",
+      "Wholesale -$175M (-4.1%) on NA key-account destocking",
+      "Demand creation spend +$130M YoY — campaign investment front-loaded",
+      "Gross margin compression modest (~40bps) from freight + premium mix"
+    ],
+    "risks": [
+      "FX translation pressure on APLA exposure — $22M unfavorable below-line",
+      "Demand creation spend above plan; validate ROAS before Q3",
+      "AWS Enterprise embedded-derivative (CPI escalator) ASC 815 review required"
+    ],
+    "recommendation": "Proceed to consolidation; flag AWS ASC 815 review and APLA FX hedging strategy for controller steering committee."
+  }
+}
