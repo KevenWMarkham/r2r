@@ -1,0 +1,10 @@
+{
+  "filename": "Contract_3_Insurance_MultiYear.docx",
+  "must_contain": {
+    "contract_type": "Insurance",
+    "currency": "USD"
+  },
+  "must_flag_true": [],
+  "min_avg_confidence": 0.55,
+  "min_high_confidence_count": 12
+}

@@ -1,0 +1,9 @@
+{
+  "filename": "Contract_2_Professional_Services_Outsourcing.docx",
+  "must_contain": {
+    "currency": "USD"
+  },
+  "must_flag_true": [],
+  "min_avg_confidence": 0.55,
+  "min_high_confidence_count": 14
+}

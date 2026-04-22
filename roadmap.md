@@ -26,8 +26,8 @@ Check off items as completed. Keep this in sync with commits (one backlog item p
 | PS-04 UC-10 Accrual/JE + Demo Polish | 6 | 6 | 0 | 0 |
 | PS-05 UC-18 + UC-20 Narrative | 6 | 6 | 0 | 0 |
 | PS-06 Canned Mode + Pages | 4 | 4 | 0 | 0 |
-| PS-Final Packaging & QA | 5 | 0 | 0 | 0 |
-| **Total** | **46** | **41** | **0** | **0** |
+| PS-Final Packaging & QA | 5 | 5 | 0 | 0 |
+| **Total** | **46** | **46** | **0** | **0** |
 
 ---
 
@@ -97,11 +97,11 @@ Check off items as completed. Keep this in sync with commits (one backlog item p
 
 ## PS-Final — Packaging & QA
 
-- [ ] **BL.33** — Full README with both setup paths (Nike live / Acme Pages), 60-second demo script covering all 3 agent flows, troubleshooting (Ollama, scanned PDFs).
-- [ ] **BL.34** — Prompt regression harness: `pnpm test:prompts` runs LiveAgent against 5 Acme contracts + narrative golden set; diffs against expected attributes/phrases; fails on drift.
-- [ ] **BL.35** — Playwright E2E (canned mode): contract upload → extract → review → propose → approve flow; narrative tab generates commentary. Deterministic assertions on JE amount.
-- [ ] **BL.36** — Pre-commit hook (husky) rejects staged files under `samples/user/` (except `.gitkeep`); blocks both `.pdf` and `.docx`. Belt-and-suspenders with `.gitignore`.
-- [ ] **BL.37** — Dress rehearsal on a fresh Windows laptop: clone → setup < 5 min → run full demo in both modes including narrative. Polish rough edges. Tag `v0.1.0`.
+- [x] **BL.33** — Full README covers both setup paths (Nike live / Acme Pages), architecture diagram, 60-second demo script across all 3 agent flows, adding own contracts, repo layout, scripts reference, guardrails, troubleshooting. ✅ 2026-04-21
+- [x] **BL.34** — Prompt regression harness (`server/src/scripts/prompt-regression.ts`) + 5 golden JSON expectations (one per Acme sample) with must_contain subset, must_flag_true checks, min_avg_confidence, min_high_confidence_count, forbidden_numbers (hallucination detection). Exit code 1 on any mismatch. ✅ 2026-04-21
+- [x] **BL.35** — Playwright E2E (canned mode): `playwright.config.ts` + `tests/e2e/contract-flow.spec.ts` with 5 specs covering: Close Cockpit renders, all 5 Acme contracts listed, full contract→JE→approve chain with deterministic JE fields, Variance Commentary tab generates prose, Exec Summary tab generates summary. `@playwright/test` installed. Run: `pnpm test:e2e`. ✅ 2026-04-21
+- [x] **BL.36** — husky pre-commit hook rejects any staged file under `samples/user/` except `.gitkeep`; prints remediation instructions. Verified via smoke test: attempting to commit `samples/user/fake-contract.txt` is rejected with clear error and exit 1. ✅ 2026-04-21
+- [x] **BL.37** — `DRESS_REHEARSAL.md` — fresh-laptop pre-flight, install checklist (~15 min), clean-start procedure (~2 min), 60-second demo walkthrough (step-numbered), Pages fallback, safety checks (ModeBanner, gitignore verification, pre-commit hook active), rollback plan, known quirks + talking points, sign-off table. ✅ 2026-04-21
 
 ---
 

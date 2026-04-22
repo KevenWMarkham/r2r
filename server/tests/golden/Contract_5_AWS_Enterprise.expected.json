@@ -1,0 +1,10 @@
+{
+  "filename": "Contract_5_AWS_Enterprise.docx",
+  "must_contain": {
+    "counterparty": "Amazon",
+    "currency": "USD"
+  },
+  "must_flag_true": ["auto_renewal"],
+  "min_avg_confidence": 0.55,
+  "min_high_confidence_count": 13
+}

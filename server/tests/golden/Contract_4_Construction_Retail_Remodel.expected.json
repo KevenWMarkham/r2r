@@ -1,0 +1,10 @@
+{
+  "filename": "Contract_4_Construction_Retail_Remodel.docx",
+  "must_contain": {
+    "contract_type": "Construction",
+    "currency": "USD"
+  },
+  "must_flag_true": [],
+  "min_avg_confidence": 0.55,
+  "min_high_confidence_count": 12
+}

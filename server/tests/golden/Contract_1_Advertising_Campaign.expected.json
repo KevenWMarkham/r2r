@@ -1,0 +1,12 @@
+{
+  "filename": "Contract_1_Advertising_Campaign.docx",
+  "must_contain": {
+    "counterparty": "Wieden",
+    "contract_type": "Master Services",
+    "currency": "USD"
+  },
+  "must_flag_true": [],
+  "min_avg_confidence": 0.55,
+  "min_high_confidence_count": 15,
+  "forbidden_numbers": ["999999999", "123456789"]
+}

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+#
+# Pre-commit hook — block committing anything from samples/user/ except .gitkeep.
+# samples/user/ is for Deloitte contracts that must never be committed.
+#
+# To bypass in emergency (do NOT bypass for Deloitte contracts):
+#   git commit --no-verify
+#
+set -e
+
+staged=$(git diff --cached --name-only | grep -E '^samples/user/' | grep -v '/\.gitkeep$' || true)
+
+if [ -n "$staged" ]; then
+  echo ""
+  echo "ERROR: Pre-commit rejected — attempted to commit file(s) from samples/user/:"
+  echo ""
+  printf '  %s\n' $staged
+  echo ""
+  echo "samples/user/ is gitignored for Deloitte contracts."
+  echo ""
+  echo "If these are NOT confidential Deloitte contracts and belong in the public"
+  echo "set, move them to samples/acme/ and regenerate fixtures:"
+  echo ""
+  echo "  git restore --staged samples/user/..."
+  echo "  git mv samples/user/FILE samples/acme/FILE"
+  echo "  cd server && pnpm seed && pnpm tsx src/scripts/generate-fixtures.ts"
+  echo ""
+  exit 1
+fi
