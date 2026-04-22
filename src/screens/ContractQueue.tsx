@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { listContracts, uploadContract, type ContractSummary } from "@/lib/api-client";
+import OllamaGuard from "@/components/OllamaGuard";
 import { FileText, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
@@ -15,6 +16,13 @@ export default function ContractQueue() {
       setLoading(true);
       setError(null);
       const list = await listContracts();
+      // Sort: risk_score desc (null last), then filename asc
+      list.sort((a, b) => {
+        const aR = a.risk_score ?? -1;
+        const bR = b.risk_score ?? -1;
+        if (aR !== bR) return bR - aR;
+        return a.filename.localeCompare(b.filename);
+      });
       setContracts(list);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : String(e));
@@ -43,6 +51,7 @@ export default function ContractQueue() {
   };
 
   return (
+    <OllamaGuard>
     <div className="space-y-8">
       <div>
         <h1 className="font-display text-4xl font-extrabold uppercase tracking-tight">Contracts</h1>
@@ -143,5 +152,6 @@ export default function ContractQueue() {
         )}
       </div>
     </div>
+    </OllamaGuard>
   );
 }

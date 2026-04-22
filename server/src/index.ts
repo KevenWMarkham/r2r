@@ -1,3 +1,9 @@
+import { Agent, setGlobalDispatcher } from "undici";
+
+// Node's default undici fetch has a 30s headersTimeout; Qwen extraction can take
+// 60-180s. Raise global timeouts so server-side LLM calls don't die prematurely.
+setGlobalDispatcher(new Agent({ headersTimeout: 600_000, bodyTimeout: 600_000 }));
+
 import express from "express";
 import cors from "cors";
 import { contractsRouter } from "./routes/contracts.js";
