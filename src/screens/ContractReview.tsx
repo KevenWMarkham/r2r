@@ -142,6 +142,12 @@ export default function ContractReview() {
                 >
                   Tech-Acct only
                 </button>
+                <Link
+                  to={`/contracts/${id}/accrual`}
+                  className="px-3 py-2 bg-brand-surface-alt border border-brand-border font-display font-bold uppercase text-xs tracking-wider hover:border-brand-accent hover:text-brand-accent"
+                >
+                  → Accrual
+                </Link>
               </>
             )}
           </div>

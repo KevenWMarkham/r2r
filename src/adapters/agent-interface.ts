@@ -1,6 +1,7 @@
 import type { ContractAttributes } from "@/agents/contract-schema";
 import type { RiskResult } from "@/agents/risk";
 import type { TechAccountingFlags } from "@/agents/tech-accounting";
+import type { AccrualPipelineResult } from "@/agents/accrual";
 
 export type AgentStep =
   | "extract"
@@ -53,4 +54,14 @@ export interface Agent {
     fullText: string,
     cb?: AgentCallbacks
   ): Promise<TechAccountingFlags>;
+
+  /** UC-10 — Accrual extraction + deterministic math + proposed JE. */
+  calculateAccrual(
+    contractId: string,
+    counterparty: string,
+    attributes: ContractAttributes,
+    fullText: string,
+    opts?: { periodEnd?: Date; billedToDate?: number },
+    cb?: AgentCallbacks
+  ): Promise<AccrualPipelineResult>;
 }

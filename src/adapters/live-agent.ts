@@ -1,6 +1,7 @@
 import { extractAttributes as runExtract } from "@/agents/extractor";
 import { scoreRisk as runScoreRisk } from "@/agents/risk";
 import { flagTechnicalAccounting as runFlagTech } from "@/agents/tech-accounting";
+import { runAccrualPipeline, AccrualGapError, type AccrualPipelineResult } from "@/agents/accrual";
 import { patchMetabase, recordAudit } from "@/lib/api-client";
 import type { ContractAttributes } from "@/agents/contract-schema";
 import type { RiskResult } from "@/agents/risk";
@@ -78,6 +79,48 @@ export class LiveAgent implements Agent {
         },
       }).catch(() => undefined);
       return { outcome: result };
+    });
+  }
+
+  async calculateAccrual(
+    contractId: string,
+    counterparty: string,
+    attributes: ContractAttributes,
+    fullText: string,
+    opts?: { periodEnd?: Date; billedToDate?: number },
+    cb?: AgentCallbacks
+  ): Promise<AccrualPipelineResult> {
+    return this.runStep("accrual", cb, async () => {
+      try {
+        const result = await runAccrualPipeline(attributes, fullText, {
+          contractId,
+          counterparty,
+          periodEnd: opts?.periodEnd,
+          billedToDate: opts?.billedToDate,
+        });
+        await patchMetabase(contractId, {
+          proposed_je: result.je as unknown as Record<string, unknown>,
+          agent_status: { accrual: "done" },
+        });
+        await recordAudit({
+          event_type: "accrual",
+          contract_id: contractId,
+          agent: "accrual",
+          payload: {
+            period_accrual: result.calc.periodAccrual,
+            total_debits: result.je.totalDebits,
+            reversal_date: result.je.reversalDate,
+          },
+        }).catch(() => undefined);
+        return { outcome: result };
+      } catch (e) {
+        if (e instanceof AccrualGapError) {
+          await patchMetabase(contractId, {
+            agent_status: { accrual: "missing_inputs" },
+          }).catch(() => undefined);
+        }
+        throw e;
+      }
     });
   }
 

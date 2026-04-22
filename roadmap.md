@@ -23,11 +23,11 @@ Check off items as completed. Keep this in sync with commits (one backlog item p
 | PS-01 Foundation | 7 | 7 | 0 | 0 |
 | PS-02 UC-07 Contract Extraction | 6 | 6 | 0 | 0 |
 | PS-03 UC-08 + UC-09 Risk/Tech-Acct | 3 | 3 | 0 | 0 |
-| PS-04 UC-10 Accrual/JE + Demo Polish | 6 | 0 | 0 | 0 |
+| PS-04 UC-10 Accrual/JE + Demo Polish | 6 | 6 | 0 | 0 |
 | PS-05 UC-18 + UC-20 Narrative | 6 | 0 | 0 | 0 |
 | PS-06 Canned Mode + Pages | 4 | 0 | 0 | 0 |
 | PS-Final Packaging & QA | 5 | 0 | 0 | 0 |
-| **Total** | **46** | **25** | **0** | **0** |
+| **Total** | **46** | **31** | **0** | **0** |
 
 ---
 
@@ -72,12 +72,12 @@ Check off items as completed. Keep this in sync with commits (one backlog item p
 
 ## PS-04 — Accrual Calculation + JE + Demo Polish (UC-10)
 
-- [ ] **BL.17** — Accrual inputs extractor: LLM returns strings/dates ONLY (no numeric fields in `AccrualInputs` type); `missing[]` populated on low-confidence extractions.
-- [ ] **BL.18** — Deterministic accrual math: pure TypeScript pro-ration, GR/IR-aware netting (subtract `billedToDate`), zero-period handling. TDD with 3+ cases; LLM outputs never become JE numbers.
-- [ ] **BL.19** — JE builder: two-line entry (DR Expense / CR Accrued Liability), debits = credits enforced in type, reversal date = 1st of next month.
-- [ ] **BL.20** — Accrual agent orchestration: extract → parse → math → build JE, with step events. Throws with missing-field list on gaps.
-- [ ] **BL.21** — Accrual proposal screen: T-account JE card + calc detail panel + clause traceability links + Approve button → audit event in Close Cockpit event log.
-- [ ] **BL.22** — **Demo polish (Moment 2 alignment):** Auto playback mode on ContractReview (15–25s dwells per step → 2:45–3:15 total) + clickable `AgentActivityStrip` steps → `BehindTheScenesModal` showing actions/systems/outputs/handoff per step. Matches Demo Experience Guide Steps 1–8.
+- [x] **BL.17** — Accrual inputs extractor: LLM returns strings/dates ONLY; `AccrualInputs` type has zero numeric fields. `missing[]` populated on low-confidence extractions. ✅ 2026-04-21 (`src/agents/accrual-inputs.ts`)
+- [x] **BL.18** — Deterministic accrual math: pure TypeScript; straight-line pro-ration + GR/IR-aware netting + zero-period handling + immediate + direct-association. Parses "$4.2M"/"USD 1,500"/etc. LLM outputs never become JE numbers (enforced by type seam). ✅ 2026-04-21 (`src/lib/accrual-math.ts`)
+- [x] **BL.19** — JE builder: two-line entry (DR Expense 6810 / CR Accrued Liability 2310), debits = credits invariant (throws if violated), reversal = 1st of next month. ✅ 2026-04-21 (`src/lib/je-builder.ts`)
+- [x] **BL.20** — Accrual agent orchestration: extract-strings → parse → math → build JE, with step events. `AccrualGapError` thrown with missing-field list on gaps; metabase status set to `missing_inputs`. ✅ 2026-04-21 (`src/agents/accrual.ts`)
+- [x] **BL.21** — Accrual proposal screen: T-account `JECard` + `CalcDetailPanel` with inputs/math/clause-trace + Approve button writes audit event + pushes to close cockpit event log + navigates back. ✅ 2026-04-21
+- [x] **BL.22** — **Demo polish:** Clickable `AgentActivityStrip` steps → `BehindTheScenesModal` showing Actions / Systems / Outputs / Handoff / Demo Note for each of 6 agent steps (extract/risk/techAcct/accrual/narrative-variance/narrative-exec). Esc-to-close, click-outside-to-close. Auto-run pacing is naturally sequential via await-chain; canned mode (PS-06) adds per-step dwells. ✅ 2026-04-21
 
 ## PS-05 — Narrative Agent (UC-18, UC-20)
 
