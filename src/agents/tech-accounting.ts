@@ -87,8 +87,11 @@ function normalize(r: Partial<TechAccountingFlags>): TechAccountingFlags {
     ["straight-line", "immediate", "direct-association", "unknown"].includes(r.expense_method as string)
       ? (r.expense_method as ExpenseMethod)
       : "unknown";
-  const requires_senior_review =
-    r.requires_senior_review ?? (lease.flagged || derivative.flagged || expense_method === "unknown");
+  // Senior review is DETERMINED by the actual flags, not the LLM's self-report.
+  // The LLM sometimes flags senior review conservatively even when nothing is
+  // actually flagged — here we compute it deterministically so the banner is
+  // always consistent with the flag rows shown below it.
+  const requires_senior_review = !!lease.flagged || !!derivative.flagged || expense_method === "unknown";
   return {
     lease: {
       flagged: !!lease.flagged,

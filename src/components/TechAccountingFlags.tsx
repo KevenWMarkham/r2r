@@ -22,9 +22,18 @@ export default function TechAccountingFlagsPanel({
     );
   }
 
+  // Compute the senior-review banner from the actual flag values rather than
+  // trusting the stored requires_senior_review field — guards against stale
+  // or inconsistent data where the LLM flagged review without a real trigger.
+  const reasons: string[] = [];
+  if (flags.lease.flagged) reasons.push(`ASC ${flags.lease.standard ?? "lease"} lease component`);
+  if (flags.derivative.flagged) reasons.push("ASC 815 embedded derivative");
+  if (flags.expense_method === "unknown") reasons.push("unresolved expense method");
+  const needsReview = reasons.length > 0;
+
   return (
     <div className="space-y-3">
-      {flags.requires_senior_review && (
+      {needsReview && (
         <div className="flex items-start gap-2 border border-status-amber bg-status-amber/10 p-3">
           <AlertTriangle size={16} className="text-status-amber flex-shrink-0 mt-0.5" />
           <div>
@@ -32,7 +41,7 @@ export default function TechAccountingFlagsPanel({
               Mandatory Senior Review
             </div>
             <div className="text-xs text-brand-text-muted mt-0.5">
-              Flagged due to lease, derivative, or unresolved expense method.
+              Triggered by: {reasons.join(" · ")}.
             </div>
           </div>
         </div>
