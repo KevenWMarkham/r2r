@@ -5,6 +5,7 @@ import ModeBanner from "./ModeBanner";
 const navItems = [
   { to: "/", label: "Close Cockpit", end: true },
   { to: "/contracts", label: "Contracts" },
+  { to: "/review", label: "Review Queue" },
   { to: "/narrative", label: "Narrative" },
   { to: "/copilot", label: "Copilot" },
 ];

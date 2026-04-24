@@ -202,6 +202,87 @@ export async function auditEvents(contractId?: string, limit = 100): Promise<Aud
   return request(`/api/audit${qs}`);
 }
 
+// ── Journal Entry lifecycle (PS-07) ─────────────────────────────────────────
+export type JEStatus =
+  | "draft" | "submitted" | "approved" | "rejected" | "posted" | "reversed" | "voided";
+
+export type MaterialityTier = "standard" | "manager" | "controller" | "exec";
+
+export interface ProposedJERecord {
+  id: string;
+  contract_id: string;
+  status: JEStatus;
+  period: string;
+  je_body: Record<string, unknown>;
+  materiality_tier: MaterialityTier | null;
+  total_amount: string;          // numeric from pg returns as string
+  prepared_by: string;
+  submitted_at: string | null;
+  approved_by: string | null;
+  approved_at: string | null;
+  rejected_by: string | null;
+  rejected_at: string | null;
+  rejected_reason: string | null;
+  posted_at: string | null;
+  posting_ref: string | null;
+  reversal_date: string;
+  reversed_at: string | null;
+  reversal_ref: string | null;
+  created_at: string;
+  updated_at: string;
+  // Joined from contracts/metabase
+  filename?: string;
+  counterparty?: string | null;
+}
+
+export async function submitJE(payload: {
+  contract_id: string;
+  period: string;
+  je_body: Record<string, unknown>;
+  total_amount: number;
+  reversal_date: string;
+  prepared_by?: string;
+}): Promise<ProposedJERecord> {
+  if (IS_CANNED) throw new ApiError("JE submit disabled in canned mode", 400);
+  return request("/api/je", { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function listJEQueue(tier?: MaterialityTier): Promise<ProposedJERecord[]> {
+  if (IS_CANNED) return [];
+  const qs = tier ? `?tier=${tier}` : "";
+  return request(`/api/je/queue${qs}`);
+}
+
+export async function getJE(id: string): Promise<ProposedJERecord> {
+  return request(`/api/je/${id}`);
+}
+
+export async function listJEsForContract(contractId: string): Promise<ProposedJERecord[]> {
+  if (IS_CANNED) return [];
+  return request(`/api/je/by-contract/${contractId}`);
+}
+
+export async function approveJE(id: string, approvedBy = "Rachel"): Promise<ProposedJERecord> {
+  if (IS_CANNED) throw new ApiError("JE approve disabled in canned mode", 400);
+  return request(`/api/je/${id}/approve`, {
+    method: "POST",
+    body: JSON.stringify({ approved_by: approvedBy }),
+  });
+}
+
+export async function rejectJE(id: string, reason: string, rejectedBy = "Rachel"): Promise<ProposedJERecord> {
+  if (IS_CANNED) throw new ApiError("JE reject disabled in canned mode", 400);
+  return request(`/api/je/${id}/reject`, {
+    method: "POST",
+    body: JSON.stringify({ rejected_by: rejectedBy, reason }),
+  });
+}
+
+export async function runReversals(): Promise<{ count: number; reversed: Array<{ id: string; reversal_ref: string }> }> {
+  if (IS_CANNED) return { count: 0, reversed: [] };
+  return request("/api/je/run-reversals", { method: "POST" });
+}
+
 export async function recordAudit(ev: {
   event_type: string;
   contract_id?: string;

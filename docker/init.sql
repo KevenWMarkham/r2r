@@ -123,6 +123,46 @@ CREATE TABLE IF NOT EXISTS pnl_lines (
 COMMENT ON TABLE pnl_lines IS 'Seed P&L data powering UC-18 Variance Commentary and UC-20 Executive Narrative.';
 
 -- =============================================================================
+-- proposed_journal_entries — JE lifecycle (UC-11 · UC-15 · PS-07)
+-- =============================================================================
+CREATE TABLE IF NOT EXISTS proposed_journal_entries (
+    id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    contract_id       UUID NOT NULL REFERENCES contracts(id) ON DELETE CASCADE,
+    status            TEXT NOT NULL DEFAULT 'draft'
+                      CHECK (status IN ('draft','submitted','approved','rejected','posted','reversed','voided')),
+    period            TEXT NOT NULL,
+    je_body           JSONB NOT NULL,
+    materiality_tier  TEXT CHECK (materiality_tier IN ('standard','manager','controller','exec')),
+    total_amount      NUMERIC(18, 2) NOT NULL,
+
+    prepared_by       TEXT NOT NULL,
+    submitted_at      TIMESTAMPTZ,
+    approved_by       TEXT,
+    approved_at       TIMESTAMPTZ,
+    rejected_by       TEXT,
+    rejected_at       TIMESTAMPTZ,
+    rejected_reason   TEXT,
+    posted_at         TIMESTAMPTZ,
+    posting_ref       TEXT,
+    reversal_date     DATE NOT NULL,
+    reversed_at       TIMESTAMPTZ,
+    reversal_ref      TEXT,
+
+    created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_pje_contract        ON proposed_journal_entries(contract_id);
+CREATE INDEX IF NOT EXISTS idx_pje_status          ON proposed_journal_entries(status);
+CREATE INDEX IF NOT EXISTS idx_pje_materiality     ON proposed_journal_entries(materiality_tier) WHERE status = 'submitted';
+CREATE INDEX IF NOT EXISTS idx_pje_reversal_ready  ON proposed_journal_entries(reversal_date) WHERE status = 'posted';
+
+DROP TRIGGER IF EXISTS trg_pje_touch ON proposed_journal_entries;
+CREATE TRIGGER trg_pje_touch
+  BEFORE UPDATE ON proposed_journal_entries
+  FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
+
+-- =============================================================================
 -- Dev convenience view — one-row summary per contract
 -- =============================================================================
 CREATE OR REPLACE VIEW v_contract_summary AS

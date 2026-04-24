@@ -10,6 +10,7 @@ import { contractsRouter } from "./routes/contracts.js";
 import { searchRouter } from "./routes/search.js";
 import { auditRouter } from "./routes/audit.js";
 import { metabaseRouter } from "./routes/metabase.js";
+import { jeRouter } from "./routes/je.js";
 import { pool } from "./db.js";
 
 const PORT = Number(process.env.PORT ?? 3001);
@@ -31,6 +32,7 @@ app.use("/api/contracts", contractsRouter);
 app.use("/api/metabase", metabaseRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/audit", auditRouter);
+app.use("/api/je", jeRouter);
 
 // 404 + error handlers
 app.use((_req, res) => res.status(404).json({ error: "Not found" }));
