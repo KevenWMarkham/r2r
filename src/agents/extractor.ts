@@ -61,7 +61,7 @@ export async function extractAttributes(fullText: string): Promise<ExtractorResu
 
   const parsed = ContractAttributesSchema.safeParse(raw);
   if (parsed.success) {
-    return { attributes: parsed.data, degraded: false, raw };
+    return { attributes: reconcileAliases(parsed.data), degraded: false, raw };
   }
 
   // Partial parse: try to salvage individual fields from the raw response
@@ -77,9 +77,36 @@ export async function extractAttributes(fullText: string): Promise<ExtractorResu
     }
   }
   return {
-    attributes: salvaged,
+    attributes: reconcileAliases(salvaged),
     degraded: true,
     raw,
     warning: `Partial schema match — ${parsed.error.issues.length} fields invalid, rendering nulls for those.`,
   };
+}
+
+// Post-process pass: the 27-attribute schema has several near-duplicate pairs
+// (effective_date ≈ service_start_date; expiration_date ≈ service_end_date).
+// Smaller models reliably populate one alias but leave the twin null. Reconcile
+// them deterministically here — this is ALIAS RESOLUTION, not derivation, so we
+// keep the same value + confidence + source_page and just mirror it across.
+function reconcileAliases(attrs: ContractAttributes): ContractAttributes {
+  const out = { ...attrs } as ContractAttributes;
+  const raw = out as unknown as Record<string, { value: unknown; confidence: number; source_page: number | null }>;
+
+  const mirror = (primary: string, alias: string) => {
+    const p = raw[primary];
+    const a = raw[alias];
+    const pHas = p && p.value !== null && p.confidence > 0;
+    const aHas = a && a.value !== null && a.confidence > 0;
+    if (pHas && !aHas) {
+      raw[alias] = { ...p!, confidence: Math.max(0.6, p!.confidence - 0.2) }; // slight penalty to flag derived
+    } else if (!pHas && aHas) {
+      raw[primary] = { ...a!, confidence: Math.max(0.6, a!.confidence - 0.2) };
+    }
+  };
+
+  mirror("effective_date", "service_start_date");
+  mirror("expiration_date", "service_end_date");
+
+  return out;
 }
