@@ -43,11 +43,49 @@ export function parseDate(input: string): Date | null {
 }
 
 // ── Core calculation ────────────────────────────────────────────────────────
+
+// Calendar-month-proration between two dates, INCLUSIVE on both ends.
+// A contract active Apr 1 through Apr 30 is 30 days of service = 1.0 full month,
+// not 29/30 days. This matches standard accrual accounting: you accrue for each
+// day the service was active, and day-of-start counts.
+//
+// Examples:
+//   Apr 1 → Apr 30         = 1.00 month  (30/30 days in April)
+//   Mar 1 → Apr 30         = 2.00 months (full March + full April)
+//   Jan 1 → Dec 31         = 12.00 months (full year)
+//   Apr 1 → Apr 14         = 0.47 month  (14/30 days of April)
+//   Mar 15 → Apr 14        = 1.01 months (~half of March + ~half of April)
+//   Feb 1 2025 → Feb 28    = 1.00 month  (full February, 28/28)
 function monthsBetween(a: Date, b: Date): number {
-  const years = b.getFullYear() - a.getFullYear();
-  const months = b.getMonth() - a.getMonth();
-  const dayFrac = (b.getDate() - a.getDate()) / 30; // approximate
-  return years * 12 + months + dayFrac;
+  if (b <= a) return 0;
+  const aY = a.getFullYear(), aM = a.getMonth(), aD = a.getDate();
+  const bY = b.getFullYear(), bM = b.getMonth(), bD = b.getDate();
+  const daysInMonth = (y: number, m: number) => new Date(y, m + 1, 0).getDate();
+
+  // Same month: inclusive day-count / days-in-month
+  if (aY === bY && aM === bM) {
+    return (bD - aD + 1) / daysInMonth(aY, aM);
+  }
+
+  // Partial start month: from aD through end of start month (inclusive)
+  const startDays = daysInMonth(aY, aM);
+  const startPortion = (startDays - aD + 1) / startDays;
+
+  // Partial end month: from 1st of end month through bD (inclusive)
+  const endDays = daysInMonth(bY, bM);
+  const endPortion = bD / endDays;
+
+  // Full calendar months strictly between start and end
+  let middle = 0;
+  let y = aY, m = aM + 1;
+  if (m >= 12) { m = 0; y++; }
+  while (y < bY || (y === bY && m < bM)) {
+    middle++;
+    m++;
+    if (m >= 12) { m = 0; y++; }
+  }
+
+  return startPortion + middle + endPortion;
 }
 
 function round2(n: number): number {
