@@ -7,7 +7,7 @@
     "dev": "vite",
     "dev:canned": "cross-env VITE_MODE=canned vite",
     "build": "tsc -b && vite build",
-    "build:pages": "cross-env VITE_MODE=canned vite build --base=/nike-r2r-demo/",
+    "build:pages": "cross-env VITE_MODE=canned vite build --base=/r2r/",
     "preview": "vite preview",
     "lint": "tsc --noEmit",
     "test": "vitest run",
