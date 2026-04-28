@@ -40,6 +40,11 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          # Auto-enable Pages on first run so we don't need to flip the
+          # "Source" dropdown manually in repo settings. Requires the
+          # GITHUB_TOKEN to have pages:write (set in permissions block above).
+          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
