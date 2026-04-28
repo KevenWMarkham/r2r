@@ -1,4 +1,13 @@
 import { API_URL, IS_CANNED } from "@/config/env";
+import {
+  cannedSubmitJE,
+  cannedListJEQueue,
+  cannedListJEsForContract,
+  cannedApproveJE,
+  cannedRejectJE,
+  cannedRunReversals,
+  cannedAuditEvents,
+} from "./canned-je-store";
 import { getFixtureContracts, getFixtureContract } from "./fixtures";
 
 export class ApiError extends Error {
@@ -103,7 +112,17 @@ export async function deleteContract(id: string): Promise<void> {
 }
 
 export function blobUrl(id: string): string {
-  if (IS_CANNED) return "#";
+  if (IS_CANNED) {
+    // In canned mode the docx files ship in /public/samples/acme/, so Vite
+    // serves them as static assets at /samples/acme/<filename>.
+    // We look up the filename from the fixture by id.
+    const c = getFixtureContract(id);
+    if (!c) return "#";
+    // Use BASE_URL so this works both locally (`/`) and on GitHub Pages
+    // (`/nike-r2r-demo/`) without changing the link.
+    const base = import.meta.env.BASE_URL || "/";
+    return `${base.replace(/\/$/, "")}/samples/acme/${encodeURIComponent(c.filename)}`;
+  }
   return `${API_URL}/api/contracts/${id}/blob`;
 }
 
@@ -195,7 +214,7 @@ export interface AuditEvent {
 }
 
 export async function auditEvents(contractId?: string, limit = 100): Promise<AuditEvent[]> {
-  if (IS_CANNED) return [];
+  if (IS_CANNED) return cannedAuditEvents(contractId, limit);
   const qs = contractId
     ? `?contract_id=${encodeURIComponent(contractId)}&limit=${limit}`
     : `?limit=${limit}`;
@@ -243,12 +262,12 @@ export async function submitJE(payload: {
   reversal_date: string;
   prepared_by?: string;
 }): Promise<ProposedJERecord> {
-  if (IS_CANNED) throw new ApiError("JE submit disabled in canned mode", 400);
+  if (IS_CANNED) return cannedSubmitJE(payload);
   return request("/api/je", { method: "POST", body: JSON.stringify(payload) });
 }
 
 export async function listJEQueue(tier?: MaterialityTier): Promise<ProposedJERecord[]> {
-  if (IS_CANNED) return [];
+  if (IS_CANNED) return cannedListJEQueue(tier);
   const qs = tier ? `?tier=${tier}` : "";
   return request(`/api/je/queue${qs}`);
 }
@@ -258,20 +277,20 @@ export async function getJE(id: string): Promise<ProposedJERecord> {
 }
 
 export async function listJEsForContract(contractId: string): Promise<ProposedJERecord[]> {
-  if (IS_CANNED) return [];
+  if (IS_CANNED) return cannedListJEsForContract(contractId);
   return request(`/api/je/by-contract/${contractId}`);
 }
 
-export async function approveJE(id: string, approvedBy = "Rachel"): Promise<ProposedJERecord> {
-  if (IS_CANNED) throw new ApiError("JE approve disabled in canned mode", 400);
+export async function approveJE(id: string, approvedBy = "SG&A Manager"): Promise<ProposedJERecord> {
+  if (IS_CANNED) return cannedApproveJE(id, approvedBy);
   return request(`/api/je/${id}/approve`, {
     method: "POST",
     body: JSON.stringify({ approved_by: approvedBy }),
   });
 }
 
-export async function rejectJE(id: string, reason: string, rejectedBy = "Rachel"): Promise<ProposedJERecord> {
-  if (IS_CANNED) throw new ApiError("JE reject disabled in canned mode", 400);
+export async function rejectJE(id: string, reason: string, rejectedBy = "SG&A Manager"): Promise<ProposedJERecord> {
+  if (IS_CANNED) return cannedRejectJE(id, reason, rejectedBy);
   return request(`/api/je/${id}/reject`, {
     method: "POST",
     body: JSON.stringify({ rejected_by: rejectedBy, reason }),
@@ -279,7 +298,7 @@ export async function rejectJE(id: string, reason: string, rejectedBy = "Rachel"
 }
 
 export async function runReversals(): Promise<{ count: number; reversed: Array<{ id: string; reversal_ref: string }> }> {
-  if (IS_CANNED) return { count: 0, reversed: [] };
+  if (IS_CANNED) return cannedRunReversals();
   return request("/api/je/run-reversals", { method: "POST" });
 }
 

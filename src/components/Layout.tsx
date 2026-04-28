@@ -3,11 +3,11 @@ import { theme } from "@/theme";
 import ModeBanner from "./ModeBanner";
 
 const navItems = [
-  { to: "/", label: "Close Cockpit", end: true },
   { to: "/contracts", label: "Contracts" },
   { to: "/review", label: "Review Queue" },
   { to: "/narrative", label: "Narrative" },
-  { to: "/copilot", label: "Copilot" },
+  { to: "/copilot", label: "NOAH Help" },
+  { to: "/", label: "Close Cockpit", end: true, pushRight: true },
 ];
 
 export default function Layout() {
@@ -34,13 +34,13 @@ export default function Layout() {
         </div>
       </header>
       <nav className="sticky top-16 z-40 bg-black/90 backdrop-blur border-b border-brand-border px-10 flex gap-0 overflow-x-auto">
-        {navItems.map(({ to, label, end }) => (
+        {navItems.map(({ to, label, end, pushRight }) => (
           <NavLink
             key={to}
             to={to}
             end={end}
             className={({ isActive }) =>
-              `px-6 py-3 font-display text-sm font-semibold uppercase tracking-[1px] border-b-2 whitespace-nowrap transition-colors ${
+              `${pushRight ? "ml-auto" : ""} px-6 py-3 font-display text-sm font-semibold uppercase tracking-[1px] border-b-2 whitespace-nowrap transition-colors ${
                 isActive
                   ? "text-brand-text border-brand-accent"
                   : "text-brand-text-muted border-transparent hover:text-brand-text"

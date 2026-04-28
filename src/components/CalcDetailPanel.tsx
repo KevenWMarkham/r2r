@@ -34,26 +34,28 @@ export default function CalcDetailPanel({ inputs, calc, je }: Props) {
         <div className="bg-black/40 border border-brand-border p-3 font-mono text-[11px] text-brand-text-muted leading-relaxed space-y-1">
           <div>
             Monthly rate:{" "}
-            <span className="text-brand-text">${calc.monthlyRate.toLocaleString()}</span>
+            <span className="text-brand-text">
+              {calc.monthlyRate != null ? `$${calc.monthlyRate.toLocaleString()}` : "(milestone-based — no monthly rate)"}
+            </span>
           </div>
           <div>
             Service months:{" "}
-            <span className="text-brand-text">{calc.serviceMonths.toFixed(1)}</span>
+            <span className="text-brand-text">{(calc.serviceMonths ?? 0).toFixed(1)}</span>
           </div>
           <div>
             Months elapsed:{" "}
-            <span className="text-brand-text">{calc.monthsElapsed.toFixed(1)}</span>
+            <span className="text-brand-text">{(calc.monthsElapsed ?? 0).toFixed(1)}</span>
           </div>
           <div>
             Cumulative earned:{" "}
             <span className="text-brand-text">
-              ${calc.accruedCumulative.toLocaleString()}
+              ${(calc.accruedCumulative ?? 0).toLocaleString()}
             </span>
           </div>
           <div className="pt-1 border-t border-brand-border/60 mt-1">
             Period accrual:{" "}
             <span className="text-brand-accent font-bold">
-              ${calc.periodAccrual.toLocaleString()}
+              ${(calc.periodAccrual ?? 0).toLocaleString()}
             </span>
           </div>
         </div>

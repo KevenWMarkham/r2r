@@ -35,7 +35,21 @@ export function getFixtureContracts(): ContractSummary[] {
 }
 
 export function getFixtureContract(id: string): FixtureContract | null {
-  return contracts.find((c) => c.id === id) ?? null;
+  const c = contracts.find((c) => c.id === id);
+  if (!c) return null;
+  // The canned fixtures intentionally don't bundle the full contract text
+  // (it bloats the bundle by ~150KB × 11). The agent screens guard on
+  // `contract.full_text` before running the agent chain — a missing value
+  // would silently disable every "Run / Risk / Tech-Acct / Compute" button.
+  // The canned agent doesn't actually read full_text, so a synthetic stub
+  // unblocks the buttons without changing behavior.
+  if (!c.full_text) {
+    return {
+      ...c,
+      full_text: `[Canned-mode stub] Contract: ${c.filename}\nCounterparty: ${c.counterparty ?? "n/a"}\nTCV: ${c.tcv ?? "n/a"}\n\nFull document text is omitted in canned mode for bundle-size reasons. Live mode (VITE_MODE=live) loads the real contract text from Postgres.`,
+    };
+  }
+  return c;
 }
 
 export function getFixtureVarianceCommentary(lineId: string): VarianceCommentary | null {

@@ -59,7 +59,7 @@ export default function CommentaryPanel({ line, commentary, running }: Props) {
       {running ? (
         <div className="flex items-center gap-2 text-status-amber font-mono text-xs">
           <Loader2 size={14} className="animate-spin" />
-          Qwen drafting commentary…
+          NOAH drafting commentary…
         </div>
       ) : commentary ? (
         <>

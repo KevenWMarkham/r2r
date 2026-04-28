@@ -7,6 +7,8 @@ import AttributeChecklist from "@/components/AttributeChecklist";
 import RiskPanel from "@/components/RiskPanel";
 import TechAccountingFlagsPanel from "@/components/TechAccountingFlags";
 import OllamaGuard from "@/components/OllamaGuard";
+import ContractWireframe from "@/components/ContractWireframe";
+import { IS_CANNED } from "@/config/env";
 import type { ContractAttributes } from "@/agents/contract-schema";
 import type { RiskResult } from "@/agents/risk";
 import type { TechAccountingFlags } from "@/agents/tech-accounting";
@@ -178,11 +180,15 @@ export default function ContractReview() {
                 <FileText size={12} /> Open original
               </a>
             </div>
-            {contract.full_text && (
-              <div className="max-h-[560px] overflow-y-auto whitespace-pre-wrap text-[12px] font-mono text-brand-text-muted bg-black/40 border border-brand-border p-3 leading-relaxed">
-                {contract.full_text.slice(0, 6000)}
-                {contract.full_text.length > 6000 ? "\n\n…(truncated)" : ""}
-              </div>
+            {IS_CANNED ? (
+              <ContractWireframe contract={contract} />
+            ) : (
+              contract.full_text && (
+                <div className="max-h-[560px] overflow-y-auto whitespace-pre-wrap text-[12px] font-mono text-brand-text-muted bg-black/40 border border-brand-border p-3 leading-relaxed">
+                  {contract.full_text.slice(0, 6000)}
+                  {contract.full_text.length > 6000 ? "\n\n…(truncated)" : ""}
+                </div>
+              )
             )}
           </div>
 

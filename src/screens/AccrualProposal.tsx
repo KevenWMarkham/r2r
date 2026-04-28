@@ -84,7 +84,7 @@ export default function AccrualProposal() {
         je_body: result.je as unknown as Record<string, unknown>,
         total_amount: result.je.totalDebits,
         reversal_date: result.je.reversalDate,
-        prepared_by: "Marcus",
+        prepared_by: "Senior Accountant",
       });
       setSubmitted(record);
 

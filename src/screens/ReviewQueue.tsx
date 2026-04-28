@@ -7,6 +7,8 @@ import {
   runReversals,
   type ProposedJERecord,
 } from "@/lib/api-client";
+import { subscribeJEStore } from "@/lib/canned-je-store";
+import { IS_CANNED } from "@/config/env";
 import MaterialityBadge from "@/components/MaterialityBadge";
 import { useCloseStore } from "@/store/closeStore";
 import { Check, X, RefreshCw, RotateCcw } from "lucide-react";
@@ -50,9 +52,16 @@ export default function ReviewQueue() {
 
   useEffect(() => { void refresh(); }, [refresh]);
 
+  // In canned mode, subscribe to JE store changes so the queue auto-refreshes
+  // when Marcus submits a JE from the AccrualProposal screen on another tab.
+  useEffect(() => {
+    if (!IS_CANNED) return;
+    return subscribeJEStore(() => { void refresh(); });
+  }, [refresh]);
+
   const approve = async (je: ProposedJERecord) => {
     try {
-      const updated = await approveJE(je.id, "Rachel");
+      const updated = await approveJE(je.id, "SG&A Manager");
       pushEvent(
         `${je.filename ?? "JE"}: Approved + posted — ${fmt(je.total_amount)} · SAP ${updated.posting_ref}`,
         "approval"
@@ -64,9 +73,9 @@ export default function ReviewQueue() {
   const reject = async (je: ProposedJERecord) => {
     if (!rejectReason.trim()) return;
     try {
-      await rejectJE(je.id, rejectReason, "Rachel");
+      await rejectJE(je.id, rejectReason, "SG&A Manager");
       pushEvent(
-        `${je.filename ?? "JE"}: Rejected by Rachel — ${rejectReason}`,
+        `${je.filename ?? "JE"}: Rejected by SG&A Manager — ${rejectReason}`,
         "info"
       );
       setRejectingId(null);
@@ -79,6 +88,8 @@ export default function ReviewQueue() {
     const r = await runReversals();
     if (r.count > 0) {
       pushEvent(`${r.count} JE${r.count === 1 ? "" : "s"} auto-reversed at period-end`, "approval");
+    } else {
+      pushEvent("Reversal batch ran — no posted JEs eligible to reverse", "info");
     }
     await refresh();
   };
@@ -89,7 +100,7 @@ export default function ReviewQueue() {
         <div>
           <h1 className="font-display text-4xl font-extrabold uppercase tracking-tight">Review Queue</h1>
           <p className="text-sm text-brand-text-muted mt-2 max-w-2xl">
-            Journal entries submitted by Marcus that need manager/controller approval before posting to SAP via BlackLine.
+            Journal entries submitted by the Senior Accountant that need SG&A Manager / VP Controlling approval before posting to SAP via BlackLine.
             Below-threshold entries auto-post without human review.
           </p>
         </div>
@@ -200,7 +211,7 @@ export default function ReviewQueue() {
       </div>
 
       <div className="text-xs text-brand-text-dim font-mono leading-relaxed">
-        Materiality routing: &lt;$100K auto-approve · $100K–$1M → Rachel (Manager) · $1M–$10M → Sarah (Controller) · &gt;$10M → CFO.
+        Materiality routing: &lt;$100K auto-approve · $100K–$1M → SG&A Manager · $1M–$10M → VP Controlling · &gt;$10M → CFO.
         Approving fires the Posting Agent which calls BlackLine → SAP <code>BAPI_ACC_DOCUMENT_POST</code>.
       </div>
     </div>

@@ -2,7 +2,7 @@ import { getFixtureContract, getFixtureVarianceCommentary, getFixtureExecutiveSu
 import type { ContractAttributes } from "@/agents/contract-schema";
 import type { RiskResult } from "@/agents/risk";
 import type { TechAccountingFlags } from "@/agents/tech-accounting";
-import type { AccrualPipelineResult } from "@/agents/accrual";
+import { AccrualGapError, type AccrualPipelineResult } from "@/agents/accrual";
 import type { AccrualInputs } from "@/agents/accrual-inputs";
 import type { VarianceCommentary, ExecutiveSummary, ExecInputs } from "@/agents/narrative";
 import type { PnLLine } from "@/data/seed-pnl";
@@ -10,11 +10,12 @@ import type { Agent, AgentCallbacks, AgentStep, ExtractOutcome } from "./agent-i
 import type { ProposedJE } from "@/lib/je-builder";
 import type { AccrualCalcResult } from "@/lib/accrual-math";
 
-// Artificial per-step dwell to keep the AgentActivityStrip visibly animated.
-// Demo Experience Guide targets ~3 min for the full 4-step chain, so each
-// step lands around 400-700ms in canned mode (real extraction is minutes).
-const DWELL_MS_MIN = 400;
-const DWELL_MS_MAX = 700;
+// Artificial per-step dwell. Tuned to mimic a real Claude API call so the
+// canned demo "feels" like the live Anthropic backend (~1.5-2s per step,
+// ~6-8s for the full 4-step extract → risk → tech-acct → accrual chain).
+// Real Ollama/Qwen on a laptop runs ~30-90s per contract — too slow for live demo.
+const DWELL_MS_MIN = 1200;
+const DWELL_MS_MAX = 2200;
 
 function dwell(): Promise<void> {
   const ms = DWELL_MS_MIN + Math.random() * (DWELL_MS_MAX - DWELL_MS_MIN);
@@ -83,8 +84,20 @@ export class CannedAgent implements Agent {
   ): Promise<AccrualPipelineResult> {
     return this.replay("accrual", cb, async () => {
       const c = getFixtureContract(contractId);
-      if (!c || !c.proposed_je || !c.accrual_detail) {
-        throw new Error(`No accrual fixture for contract id=${contractId}.`);
+      if (!c) {
+        throw new Error(`No fixture for contract id=${contractId}. Only bundled Acme samples are available in canned mode.`);
+      }
+      // Future-dated contracts (service start > current period) legitimately have
+      // no proposed_je yet — surface as AccrualGapError so the AccrualProposal
+      // screen renders the friendly "Cannot compute" panel instead of an error toast.
+      if (!c.proposed_je || !c.accrual_detail) {
+        const start = (c.attributes as Record<string, { value?: unknown }> | null)?.service_start_date?.value as string | undefined;
+        if (start) {
+          throw new AccrualGapError([
+            `Service start date ${start} is after current period end (2026-04-30) — no accrual recognized this period.`,
+          ]);
+        }
+        throw new AccrualGapError(["Accrual inputs not yet seeded for this fixture."]);
       }
       return {
         inputs: c.accrual_detail.inputs as AccrualInputs,

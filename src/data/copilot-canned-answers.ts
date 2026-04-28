@@ -12,7 +12,7 @@ export const cannedAnswers: CannedAnswer[] = [
   {
     match: /exceptions|recon/i,
     reply:
-      "12 exceptions above $500K materiality — top 3: GL 4211 ($1.2M variance), GL 6831 ($890K variance), GL 2114 ($670K variance). Two have proposed adjusting entries waiting on Rachel's approval.",
+      "12 exceptions above $500K materiality — top 3: GL 4211 ($1.2M variance), GL 6831 ($890K variance), GL 2114 ($670K variance). Two have proposed adjusting entries waiting on the SG&A Manager's approval.",
   },
   {
     match: /contract/i,
@@ -22,7 +22,7 @@ export const cannedAnswers: CannedAnswer[] = [
   {
     match: /accrual/i,
     reply:
-      "Proposed accruals total $14.2M this period. 23 auto-calculated with confidence >0.8. 4 are awaiting Marcus's approval — open the AccrualProposal view for each to see the calc detail and approve.",
+      "Proposed accruals total $14.2M this period. 23 auto-calculated with confidence >0.8. 4 are awaiting the Senior Accountant's submission — open the AccrualProposal view for each to see the calc detail and approve.",
   },
   {
     match: /entity|entities|region/i,

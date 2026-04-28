@@ -25,8 +25,8 @@ export default function ModeBanner() {
   if (hidden || IS_PROD) return null;
 
   const llmLabel = IS_ANTHROPIC
-    ? `Anthropic ${ANTHROPIC_MODEL}`
-    : `Qwen ${QWEN_MODEL} @ ${OLLAMA_URL}`;
+    ? `NOAH (Anthropic ${ANTHROPIC_MODEL})`
+    : `NOAH (${QWEN_MODEL}) @ ${OLLAMA_URL}`;
 
   const label =
     MODE === "live"

@@ -32,7 +32,7 @@ const phases: PhaseMeta[] = [
     label: "Validate",
     num: 3,
     days: "Day 4-5",
-    desc: "Balance validation. Recon agent checks. Qwen generates narrative.",
+    desc: "Balance validation. Recon agent checks. NOAH generates narrative.",
     color: "var(--status-green)",
   },
   {

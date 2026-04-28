@@ -44,10 +44,10 @@ export default function CopilotPanel() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-display text-4xl font-extrabold uppercase tracking-tight">Copilot</h1>
+        <h1 className="font-display text-4xl font-extrabold uppercase tracking-tight">NOAH Help</h1>
         <p className="text-sm text-brand-text-muted mt-2 max-w-2xl">
-          Scripted Teams-style Copilot panel. In production, this would route to the real Copilot
-          Studio agent with knowledge grounding over Nike's close data.
+          Scripted Teams-style assistant panel. In production, this would route to a NOAH-grounded
+          Copilot Studio agent with knowledge grounding over Nike's close data.
         </p>
       </div>
 

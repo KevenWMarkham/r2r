@@ -481,6 +481,580 @@
           "reasoning": "Straight-line minimum: $1,250,000/month × 4 months = $5,000,000 earned. Less $3,750,000 billed through March: period accrual = $1,250,000. NOTE: ASC 815 embedded-derivative review required before Q3 escalator effective date."
         }
       }
+    },
+    {
+      "id": "acme-contract-0",
+      "filename": "Contract_0_Meridian_Golden.docx",
+      "file_type": "docx",
+      "byte_size": 13443,
+      "source": "sample_acme",
+      "uploaded_at": "2026-04-21T00:00:00Z",
+      "updated_at": "2026-04-21T00:00:00Z",
+      "counterparty": "Meridian Solutions Inc.",
+      "tcv": "$18,000,000",
+      "lease_flagged": false,
+      "derivative_flagged": false,
+      "risk_score": 38,
+      "risk_category": "Low",
+      "risk_reasons": [
+        "TCV $18M but liability cap present (2x prior 12mo fees)",
+        "Auto-renewal clause requires 90-day notice tracking",
+        "All 27 attributes extract at 100% — golden reference document"
+      ],
+      "tech_acct_flags": {
+        "lease": { "flagged": false, "standard": null, "reasoning": "Pure advisory services — no identified asset under Acme control." },
+        "derivative": { "flagged": false, "standard": null, "reasoning": "Fixed USD pricing — no indexing to financial variables." },
+        "expense_method": "straight-line",
+        "requires_senior_review": false
+      },
+      "agent_status": { "extract": "done", "risk": "done", "techAcct": "done", "accrual": "done" },
+      "attributes": {
+        "counterparty": { "value": "Meridian Solutions Inc.", "confidence": 1.0, "source_page": 1 },
+        "contract_type": { "value": "Master Services Agreement", "confidence": 1.0, "source_page": 1 },
+        "effective_date": { "value": "2026-03-01", "confidence": 1.0, "source_page": 1 },
+        "expiration_date": { "value": "2029-02-28", "confidence": 1.0, "source_page": 1 },
+        "total_contract_value": { "value": 18000000, "confidence": 1.0, "source_page": 2 },
+        "currency": { "value": "USD", "confidence": 1.0, "source_page": 2 },
+        "payment_terms": { "value": "Net 30", "confidence": 1.0, "source_page": 2 },
+        "billing_frequency": { "value": "monthly", "confidence": 1.0, "source_page": 2 },
+        "fee_schedule": { "value": "$500,000 per month, fixed for 36-month term", "confidence": 1.0, "source_page": 2 },
+        "service_description": { "value": "Digital transformation advisory, strategy, and change management", "confidence": 1.0, "source_page": 1 },
+        "service_start_date": { "value": "2026-03-01", "confidence": 1.0, "source_page": 1 },
+        "service_end_date": { "value": "2029-02-28", "confidence": 1.0, "source_page": 1 },
+        "auto_renewal": { "value": true, "confidence": 1.0, "source_page": 3 },
+        "termination_notice_days": { "value": 90, "confidence": 1.0, "source_page": 3 },
+        "governing_law": { "value": "Delaware", "confidence": 1.0, "source_page": 4 },
+        "indemnification_present": { "value": true, "confidence": 1.0, "source_page": 3 },
+        "liability_cap": { "value": "2x fees paid in prior 12 months", "confidence": 1.0, "source_page": 3 },
+        "lease_component": { "value": false, "confidence": 1.0, "source_page": null },
+        "embedded_derivative": { "value": false, "confidence": 1.0, "source_page": null },
+        "expense_recognition_method": { "value": "straight-line", "confidence": 1.0, "source_page": null },
+        "performance_obligations": { "value": "Single obligation — advisory services across the Term", "confidence": 1.0, "source_page": 2 },
+        "pricing_variability": { "value": "None — fees fixed", "confidence": 1.0, "source_page": 2 },
+        "minimum_commitment": { "value": "$6,000,000 per year", "confidence": 1.0, "source_page": 2 },
+        "exclusivity_clause": { "value": false, "confidence": 1.0, "source_page": 3 },
+        "ip_ownership": { "value": "Acme owns Client Work Product; Meridian retains pre-existing IP", "confidence": 1.0, "source_page": 3 },
+        "confidentiality_term": { "value": "7 years post-termination", "confidence": 1.0, "source_page": 4 },
+        "change_order_mechanism": { "value": "Written Change Order signed by both parties", "confidence": 1.0, "source_page": 3 }
+      },
+      "proposed_je": {
+        "id": "JE-acme-con-2026-04-meridian",
+        "contractId": "acme-contract-0",
+        "period": "2026-04",
+        "description": "Accrual — Meridian Solutions Inc.",
+        "lines": [
+          { "account": "6810", "accountName": "Advisory Services Expense", "debit": 500000, "credit": 0 },
+          { "account": "2310", "accountName": "Accrued Liabilities", "debit": 0, "credit": 500000 }
+        ],
+        "totalDebits": 500000,
+        "totalCredits": 500000,
+        "reversalDate": "2026-05-01",
+        "supportingCalc": "Straight-line: $500,000/month × 2.0 months elapsed (Mar 1–Apr 30) = $1,000,000 earned. Less $500,000 already billed (March in arrears, paid April): period accrual = $500,000.",
+        "clauseRefs": [
+          { "field": "total_contract_value", "page": 2 },
+          { "field": "fee_schedule", "page": 2 },
+          { "field": "service_start_date", "page": 1 },
+          { "field": "service_end_date", "page": 1 }
+        ]
+      },
+      "accrual_detail": {
+        "inputs": {
+          "fee_schedule_description": "$500,000 monthly retainer for 36-month term",
+          "total_fee_amount_string": "$18,000,000",
+          "currency": "USD",
+          "service_start_date": "2026-03-01",
+          "service_end_date": "2029-02-28",
+          "billing_frequency": "monthly",
+          "expense_recognition_method": "straight-line",
+          "missing": []
+        },
+        "calc": {
+          "periodAccrual": 500000,
+          "accruedCumulative": 1000000,
+          "monthlyRate": 500000,
+          "serviceMonths": 36,
+          "monthsElapsed": 2,
+          "reasoning": "Straight-line: $500,000/month × 2.0 months elapsed through 2026-04-30 = $1,000,000 earned. Less $500,000 already billed (Mar in arrears): period accrual = $500,000."
+        }
+      }
+    },
+    {
+      "id": "acme-golden-a",
+      "filename": "Golden_A_TechFlow_MSA.docx",
+      "file_type": "docx",
+      "byte_size": 12316,
+      "source": "sample_acme",
+      "uploaded_at": "2026-04-24T00:00:00Z",
+      "updated_at": "2026-04-24T00:00:00Z",
+      "counterparty": "TechFlow Consulting LLC",
+      "tcv": "$2,400,000",
+      "lease_flagged": false,
+      "derivative_flagged": false,
+      "risk_score": 24,
+      "risk_category": "Low",
+      "risk_reasons": [
+        "TCV $2.4M — below $5M concentration threshold",
+        "Liability cap present (2x prior 12mo fees)",
+        "Auto-renewal with 90-day notice tracking"
+      ],
+      "tech_acct_flags": {
+        "lease": { "flagged": false, "standard": null, "reasoning": "Pure advisory services — no identified asset." },
+        "derivative": { "flagged": false, "standard": null, "reasoning": "Fixed USD pricing — no indexing." },
+        "expense_method": "straight-line",
+        "requires_senior_review": false
+      },
+      "agent_status": { "extract": "done", "risk": "done", "techAcct": "done", "accrual": "done" },
+      "attributes": {
+        "counterparty": { "value": "TechFlow Consulting LLC", "confidence": 1.0, "source_page": 1 },
+        "contract_type": { "value": "Master Services Agreement for Technology Advisory Services", "confidence": 1.0, "source_page": 1 },
+        "effective_date": { "value": "2026-02-01", "confidence": 1.0, "source_page": 1 },
+        "expiration_date": { "value": "2028-01-31", "confidence": 1.0, "source_page": 1 },
+        "total_contract_value": { "value": 2400000, "confidence": 1.0, "source_page": 1 },
+        "currency": { "value": "USD", "confidence": 1.0, "source_page": 1 },
+        "payment_terms": { "value": "Net 30", "confidence": 1.0, "source_page": 2 },
+        "billing_frequency": { "value": "monthly", "confidence": 1.0, "source_page": 2 },
+        "fee_schedule": { "value": "$100,000/month fixed; $1.2M annual; $2.4M total", "confidence": 1.0, "source_page": 2 },
+        "service_description": { "value": "Cloud architecture review, security assessment, DevOps advisory", "confidence": 1.0, "source_page": 2 },
+        "service_start_date": { "value": "2026-02-01", "confidence": 1.0, "source_page": 1 },
+        "service_end_date": { "value": "2028-01-31", "confidence": 1.0, "source_page": 1 },
+        "auto_renewal": { "value": true, "confidence": 1.0, "source_page": 2 },
+        "termination_notice_days": { "value": 90, "confidence": 1.0, "source_page": 2 },
+        "governing_law": { "value": "Virginia", "confidence": 1.0, "source_page": 3 },
+        "indemnification_present": { "value": true, "confidence": 1.0, "source_page": 3 },
+        "liability_cap": { "value": "2x fees paid in prior 12 months", "confidence": 1.0, "source_page": 3 },
+        "lease_component": { "value": false, "confidence": 1.0, "source_page": null },
+        "embedded_derivative": { "value": false, "confidence": 1.0, "source_page": null },
+        "expense_recognition_method": { "value": "straight-line", "confidence": 1.0, "source_page": null },
+        "performance_obligations": { "value": "Single obligation — technology advisory services", "confidence": 1.0, "source_page": 2 },
+        "pricing_variability": { "value": "None — fees fixed; no escalators", "confidence": 1.0, "source_page": 2 },
+        "minimum_commitment": { "value": "$100,000/month minimum; $1.2M annual; $2.4M total", "confidence": 1.0, "source_page": 2 },
+        "exclusivity_clause": { "value": false, "confidence": 1.0, "source_page": 3 },
+        "ip_ownership": { "value": "Acme owns work product upon payment; TechFlow retains methodologies", "confidence": 1.0, "source_page": 3 },
+        "confidentiality_term": { "value": "5 years post-termination", "confidence": 1.0, "source_page": 4 },
+        "change_order_mechanism": { "value": "Written Change Order signed by both parties", "confidence": 1.0, "source_page": 3 }
+      },
+      "proposed_je": {
+        "id": "JE-acme-gold-a-2026-04",
+        "contractId": "acme-golden-a",
+        "period": "2026-04",
+        "description": "Accrual — TechFlow Consulting LLC",
+        "lines": [
+          { "account": "6810", "accountName": "Technology Advisory Expense", "debit": 100000, "credit": 0 },
+          { "account": "2310", "accountName": "Accrued Liabilities", "debit": 0, "credit": 100000 }
+        ],
+        "totalDebits": 100000,
+        "totalCredits": 100000,
+        "reversalDate": "2026-05-01",
+        "supportingCalc": "Straight-line: $100,000/month × 3.0 months elapsed (Feb 1–Apr 30) = $300,000 earned. Less $200,000 already billed (Feb + Mar in arrears): period accrual = $100,000.",
+        "clauseRefs": [
+          { "field": "total_contract_value", "page": 1 },
+          { "field": "fee_schedule", "page": 2 },
+          { "field": "service_start_date", "page": 1 },
+          { "field": "service_end_date", "page": 1 }
+        ]
+      },
+      "accrual_detail": {
+        "inputs": {
+          "fee_schedule_description": "$100,000 monthly retainer for 24-month term",
+          "total_fee_amount_string": "$2,400,000",
+          "currency": "USD",
+          "service_start_date": "2026-02-01",
+          "service_end_date": "2028-01-31",
+          "billing_frequency": "monthly",
+          "expense_recognition_method": "straight-line",
+          "missing": []
+        },
+        "calc": {
+          "periodAccrual": 100000,
+          "accruedCumulative": 300000,
+          "monthlyRate": 100000,
+          "serviceMonths": 24,
+          "monthsElapsed": 3,
+          "reasoning": "Straight-line: $100,000/month × 3.0 months elapsed through 2026-04-30 = $300,000 earned. Less $200,000 already billed (Feb + Mar): period accrual = $100,000."
+        }
+      }
+    },
+    {
+      "id": "acme-golden-b",
+      "filename": "Golden_B_Nexus_SaaS_Renewal.docx",
+      "file_type": "docx",
+      "byte_size": 12337,
+      "source": "sample_acme",
+      "uploaded_at": "2026-04-24T00:00:00Z",
+      "updated_at": "2026-04-24T00:00:00Z",
+      "counterparty": "Nexus Cloud Inc.",
+      "tcv": "$1,350,000",
+      "lease_flagged": false,
+      "derivative_flagged": true,
+      "risk_score": 71,
+      "risk_category": "High",
+      "risk_reasons": [
+        "ASC 815 embedded-derivative bifurcation review required (CPI-U escalator, capped 6%)",
+        "Annual prepayment creates Prepaid Asset balance",
+        "TCV $1.35M low concentration but tech-acct senior review required for derivative"
+      ],
+      "tech_acct_flags": {
+        "lease": { "flagged": false, "standard": null, "reasoning": "SaaS consumption with no identified physical asset under Subscriber control." },
+        "derivative": { "flagged": true, "standard": "ASC 815", "reasoning": "Pricing contains a CPI-U indexed escalator (3% floor, 6% cap). Senior reviewer must evaluate clearly-and-closely-related test for potential bifurcation." },
+        "expense_method": "straight-line",
+        "requires_senior_review": true
+      },
+      "agent_status": { "extract": "done", "risk": "done", "techAcct": "done", "accrual": "done" },
+      "attributes": {
+        "counterparty": { "value": "Nexus Cloud Inc.", "confidence": 1.0, "source_page": 1 },
+        "contract_type": { "value": "Enterprise SaaS Subscription Renewal Agreement", "confidence": 1.0, "source_page": 1 },
+        "effective_date": { "value": "2026-01-01", "confidence": 1.0, "source_page": 1 },
+        "expiration_date": { "value": "2028-12-31", "confidence": 1.0, "source_page": 1 },
+        "total_contract_value": { "value": 1350000, "confidence": 0.9, "source_page": 2 },
+        "currency": { "value": "USD", "confidence": 1.0, "source_page": 2 },
+        "payment_terms": { "value": "Annual pre-payment, Net 30 from anniversary invoice", "confidence": 1.0, "source_page": 2 },
+        "billing_frequency": { "value": "annual", "confidence": 1.0, "source_page": 2 },
+        "fee_schedule": { "value": "Year 1 $450K; Years 2-3 CPI-U adjusted (3% floor, 6% cap); estimated total $1.35M", "confidence": 1.0, "source_page": 2 },
+        "service_description": { "value": "Nexus Enterprise Data Platform — Analytics, Data Catalog, Governance for up to 500 users", "confidence": 1.0, "source_page": 2 },
+        "service_start_date": { "value": "2026-01-01", "confidence": 1.0, "source_page": 1 },
+        "service_end_date": { "value": "2028-12-31", "confidence": 1.0, "source_page": 1 },
+        "auto_renewal": { "value": true, "confidence": 1.0, "source_page": 2 },
+        "termination_notice_days": { "value": 90, "confidence": 1.0, "source_page": 2 },
+        "governing_law": { "value": "California", "confidence": 1.0, "source_page": 3 },
+        "indemnification_present": { "value": true, "confidence": 1.0, "source_page": 3 },
+        "liability_cap": { "value": "Prior 12 months fees, with IP/confidentiality carve-outs", "confidence": 1.0, "source_page": 3 },
+        "lease_component": { "value": false, "confidence": 1.0, "source_page": null },
+        "embedded_derivative": { "value": true, "confidence": 1.0, "source_page": 2 },
+        "expense_recognition_method": { "value": "straight-line", "confidence": 1.0, "source_page": null },
+        "performance_obligations": { "value": "Single obligation — SaaS access with 99.95% uptime SLA", "confidence": 1.0, "source_page": 2 },
+        "pricing_variability": { "value": "CPI-U indexed annual escalator; 3% floor, 6% cap", "confidence": 1.0, "source_page": 2 },
+        "minimum_commitment": { "value": "500 named users; $450K annual minimum pre-CPI", "confidence": 1.0, "source_page": 2 },
+        "exclusivity_clause": { "value": false, "confidence": 1.0, "source_page": 3 },
+        "ip_ownership": { "value": "Subscriber retains data; Provider retains platform IP; revocable license", "confidence": 1.0, "source_page": 3 },
+        "confidentiality_term": { "value": "5 years post-termination", "confidence": 1.0, "source_page": 4 },
+        "change_order_mechanism": { "value": "Written amendment for commercial; click-through for adds", "confidence": 1.0, "source_page": 3 }
+      },
+      "proposed_je": {
+        "id": "JE-acme-gold-b-2026-04",
+        "contractId": "acme-golden-b",
+        "period": "2026-04",
+        "description": "Period amortization — Nexus Cloud Inc. (annual SaaS prepayment)",
+        "lines": [
+          { "account": "6840", "accountName": "Software Subscription Expense", "debit": 37500, "credit": 0 },
+          { "account": "1410", "accountName": "Prepaid Software", "debit": 0, "credit": 37500 }
+        ],
+        "totalDebits": 37500,
+        "totalCredits": 37500,
+        "reversalDate": null,
+        "supportingCalc": "Year-1 annual prepayment $450,000 paid 2026-01-01. Amortize ratably $450,000 / 12 = $37,500/month. April: 4th month = $37,500. NOTE: ASC 815 senior review pending on CPI-U escalator before Year 2.",
+        "clauseRefs": [
+          { "field": "fee_schedule", "page": 2 },
+          { "field": "billing_frequency", "page": 2 },
+          { "field": "embedded_derivative", "page": 2 }
+        ]
+      },
+      "accrual_detail": {
+        "inputs": {
+          "fee_schedule_description": "$450K Year-1 annual prepayment; CPI-U escalated Years 2-3",
+          "total_fee_amount_string": "$1,350,000",
+          "currency": "USD",
+          "service_start_date": "2026-01-01",
+          "service_end_date": "2028-12-31",
+          "billing_frequency": "annual",
+          "expense_recognition_method": "straight-line",
+          "missing": []
+        },
+        "calc": {
+          "periodAccrual": 37500,
+          "accruedCumulative": 150000,
+          "monthlyRate": 37500,
+          "serviceMonths": 36,
+          "monthsElapsed": 4,
+          "reasoning": "Prepaid amortization: $450,000 Year-1 fee / 12 months = $37,500/month. 4 months elapsed Jan–Apr = $150,000 cumulative; period $37,500 reduces Prepaid Software."
+        }
+      }
+    },
+    {
+      "id": "acme-golden-c",
+      "filename": "Golden_C_Atlas_Office_Lease.docx",
+      "file_type": "docx",
+      "byte_size": 12321,
+      "source": "sample_acme",
+      "uploaded_at": "2026-04-24T00:00:00Z",
+      "updated_at": "2026-04-24T00:00:00Z",
+      "counterparty": "Atlas Realty Partners, LP",
+      "tcv": "$3,600,000",
+      "lease_flagged": true,
+      "derivative_flagged": false,
+      "risk_score": 58,
+      "risk_category": "Medium",
+      "risk_reasons": [
+        "ASC 842 operating lease — right-of-use asset and lease liability recognition required at commencement",
+        "Non-cancelable 5-year term, $3.6M aggregate base rent",
+        "Landlord liability limited to interest in Building — concentration risk on single property"
+      ],
+      "tech_acct_flags": {
+        "lease": { "flagged": true, "standard": "ASC 842", "reasoning": "Long-term real estate operating lease — Tenant recognizes ROU asset and lease liability at the Commencement Date; rent is straight-lined over the 60-month Term." },
+        "derivative": { "flagged": false, "standard": null, "reasoning": "Fixed USD rent with no financial-variable indexing." },
+        "expense_method": "straight-line",
+        "requires_senior_review": true
+      },
+      "agent_status": { "extract": "done", "risk": "done", "techAcct": "done", "accrual": "done" },
+      "attributes": {
+        "counterparty": { "value": "Atlas Realty Partners, LP", "confidence": 1.0, "source_page": 1 },
+        "contract_type": { "value": "Commercial Real Estate Lease Agreement", "confidence": 1.0, "source_page": 1 },
+        "effective_date": { "value": "2026-02-01", "confidence": 1.0, "source_page": 1 },
+        "expiration_date": { "value": "2031-01-31", "confidence": 1.0, "source_page": 1 },
+        "total_contract_value": { "value": 3600000, "confidence": 1.0, "source_page": 1 },
+        "currency": { "value": "USD", "confidence": 1.0, "source_page": 1 },
+        "payment_terms": { "value": "Monthly, in advance, first business day", "confidence": 1.0, "source_page": 2 },
+        "billing_frequency": { "value": "monthly", "confidence": 1.0, "source_page": 2 },
+        "fee_schedule": { "value": "Base Rent $60,000/month × 60 months = $3.6M; CAM and taxes billed separately", "confidence": 1.0, "source_page": 2 },
+        "service_description": { "value": "Lease of 12,000 RSF Class-A office at 1500 Innovation Way, Portland, OR · Suite 400 · 15 parking spaces", "confidence": 1.0, "source_page": 2 },
+        "service_start_date": { "value": "2026-02-01", "confidence": 1.0, "source_page": 1 },
+        "service_end_date": { "value": "2031-01-31", "confidence": 1.0, "source_page": 1 },
+        "auto_renewal": { "value": false, "confidence": 1.0, "source_page": 2 },
+        "termination_notice_days": { "value": 30, "confidence": 1.0, "source_page": 2 },
+        "governing_law": { "value": "Oregon", "confidence": 1.0, "source_page": 3 },
+        "indemnification_present": { "value": true, "confidence": 1.0, "source_page": 3 },
+        "liability_cap": { "value": "Landlord liability limited to interest in Building", "confidence": 1.0, "source_page": 3 },
+        "lease_component": { "value": true, "confidence": 1.0, "source_page": 2 },
+        "embedded_derivative": { "value": false, "confidence": 1.0, "source_page": null },
+        "expense_recognition_method": { "value": "straight-line (ASC 842)", "confidence": 1.0, "source_page": null },
+        "performance_obligations": { "value": "Landlord provides quiet enjoyment + structural maintenance", "confidence": 1.0, "source_page": 2 },
+        "pricing_variability": { "value": "None — base rent fixed for full Term", "confidence": 1.0, "source_page": 2 },
+        "minimum_commitment": { "value": "$3.6M aggregate, non-cancelable", "confidence": 1.0, "source_page": 2 },
+        "exclusivity_clause": { "value": false, "confidence": 1.0, "source_page": 3 },
+        "ip_ownership": { "value": "Not applicable — real estate lease", "confidence": 1.0, "source_page": 3 },
+        "confidentiality_term": { "value": "5 years post-expiration", "confidence": 1.0, "source_page": 4 },
+        "change_order_mechanism": { "value": "Written Lease Amendment signed by both parties", "confidence": 1.0, "source_page": 3 }
+      },
+      "proposed_je": {
+        "id": "JE-acme-gold-c-2026-04",
+        "contractId": "acme-golden-c",
+        "period": "2026-04",
+        "description": "Period lease expense — Atlas Realty Partners, LP (ASC 842)",
+        "lines": [
+          { "account": "6720", "accountName": "Lease Expense — Office", "debit": 60000, "credit": 0 },
+          { "account": "2410", "accountName": "Lease Liability — Current", "debit": 0, "credit": 60000 }
+        ],
+        "totalDebits": 60000,
+        "totalCredits": 60000,
+        "reversalDate": null,
+        "supportingCalc": "ASC 842 straight-line lease expense: $60,000/month × 60-month term = $3,600,000 aggregate. Period (April) lease expense = $60,000. ROU asset and lease liability recognized at commencement 2026-02-01.",
+        "clauseRefs": [
+          { "field": "fee_schedule", "page": 2 },
+          { "field": "service_start_date", "page": 1 },
+          { "field": "service_end_date", "page": 1 },
+          { "field": "lease_component", "page": 2 }
+        ]
+      },
+      "accrual_detail": {
+        "inputs": {
+          "fee_schedule_description": "$60,000 per month × 60 months base rent (no escalator)",
+          "total_fee_amount_string": "$3,600,000",
+          "currency": "USD",
+          "service_start_date": "2026-02-01",
+          "service_end_date": "2031-01-31",
+          "billing_frequency": "monthly",
+          "expense_recognition_method": "straight-line (ASC 842)",
+          "missing": []
+        },
+        "calc": {
+          "periodAccrual": 60000,
+          "accruedCumulative": 180000,
+          "monthlyRate": 60000,
+          "serviceMonths": 60,
+          "monthsElapsed": 3,
+          "reasoning": "ASC 842 straight-line lease expense: $60,000/month × 3 months elapsed (Feb–Apr) = $180,000 cumulative. Period $60,000 reduces lease liability."
+        }
+      }
+    },
+    {
+      "id": "acme-golden-d",
+      "filename": "Golden_D_Summit_Construction_Buildout.docx",
+      "file_type": "docx",
+      "byte_size": 12344,
+      "source": "sample_acme",
+      "uploaded_at": "2026-04-24T00:00:00Z",
+      "updated_at": "2026-04-24T00:00:00Z",
+      "counterparty": "Summit Builders LLC",
+      "tcv": "$8,500,000",
+      "lease_flagged": false,
+      "derivative_flagged": false,
+      "risk_score": 65,
+      "risk_category": "Medium",
+      "risk_reasons": [
+        "TCV $8.5M — exceeds $5M concentration threshold",
+        "Milestone-based recognition — capitalize to Construction in Progress (CIP) pending commissioning",
+        "Five distinct performance obligations require milestone certification before recognition",
+        "Performance bonds required; Contractor liability capped at contract value"
+      ],
+      "tech_acct_flags": {
+        "lease": { "flagged": false, "standard": null, "reasoning": "Client owns underlying real estate; this is construction capex, not a lease." },
+        "derivative": { "flagged": false, "standard": null, "reasoning": "Fixed-price USD contract with no indexing." },
+        "expense_method": "direct-association",
+        "requires_senior_review": true
+      },
+      "agent_status": { "extract": "done", "risk": "done", "techAcct": "done", "accrual": "done" },
+      "attributes": {
+        "counterparty": { "value": "Summit Builders LLC", "confidence": 1.0, "source_page": 1 },
+        "contract_type": { "value": "Fixed-Price Construction Agreement — Retail Buildout", "confidence": 1.0, "source_page": 1 },
+        "effective_date": { "value": "2026-02-01", "confidence": 1.0, "source_page": 1 },
+        "expiration_date": { "value": "2026-10-31", "confidence": 1.0, "source_page": 1 },
+        "total_contract_value": { "value": 8500000, "confidence": 1.0, "source_page": 1 },
+        "currency": { "value": "USD", "confidence": 1.0, "source_page": 1 },
+        "payment_terms": { "value": "Net 30 from certified milestone draw", "confidence": 1.0, "source_page": 2 },
+        "billing_frequency": { "value": "milestone", "confidence": 1.0, "source_page": 2 },
+        "fee_schedule": { "value": "M1 $850K · M2 $1.7M · M3 $2.55M · M4 $2.55M · M5 $850K · Total $8.5M", "confidence": 1.0, "source_page": 2 },
+        "service_description": { "value": "Turnkey buildout of 28 retail stores across Pacific Northwest", "confidence": 1.0, "source_page": 2 },
+        "service_start_date": { "value": "2026-02-01", "confidence": 1.0, "source_page": 1 },
+        "service_end_date": { "value": "2026-10-31", "confidence": 1.0, "source_page": 1 },
+        "auto_renewal": { "value": false, "confidence": 1.0, "source_page": 2 },
+        "termination_notice_days": { "value": 30, "confidence": 1.0, "source_page": 2 },
+        "governing_law": { "value": "Oregon", "confidence": 1.0, "source_page": 3 },
+        "indemnification_present": { "value": true, "confidence": 1.0, "source_page": 3 },
+        "liability_cap": { "value": "Aggregate liability capped at contract value ($8.5M); performance bonds required", "confidence": 1.0, "source_page": 3 },
+        "lease_component": { "value": false, "confidence": 1.0, "source_page": null },
+        "embedded_derivative": { "value": false, "confidence": 1.0, "source_page": null },
+        "expense_recognition_method": { "value": "direct-association (CIP)", "confidence": 1.0, "source_page": null },
+        "performance_obligations": { "value": "Five distinct obligations — one per milestone (Site Prep, Structural, Build-out, Fixtures, Commissioning)", "confidence": 1.0, "source_page": 2 },
+        "pricing_variability": { "value": "None — fixed price; scope changes via Change Order", "confidence": 1.0, "source_page": 2 },
+        "minimum_commitment": { "value": "$8,500,000 fixed", "confidence": 1.0, "source_page": 2 },
+        "exclusivity_clause": { "value": false, "confidence": 1.0, "source_page": 3 },
+        "ip_ownership": { "value": "Client owns all constructed improvements upon payment", "confidence": 1.0, "source_page": 3 },
+        "confidentiality_term": { "value": "2 years post-completion", "confidence": 1.0, "source_page": 4 },
+        "change_order_mechanism": { "value": "Written Change Order with 48-hour escalation protocol", "confidence": 1.0, "source_page": 3 }
+      },
+      "proposed_je": {
+        "id": "JE-acme-gold-d-2026-04",
+        "contractId": "acme-golden-d",
+        "period": "2026-04",
+        "description": "Milestone certification — Summit Builders LLC (M1 Site Prep)",
+        "lines": [
+          { "account": "1810", "accountName": "Construction in Progress (CIP)", "debit": 850000, "credit": 0 },
+          { "account": "2310", "accountName": "Accrued Construction Costs", "debit": 0, "credit": 850000 }
+        ],
+        "totalDebits": 850000,
+        "totalCredits": 850000,
+        "reversalDate": null,
+        "supportingCalc": "Direct-association: M1 Site Prep milestone ($850,000) certified by PM 2026-04-28. Capitalize to CIP pending commissioning. M2 Structural ($1.7M) in-flight; not yet certified — no accrual recognized for in-progress work absent independent measurement.",
+        "clauseRefs": [
+          { "field": "fee_schedule", "page": 2 },
+          { "field": "performance_obligations", "page": 2 },
+          { "field": "billing_frequency", "page": 2 }
+        ]
+      },
+      "accrual_detail": {
+        "inputs": {
+          "fee_schedule_description": "5 milestones — M1 $850K, M2 $1.7M, M3 $2.55M, M4 $2.55M, M5 $850K (total $8.5M)",
+          "total_fee_amount_string": "$8,500,000",
+          "currency": "USD",
+          "service_start_date": "2026-02-01",
+          "service_end_date": "2026-10-31",
+          "billing_frequency": "milestone",
+          "expense_recognition_method": "direct-association (CIP)",
+          "missing": []
+        },
+        "calc": {
+          "periodAccrual": 850000,
+          "accruedCumulative": 850000,
+          "monthlyRate": 0,
+          "serviceMonths": 9,
+          "monthsElapsed": 3,
+          "reasoning": "M1 Site Prep certified 2026-04-28 → $850,000 capitalized to CIP. M2 Structural in-progress (target cert May). Cumulative milestones-certified-to-date = $850,000."
+        }
+      }
+    },
+    {
+      "id": "acme-golden-e",
+      "filename": "Golden_E_Olympic_Insurance_MultiYear.docx",
+      "file_type": "docx",
+      "byte_size": 12187,
+      "source": "sample_acme",
+      "uploaded_at": "2026-04-24T00:00:00Z",
+      "updated_at": "2026-04-24T00:00:00Z",
+      "counterparty": "Olympic Insurance Group, Inc.",
+      "tcv": "$2,250,000",
+      "lease_flagged": false,
+      "derivative_flagged": false,
+      "risk_score": 32,
+      "risk_category": "Low",
+      "risk_reasons": [
+        "Annual prepayment creates Prepaid Insurance asset; amortize $62,500/month",
+        "Premium subject to loss-experience adjustment at renewal (not in-period)",
+        "Multi-year coverage commitment $2.25M aggregate"
+      ],
+      "tech_acct_flags": {
+        "lease": { "flagged": false, "standard": null, "reasoning": "Insurance contract — no right-to-use asset." },
+        "derivative": { "flagged": false, "standard": null, "reasoning": "Premium fixed for the Term; not indexed to financial variables." },
+        "expense_method": "straight-line",
+        "requires_senior_review": false
+      },
+      "agent_status": { "extract": "done", "risk": "done", "techAcct": "done", "accrual": "done" },
+      "attributes": {
+        "counterparty": { "value": "Olympic Insurance Group, Inc.", "confidence": 1.0, "source_page": 1 },
+        "contract_type": { "value": "Multi-Year Property & Casualty Insurance Policy", "confidence": 1.0, "source_page": 1 },
+        "effective_date": { "value": "2026-01-01", "confidence": 1.0, "source_page": 1 },
+        "expiration_date": { "value": "2028-12-31", "confidence": 1.0, "source_page": 1 },
+        "total_contract_value": { "value": 2250000, "confidence": 1.0, "source_page": 1 },
+        "currency": { "value": "USD", "confidence": 1.0, "source_page": 1 },
+        "payment_terms": { "value": "Annual pre-payment 30 days before each anniversary", "confidence": 1.0, "source_page": 2 },
+        "billing_frequency": { "value": "annual", "confidence": 1.0, "source_page": 2 },
+        "fee_schedule": { "value": "$750,000/year × 3 years = $2.25M; subject to loss-experience adjustment at renewal", "confidence": 1.0, "source_page": 2 },
+        "service_description": { "value": "Property, business interruption, GL, automobile, excess coverage per Declarations", "confidence": 1.0, "source_page": 2 },
+        "service_start_date": { "value": "2026-01-01", "confidence": 1.0, "source_page": 1 },
+        "service_end_date": { "value": "2028-12-31", "confidence": 1.0, "source_page": 1 },
+        "auto_renewal": { "value": false, "confidence": 1.0, "source_page": 2 },
+        "termination_notice_days": { "value": 90, "confidence": 1.0, "source_page": 2 },
+        "governing_law": { "value": "New York", "confidence": 1.0, "source_page": 3 },
+        "indemnification_present": { "value": true, "confidence": 1.0, "source_page": 3 },
+        "liability_cap": { "value": "Capped at Policy Limits per Declarations", "confidence": 1.0, "source_page": 3 },
+        "lease_component": { "value": false, "confidence": 1.0, "source_page": null },
+        "embedded_derivative": { "value": false, "confidence": 1.0, "source_page": null },
+        "expense_recognition_method": { "value": "straight-line (prepaid amortization)", "confidence": 1.0, "source_page": null },
+        "performance_obligations": { "value": "Single obligation — coverage and claim handling across Term", "confidence": 1.0, "source_page": 2 },
+        "pricing_variability": { "value": "Premium fixed for Term; loss-experience adjustment at renewal", "confidence": 1.0, "source_page": 2 },
+        "minimum_commitment": { "value": "$750,000/year; $2.25M aggregate", "confidence": 1.0, "source_page": 2 },
+        "exclusivity_clause": { "value": false, "confidence": 1.0, "source_page": 3 },
+        "ip_ownership": { "value": "Not applicable — insurance policy", "confidence": 1.0, "source_page": 3 },
+        "confidentiality_term": { "value": "Policy term plus 5 years", "confidence": 1.0, "source_page": 4 },
+        "change_order_mechanism": { "value": "Written Endorsement signed by both parties", "confidence": 1.0, "source_page": 3 }
+      },
+      "proposed_je": {
+        "id": "JE-acme-gold-e-2026-04",
+        "contractId": "acme-golden-e",
+        "period": "2026-04",
+        "description": "Period amortization — Olympic Insurance Group (annual P&C premium prepayment)",
+        "lines": [
+          { "account": "6920", "accountName": "Insurance Expense", "debit": 62500, "credit": 0 },
+          { "account": "1420", "accountName": "Prepaid Insurance", "debit": 0, "credit": 62500 }
+        ],
+        "totalDebits": 62500,
+        "totalCredits": 62500,
+        "reversalDate": null,
+        "supportingCalc": "Year-1 annual premium $750,000 paid 2026-01-01. Amortize ratably $750,000 / 12 = $62,500/month. April: 4th month = $62,500.",
+        "clauseRefs": [
+          { "field": "fee_schedule", "page": 2 },
+          { "field": "billing_frequency", "page": 2 },
+          { "field": "payment_terms", "page": 2 }
+        ]
+      },
+      "accrual_detail": {
+        "inputs": {
+          "fee_schedule_description": "$750K/year × 3 years = $2.25M; loss-experience adjustment at renewal",
+          "total_fee_amount_string": "$2,250,000",
+          "currency": "USD",
+          "service_start_date": "2026-01-01",
+          "service_end_date": "2028-12-31",
+          "billing_frequency": "annual",
+          "expense_recognition_method": "straight-line (prepaid amortization)",
+          "missing": []
+        },
+        "calc": {
+          "periodAccrual": 62500,
+          "accruedCumulative": 250000,
+          "monthlyRate": 62500,
+          "serviceMonths": 36,
+          "monthsElapsed": 4,
+          "reasoning": "Prepaid amortization: $750,000 Year-1 premium / 12 months = $62,500/month. 4 months elapsed Jan–Apr = $250,000 cumulative; period $62,500 reduces Prepaid Insurance."
+        }
+      }
     }
   ]
 }
