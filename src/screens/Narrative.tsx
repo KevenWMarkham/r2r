@@ -9,6 +9,7 @@ import VarianceTable from "@/components/VarianceTable";
 import CommentaryPanel from "@/components/CommentaryPanel";
 import ExecSummaryCard from "@/components/ExecSummaryCard";
 import { useCloseStore } from "@/store/closeStore";
+import { useUiStore } from "@/store/uiStore";
 import clsx from "clsx";
 import { Play, Loader2 } from "lucide-react";
 
@@ -45,7 +46,10 @@ export default function Narrative() {
     });
     try {
       const result = await agent.generateVarianceCommentary(line, {
-        onEvent: (e) => setVariantEvents((prev) => [...prev, e]),
+        onEvent: (e) => {
+          setVariantEvents((prev) => [...prev, e]);
+          useUiStore.getState().pushAgentActivity(e, `narrative:variance:${line.id}`);
+        },
       });
       setCommentaries((c) => ({ ...c, [line.id]: result }));
     } finally {
@@ -81,7 +85,10 @@ export default function Narrative() {
         period: "Q2 FY26",
       };
       const r = await agent.generateExecutiveSummary(inputs, {
-        onEvent: (e) => setExecEvents((prev) => [...prev, e]),
+        onEvent: (e) => {
+          setExecEvents((prev) => [...prev, e]);
+          useUiStore.getState().pushAgentActivity(e, "narrative:exec");
+        },
       });
       setExecSummary(r);
     } finally {

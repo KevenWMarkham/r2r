@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import { getContract, blobUrl, type ContractDetail } from "@/lib/api-client";
 import { agent, type AgentEvent } from "@/adapters";
+import { useUiStore } from "@/store/uiStore";
 import AgentActivityStrip from "@/components/AgentActivityStrip";
 import AttributeChecklist from "@/components/AttributeChecklist";
 import RiskPanel from "@/components/RiskPanel";
@@ -40,7 +41,10 @@ export default function ContractReview() {
     setRunning(true);
     setEvents([]);
     setError(null);
-    const onEvent = (e: AgentEvent) => setEvents((prev) => [...prev, e]);
+    const onEvent = (e: AgentEvent) => {
+      setEvents((prev) => [...prev, e]);
+      useUiStore.getState().pushAgentActivity(e, `contract:${id}`);
+    };
     try {
       const { attributes } = await agent.extractAttributes(id, contract.full_text, { onEvent });
       await agent.scoreRisk(id, attributes, contract.full_text, { onEvent });
@@ -60,7 +64,10 @@ export default function ContractReview() {
     if (!contract?.full_text || !id) return;
     setRunning(true);
     setError(null);
-    const onEvent = (e: AgentEvent) => setEvents((prev) => [...prev, e]);
+    const onEvent = (e: AgentEvent) => {
+      setEvents((prev) => [...prev, e]);
+      useUiStore.getState().pushAgentActivity(e, `contract:${id}`);
+    };
     try {
       if (step === "extract") {
         await agent.extractAttributes(id, contract.full_text, { onEvent });

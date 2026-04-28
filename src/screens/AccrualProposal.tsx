@@ -11,6 +11,7 @@ import CalcDetailPanel from "@/components/CalcDetailPanel";
 import JEStatusBadge from "@/components/JEStatusBadge";
 import MaterialityBadge from "@/components/MaterialityBadge";
 import { useCloseStore } from "@/store/closeStore";
+import { useUiStore } from "@/store/uiStore";
 import { ArrowLeft, Play, Send } from "lucide-react";
 
 export default function AccrualProposal() {
@@ -51,7 +52,10 @@ export default function AccrualProposal() {
     setError(null);
     setMissing(null);
     setEvents([]);
-    const onEvent = (e: AgentEvent) => setEvents((prev) => [...prev, e]);
+    const onEvent = (e: AgentEvent) => {
+      setEvents((prev) => [...prev, e]);
+      useUiStore.getState().pushAgentActivity(e, `accrual:${id}`);
+    };
     try {
       const res = await agent.calculateAccrual(
         id,

@@ -1,6 +1,11 @@
+import { useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import clsx from "clsx";
+import { Terminal } from "lucide-react";
 import { theme } from "@/theme";
+import { useUiStore } from "@/store/uiStore";
 import ModeBanner from "./ModeBanner";
+import LiveConsoleDock from "./LiveConsoleDock";
 
 const navItems = [
   { to: "/contracts", label: "Contracts" },
@@ -11,6 +16,21 @@ const navItems = [
 ];
 
 export default function Layout() {
+  const liveConsoleVisible = useUiStore((s) => s.liveConsoleVisible);
+  const toggleLiveConsole = useUiStore((s) => s.toggleLiveConsole);
+
+  // Ctrl+Shift+L toggles the live console (mirrors ModeBanner's Ctrl+Shift+D)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && (e.key === "L" || e.key === "l")) {
+        e.preventDefault();
+        toggleLiveConsole();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [toggleLiveConsole]);
+
   return (
     <div className="min-h-screen flex flex-col">
       <ModeBanner />
@@ -25,6 +45,21 @@ export default function Layout() {
           </span>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleLiveConsole}
+            title="Toggle Live Console (Ctrl+Shift+L)"
+            aria-pressed={liveConsoleVisible}
+            className={clsx(
+              "font-display text-[10px] font-semibold tracking-[2px] border px-2 py-0.5 uppercase flex items-center gap-1.5 transition-colors",
+              liveConsoleVisible
+                ? "text-brand-accent border-brand-accent/30 bg-brand-accent-dim"
+                : "text-brand-text-muted border-brand-border hover:text-brand-text"
+            )}
+          >
+            <Terminal size={11} />
+            Console
+          </button>
           <span className="font-display text-[10px] font-semibold text-brand-accent tracking-[2px] border border-brand-accent/30 bg-brand-accent-dim px-2 py-0.5 uppercase">
             Prototype
           </span>
@@ -57,6 +92,7 @@ export default function Layout() {
       <footer className="border-t border-brand-border px-10 py-4 text-center text-[11px] text-brand-text-dim font-mono">
         {theme.brandName} · {theme.productName} Prototype · Deloitte Engagement Reference Demo
       </footer>
+      <LiveConsoleDock />
     </div>
   );
 }
