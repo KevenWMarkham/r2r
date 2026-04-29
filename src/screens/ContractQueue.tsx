@@ -55,8 +55,15 @@ export default function ContractQueue() {
       setLoading(true);
       setError(null);
       const list = await listContracts();
-      // Sort: risk_score desc (null last), then filename asc
+      // Sort: category bucket (High > Medium > Low > unscored), then risk_score
+      // desc within bucket, then filename asc. Sorting on category first keeps
+      // any High-tagged contract above all Mediums even when raw scores drift
+      // close to the boundary after a tier recalibration.
+      const rank: Record<string, number> = { High: 3, Medium: 2, Low: 1 };
       list.sort((a, b) => {
+        const aCat = rank[a.risk_category ?? ""] ?? 0;
+        const bCat = rank[b.risk_category ?? ""] ?? 0;
+        if (aCat !== bCat) return bCat - aCat;
         const aR = a.risk_score ?? -1;
         const bR = b.risk_score ?? -1;
         if (aR !== bR) return bR - aR;
