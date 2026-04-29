@@ -9,10 +9,10 @@ const STYLES: Record<MaterialityTier, string> = {
 };
 
 const LABELS: Record<MaterialityTier, string> = {
-  standard:   "Auto · < $100K",
-  manager:    "Manager · $100K–$1M",
-  controller: "Controller · $1M–$10M",
-  exec:       "Executive · > $10M",
+  standard:   "Auto-post · < $100K",
+  manager:    "Senior Accountant · $100K–$1M",
+  controller: "Manager · $1M–$5M",
+  exec:       "Manager + Director (Dual) · > $5M",
 };
 
 export default function MaterialityBadge({ tier }: { tier: MaterialityTier | null }) {

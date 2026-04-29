@@ -61,9 +61,9 @@ export function scoreRules(i: RiskInputs): { points: number; reasons: string[] }
   const reasons: string[] = [];
 
   if (i.tcv !== null) {
-    if (i.tcv > 10_000_000) {
+    if (i.tcv > 25_000_000) {
       points += 25;
-      reasons.push(`TCV > $10M ($${(i.tcv / 1_000_000).toFixed(1)}M)`);
+      reasons.push(`TCV > $25M ($${(i.tcv / 1_000_000).toFixed(1)}M)`);
     } else if (i.tcv > 5_000_000) {
       points += 15;
       reasons.push(`TCV > $5M ($${(i.tcv / 1_000_000).toFixed(1)}M)`);

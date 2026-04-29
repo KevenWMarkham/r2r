@@ -8,16 +8,21 @@ import AgentActivityStrip from "@/components/AgentActivityStrip";
 import VarianceTable from "@/components/VarianceTable";
 import CommentaryPanel from "@/components/CommentaryPanel";
 import ExecSummaryCard from "@/components/ExecSummaryCard";
+import BalanceSheetNarrative from "@/components/BalanceSheetNarrative";
 import { useCloseStore } from "@/store/closeStore";
 import { useUiStore } from "@/store/uiStore";
 import clsx from "clsx";
 import { Play, Loader2 } from "lucide-react";
 
-type TabKey = "variance" | "exec";
+type TabKey = "variance" | "exec" | "balance-sheet";
 
 export default function Narrative() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialTab = searchParams.get("tab") === "exec" ? "exec" : "variance";
+  const tabParam = searchParams.get("tab");
+  const initialTab: TabKey =
+    tabParam === "exec" ? "exec"
+    : tabParam === "balance-sheet" ? "balance-sheet"
+    : "variance";
   const [tab, setTab] = useState<TabKey>(initialTab);
 
   // Variance state
@@ -134,6 +139,9 @@ export default function Narrative() {
           <TabButton active={tab === "exec"} onClick={() => setTab("exec")}>
             Executive Summary
           </TabButton>
+          <TabButton active={tab === "balance-sheet"} onClick={() => setTab("balance-sheet")}>
+            Balance Sheet
+          </TabButton>
         </div>
 
         {tab === "variance" && (
@@ -164,8 +172,9 @@ export default function Narrative() {
 
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="text-sm text-brand-text-muted">
-                Close metrics: Day {closeDay > 0 ? closeDay : "—"} ·{" "}
-                {activePhase ? activePhase.toUpperCase() : "not running"}
+                {activePhase
+                  ? <>Close metrics: Day {closeDay} · {activePhase.toUpperCase()}</>
+                  : <>Close metrics: cockpit idle — using <span className="text-brand-text">5.2-day</span> baseline</>}
               </div>
               <button
                 onClick={runExec}
@@ -186,6 +195,8 @@ export default function Narrative() {
             )}
           </div>
         )}
+
+        {tab === "balance-sheet" && <BalanceSheetNarrative />}
       </div>
     </OllamaGuard>
   );

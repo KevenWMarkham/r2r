@@ -1,0 +1,184 @@
+[
+  {
+    "id": "kb-contracts-overview",
+    "title": "Contracts queue overview",
+    "topic": "contracts",
+    "content": "The Contracts queue (/contracts) holds 11 seeded contracts for the demo. Each row shows filename, counterparty, total contract value (TCV) with thousand separators, source, risk category and score, technical-accounting flags (LEASE / DERIV pills), and processing status. Risk scores drive sort order — High first, then Medium, then Low. Tick the checkbox column to select contracts for batch processing. Click a row to drill into the contract detail.",
+    "keywords": ["contracts", "queue", "list", "show", "tcv", "risk", "tech acct", "filename", "counterparty"]
+  },
+  {
+    "id": "kb-contracts-fixtures",
+    "title": "Fixture contracts (canned mode)",
+    "topic": "contracts",
+    "content": "Eleven canned-mode contracts ship with the prototype: Amazon Web Services (TCV $45M, High risk, ASC 815 derivative flag), Turner Construction ($12.5M, Medium), Accenture LLP ($24M, Medium), Nexus Cloud ($1.35M, High, derivative flag), Summit Builders ($8.5M, Medium), Wieden+Kennedy ($8.4M, Medium), Chubb Commercial Insurance ($15M, Medium), Atlas Realty Partners ($3.6M, Medium, ASC 842 lease flag), Meridian Solutions ($18M, Low), Olympic Insurance ($2.25M, Low, prepaid amortization), TechFlow Consulting ($2.4M, Low). All canned mode runs read from these fixtures.",
+    "keywords": ["fixtures", "list contracts", "which contracts", "all contracts", "names", "counterparties"]
+  },
+  {
+    "id": "kb-contracts-process",
+    "title": "How to process contracts",
+    "topic": "demo-flow",
+    "content": "On /contracts, tick the contracts you want and click 'Run selected (N)' to run extract → risk → tech-acct on each. A progress banner tracks 'Processing X of N — Counterparty — extracting…'. When the batch completes, a results modal opens grouped by risk (High / Medium / Low / Failed) with per-row Review and Accrual buttons. After running, click 'Calculate accruals (N)' to compute JEs without submitting; the modal then groups results by routing tier. Click 'Submit all' to send every calculated JE to the Review Queue with materiality routing attached.",
+    "keywords": ["how to", "process", "run", "workflow", "calculate accruals", "submit all", "extract", "batch"]
+  },
+  {
+    "id": "kb-risk-thresholds",
+    "title": "Risk score thresholds (Nike-tuned)",
+    "topic": "risk",
+    "content": "Risk thresholds are Nike-scale: TCV >$25M adds 25 points (High bump), TCV >$5M adds 15 points (Medium bump), TCV >$1M adds 5 points (Low bump). Other rule contributions: auto-renewal +10, no liability cap +15, lease component +10, embedded derivative +10. The rules score caps at 60 out of 60. The LLM qualitative signal contributes 0-40 covering uncovered factors (vendor concentration, exclusivity, audit exposure). Combined score 0-100. Categorization: >=75 High, >=40 Medium, <40 Low.",
+    "keywords": ["risk", "threshold", "score", "tcv bump", "high", "medium", "low", "categorization", "scoring"]
+  },
+  {
+    "id": "kb-risk-why-25m",
+    "title": "Why $25M for High risk (vs $10M)",
+    "topic": "risk",
+    "content": "The High-risk TCV threshold was raised from $10M to $25M because Nike's revenue base (~$51B) makes a $10M contract immaterial to financial statements. AS5 / audit performance materiality at Nike scale lands in the hundreds of millions, so a $10M deal shouldn't auto-bump to High. The recalibrated tiers ensure the High category reflects contracts that warrant senior review at Nike's scale. Tunable per tenant — at a mid-market client we'd lower thresholds.",
+    "keywords": ["why 25m", "why $25m", "threshold change", "calibration", "nike scale", "materiality"]
+  },
+  {
+    "id": "kb-materiality-tiers",
+    "title": "JE materiality routing tiers",
+    "topic": "materiality",
+    "content": "Submitted journal entries route by total amount: <$100K auto-posts (no human review); $100K-$1M routes to Senior Accountant; $1M-$5M routes to Manager; >$5M routes to Manager + Director (dual approval). The router lives at canned-je-store.routeByMateriality and the equivalent server-side at je-materiality.routeForApproval. Approval triggers the Posting Agent which calls BlackLine -> SAP BAPI_ACC_DOCUMENT_POST. Below-threshold entries skip the queue and pick up SAP doc numbers immediately.",
+    "keywords": ["materiality", "routing", "tier", "approval", "manager", "director", "auto-post", "senior accountant", "dual"]
+  },
+  {
+    "id": "kb-materiality-dual",
+    "title": "Dual approval (>$5M) — current implementation",
+    "topic": "materiality",
+    "content": "JEs over $5M show 'Manager + Director (Dual)' as their materiality routing label. In the current prototype this is label-only — a single Approve click still posts. Real two-signature gating with separate manager-approved and director-approved states is roadmap. The label communicates the policy; the mechanics are intentionally simple for the demo. To implement: add two boolean approval flags on proposed_journal_entries, post only when both are true, render two distinct sign-off buttons on the Review Queue row.",
+    "keywords": ["dual approval", "5m", "$5m", "manager director", "two signature", "policy"]
+  },
+  {
+    "id": "kb-reversal-policy",
+    "title": "Auto-reversal policy",
+    "topic": "reversals",
+    "content": "Accrual reversals are policy — they inherit approval from the original journal entry and post automatically on the reversal_date. No separate human sign-off required. This matches SAP F.81 / BlackLine production behavior: reversals are mechanical undo entries (same lines flipped), dated next period, run as a batch. The audit trail records both SAP doc numbers (original posting + reversal) under the original approver's user_id. In canned mode, the queue refresh sweeps posted JEs whose reversal_date has arrived and flips them to 'reversed'. A presenter '(Demo) advance clock' button force-flips for live demos.",
+    "keywords": ["reversal", "auto-reverse", "policy", "f.81", "blackline", "no second signature", "inherited approval"]
+  },
+  {
+    "id": "kb-reversal-exceptions",
+    "title": "When reversals should NOT auto-post (exception gates)",
+    "topic": "reversals",
+    "content": "Recommended production exception gates before auto-reversing: (1) original posting status must be 'posted' (not rejected/voided); (2) contract still active (not terminated mid-period); (3) reversal period is open (not hard-closed); (4) no material change to the underlying estimate (e.g., new invoice arrived showing >10% variance). If any gate fails, route to an exception queue for manual Manager review instead of auto-posting. The current prototype implements gate (1) only — period-close gates and variance gates are roadmap.",
+    "keywords": ["reversal exception", "when not", "gates", "period close", "rejected", "void"]
+  },
+  {
+    "id": "kb-tech-acct-asc842",
+    "title": "ASC 842 lease flag",
+    "topic": "tech-acct",
+    "content": "ASC 842 lease accounting applies when a contract gives Nike the right to control the use of an identified asset for a period of time in exchange for consideration. NOAH flags this if the contract has a lease_component attribute set true. Flagged contracts route to senior tech-acct review for ROU asset / lease liability classification. Currently flagged contracts: Atlas Realty Partners (office lease).",
+    "keywords": ["asc 842", "lease", "rou", "right of use", "lease accounting"]
+  },
+  {
+    "id": "kb-tech-acct-asc815",
+    "title": "ASC 815 embedded derivative flag",
+    "topic": "tech-acct",
+    "content": "ASC 815 embedded-derivative review is triggered when a contract contains pricing or settlement terms indexed to a financial variable (FX, commodity, equity, interest rate). NOAH flags this if the embedded_derivative attribute is true. Flagged contracts require bifurcation analysis. Currently flagged contracts: Amazon Web Services (cloud-credits indexing), Nexus Cloud Inc.",
+    "keywords": ["asc 815", "derivative", "embedded", "hedging", "bifurcation"]
+  },
+  {
+    "id": "kb-phases",
+    "title": "Close cycle — five phases",
+    "topic": "phases",
+    "content": "The Close Cockpit models five phases: Phase 1 Pre-Close (Day -1 and before) scans SAP for open items, predicts at-risk accounts, produces a readiness report. Phase 2 Execute (Day 1-3) triggers BlackLine Smart Close, monitors via Event Grid, routes exceptions. Phase 3 Consolidate (Day 4) rolls up subsidiary entries, posts eliminations and FX translation, locks group totals. Phase 4 Validate (Day 5-6) runs balance validation, recon agent checks, drafts narrative. Phase 5 Gate (Day 6) confirms exceptions are below materiality, captures controller sign-off, closes the period.",
+    "keywords": ["phases", "preclose", "execute", "consolidate", "validate", "gate", "close cycle", "days"]
+  },
+  {
+    "id": "kb-narrative-tabs",
+    "title": "Narrative tab — three views",
+    "topic": "narrative",
+    "content": "/narrative has three tabs. Variance Commentary draws line-item commentary on each P&L row using Claude (or Qwen in local mode); deterministic generation, ~2-3 sentences per line, CFO-memo tone. Executive Summary drafts a board-ready close summary using top-3 variances + close metrics from the Cockpit (or a 5.2-day baseline if Cockpit idle). Balance Sheet shows Period End vs Prior Year End for 13 line items including a contract-driven Accrued Liabilities row that updates live as JEs are submitted on /contracts.",
+    "keywords": ["narrative", "variance", "commentary", "executive", "exec summary", "balance sheet"]
+  },
+  {
+    "id": "kb-narrative-balance-sheet",
+    "title": "Balance Sheet — Accrued Liabilities is contract-driven",
+    "topic": "narrative",
+    "content": "On /narrative -> Balance Sheet, the Accrued Liabilities row is special: its current period balance equals a seeded BAU base ($5,950M) PLUS the live sum of credits to GL 2310 from JEs submitted on /contracts. Variance and percent are recomputed from that live total. Clicking Generate on that row produces a deterministic commentary that names contributing contracts, materiality routing breakdown, scheduled auto-reversals, and ASC 842/815 flags from the contracts. Other rows use seeded driver text + auto-flag lines with >10% YoY variance for disclosure consideration.",
+    "keywords": ["balance sheet", "accrued liabilities", "contract driven", "gl 2310", "live"]
+  },
+  {
+    "id": "kb-review-layout",
+    "title": "Review Queue layout",
+    "topic": "review",
+    "content": "The Review Queue (/review) splits JEs into two sections: Pending Review at the top (status='submitted', with Approve/Reject actions) and Recent Activity below (posted/reversed/rejected, read-only with status pills). Each row shows Company Code (1000 = Nike US), debit account number with name, debit amount, credit account number, credit amount — what an SAP reviewer actually checks. Click the chevron to expand a row in place: full multi-line JE table, lifecycle panel (Submitted / Approved / Posted / Reversal), and the calculation narrative with a Download button for an audit-ready tab-delimited worksheet.",
+    "keywords": ["review queue", "pending", "approve", "reject", "company code", "debit", "credit", "expand", "download"]
+  },
+  {
+    "id": "kb-review-buttons",
+    "title": "Review Queue header buttons",
+    "topic": "review",
+    "content": "/review header has two buttons: '(Demo) advance clock' force-flips any posted JE with a future reversal_date to Reversed status (presenter aid for live demos; production handles this automatically on the calendar reversal_date). 'Refresh' re-fetches the queue from the JE store (canned) or Postgres (live) and runs the date-gated reversal sweep. The flash banner under the title confirms what happened on each click.",
+    "keywords": ["advance clock", "refresh", "demo button", "reversal sweep"]
+  },
+  {
+    "id": "kb-attributes-27",
+    "title": "27 contract attributes extracted",
+    "topic": "extraction",
+    "content": "The Extractor agent pulls 27 structured attributes per contract: counterparty, contract_type, effective_date, expiration_date, total_contract_value, currency, payment_terms, billing_frequency, fee_schedule, service_description, service_start_date, service_end_date, auto_renewal, termination_notice_days, governing_law, indemnification_present, liability_cap, lease_component, embedded_derivative, expense_recognition_method, performance_obligations, pricing_variability, minimum_commitment, exclusivity_clause, ip_ownership, confidentiality_term, change_order_mechanism. Each attribute returns value + confidence (0-1) + source_page. Confidence <0.5 highlights amber in the AttributeChecklist.",
+    "keywords": ["27 attributes", "extraction", "fields", "checklist", "what is extracted", "attributes"]
+  },
+  {
+    "id": "kb-demo-flow",
+    "title": "Demo flow end-to-end",
+    "topic": "demo-flow",
+    "content": "Recommended demo path (~30 min): 1) /contracts — Run selected to extract+score 11 contracts, then Calculate accruals -> Submit all to send JEs to Review Queue. 2) /review — expand a JE, show line detail + Download calc worksheet, Approve a JE, click (Demo) advance clock to flip a reversal. 3) /narrative — show Variance Commentary, Executive Summary, then Balance Sheet (note Accrued Liabilities is contract-driven). 4) /copilot — try the suggestion chips, demonstrate live answers update with state. 5) / (Close Cockpit) — Start the simulation, watch phases animate. Cockpit is shown LAST — it's the orchestration frame, not the entry point.",
+    "keywords": ["demo", "walkthrough", "flow", "script", "presentation", "step by step"]
+  },
+  {
+    "id": "kb-architecture",
+    "title": "Architecture — live mode stack",
+    "topic": "architecture",
+    "content": "Live mode stack: PostgreSQL 16 with pgvector on port 5434 (docker-compose), Express.js server on port 3001 with routes for contracts/metabase/search/audit/je/kb. Ollama at localhost:11434 with Qwen 7B for chat completion and nomic-embed-text (768 dims) for embeddings. Vite dev server on 5173 (or first free port). Production target: Anthropic API on Azure AI Foundry with managed agents, BlackLine for certification workflows, SAP for posting via BAPI_ACC_DOCUMENT_POST. Canned mode (VITE_MODE=canned) runs without backend — fixtures in fixtures/metabase.json + in-memory JE store.",
+    "keywords": ["architecture", "stack", "tech", "ollama", "postgres", "pgvector", "express", "vite", "qwen"]
+  },
+  {
+    "id": "kb-live-vs-canned",
+    "title": "Live mode vs canned mode",
+    "topic": "architecture",
+    "content": "Canned mode (VITE_MODE=canned, the demo default) runs entirely in the browser using fixtures and an in-memory JE store. No Postgres, no Ollama. Predictable timing — 1-2 seconds of synthetic dwell per agent step. Live mode (default pnpm dev) hits the Express server which calls Postgres + Ollama. Extraction takes 30-90s per contract on Qwen 7B (CPU). Switch via the .env file VITE_MODE setting. Both modes share the same UI components and data shapes — only the data sources change.",
+    "keywords": ["live mode", "canned mode", "vite_mode", "fixtures", "demo mode"]
+  },
+  {
+    "id": "kb-audit-events",
+    "title": "Audit trail",
+    "topic": "audit",
+    "content": "Every state transition pushes an audit event: je_submit, je_approve, je_post, je_reject, je_reversal. In live mode these write to the audit_events table with id, ts, event_type, contract_id, agent (which agent emitted), confidence, payload (JSONB), user_id. In canned mode the events live in an in-memory array keyed on globalThis to survive Vite HMR. The audit screen at /contracts/:id/audit renders this timeline. Reversals record under the original approver's user_id, not 'auto-reversed', preserving accountability.",
+    "keywords": ["audit", "trail", "history", "events", "log", "sox", "trace"]
+  },
+  {
+    "id": "kb-accrual-pipeline",
+    "title": "Accrual pipeline",
+    "topic": "accruals",
+    "content": "calculateAccrual takes contract attributes + full text + period end and produces inputs (parsed accrual inputs), calc (deterministic math result), je (proposed journal entry), missing (any gaps). The math is pure functions in lib/accrual-math.ts — no LLM in the loop for the actual accrual calculation; only the input-parsing stage uses Claude. Methods supported: straight-line, prepaid-amortization, percent-of-completion. AccrualGapError throws when required inputs are missing (service_start_date, fee_schedule, etc.) — surfaces in the UI as a yellow 'Cannot compute' panel listing the specific missing fields.",
+    "keywords": ["accrual", "calculate", "math", "straight line", "prepaid", "amortization", "missing inputs"]
+  },
+  {
+    "id": "kb-prepaid-vs-accrual",
+    "title": "Prepaid amortization vs accrual",
+    "topic": "accruals",
+    "content": "Two different JE patterns. An accrual recognizes expense in the current period before the invoice arrives — DR Expense, CR Accrued Liabilities — and reverses next period when the actual invoice posts. A prepaid amortization recognizes ratable expense over time on a payment already made — DR Expense, CR Prepaid Asset — and does NOT reverse. Olympic Insurance is the prepaid example in fixtures (annual premium paid up-front). Its proposed_je has reversal_date = null and the JECard component reads 'Amortization · no reversal — prepaid drawdown' for that case.",
+    "keywords": ["prepaid", "amortization", "accrual difference", "olympic", "insurance", "no reversal"]
+  },
+  {
+    "id": "kb-gl-account-override",
+    "title": "Changing the GL account on a proposed accrual JE",
+    "topic": "accruals",
+    "content": "Default GL accounts on the JE builder are 6810 Services Expense (debit) and 2310 Accrued Liabilities (credit). Today the prototype hard-codes those defaults in lib/je-builder.ts; the function already accepts expenseAccount and liabilityAccount overrides as optional parameters but no UI surfaces them. To customize, three options. (1) Reviewer override before submit: add inline-edit fields to the AccrualProposal screen so the Senior Accountant can swap the account number on the proposed JE before clicking Submit for Review — small UI change, no schema change. (2) Per-tenant chart-of-accounts mapping table: a coa_mapping table keyed on (tenant, contract_type, service_description) returning the right expense + liability accounts so Nike's CoA conventions apply automatically per contract category; mapping resolved during accrual calculation. (3) Both: mapping picks the default, reviewer can still override. Recommended path is (3). Audit log records the override + reason if the reviewer changes the account.",
+    "keywords": ["gl account", "change account", "override", "different account", "wrong account", "account number", "6810", "2310", "coa", "chart of accounts", "expense account", "liability account", "customize"]
+  },
+  {
+    "id": "kb-batch-submit",
+    "title": "Submit all month-end JEs together (batch flow)",
+    "topic": "accruals",
+    "content": "Yes — submitting JEs one contract at a time is NOT the workflow. Once a contract has been through extract → risk → tech-acct (HITL review on /contracts), the batch flow takes over. On /contracts: tick the contracts you want to accrue (the header checkbox toggles all), click 'Calculate accruals (N)'. NOAH computes a JE for each in sequence; a results modal opens grouped by where each JE will route (Manager + Director dual >$5M, Manager $1M-$5M, Senior Accountant $100K-$1M, auto-post <$100K). At this point nothing has been submitted — review the routing and amounts. Click 'Submit all (N)' to push every calculated JE to the Review Queue with materiality routing already attached. Sub-$100K entries auto-post immediately to SAP and pick up doc numbers; larger entries land in /review for approval. One click submits the full month-end batch.",
+    "keywords": ["submit all", "batch", "all jes", "month end", "month-end", "all contracts", "submit together", "one click", "multiple jes", "calculate accruals"]
+  },
+  {
+    "id": "kb-review-tiers-count",
+    "title": "How many contracts/JEs require which review tier",
+    "topic": "materiality",
+    "content": "JEs route by total amount, not by contract: <$100K auto-posts (no human review); $100K-$1M routes to Senior Accountant; $1M-$5M routes to Manager; >$5M routes to Manager + Director (dual approval). Whether a contract requires Manager review depends on its accrual amount, not its TCV — a $50M contract paid quarterly might book a $4M accrual (Manager tier), while a $2M contract paid annually books $167K (Senior Accountant tier). To see the actual tier breakdown for the current period, calculate accruals on /contracts; the post-calc modal shows per-tier counts and totals. Once submitted, the Review Queue shows pending JEs grouped by tier.",
+    "keywords": ["how many require manager", "how many require review", "manager review", "review tier", "approval count", "tier breakdown", "who approves", "review breakdown"]
+  }
+]

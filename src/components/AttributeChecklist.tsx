@@ -10,9 +10,17 @@ interface Props {
   attributes: ContractAttributes | Record<string, unknown> | null;
 }
 
-function formatValue(v: unknown): string {
+const MONEY_FIELDS = new Set(["total_contract_value", "minimum_commitment"]);
+
+function formatValue(name: string, v: unknown): string {
   if (v === null || v === undefined) return "—";
   if (typeof v === "boolean") return v ? "Yes" : "No";
+  if (typeof v === "number") {
+    if (MONEY_FIELDS.has(name)) {
+      return `$${v.toLocaleString("en-US")}`;
+    }
+    return v.toLocaleString("en-US");
+  }
   return String(v);
 }
 
@@ -32,7 +40,7 @@ export default function AttributeChecklist({ attributes }: Props) {
           | { value: unknown; confidence: number; source_page: number | null }
           | undefined;
         const hasData = field && typeof field === "object";
-        const val = hasData ? formatValue(field.value) : "—";
+        const val = hasData ? formatValue(name, field.value) : "—";
         const confidence = hasData ? field.confidence : 0;
         const page = hasData ? field.source_page : null;
         const lowConfidence = hasData && field.confidence < 0.5 && field.value !== null;

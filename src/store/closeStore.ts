@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type Phase = "preclose" | "execute" | "validate" | "gate";
+export type Phase = "preclose" | "execute" | "consolidate" | "validate" | "gate";
 export type Entity = "NA" | "EMEA" | "GC" | "APLA" | "Corp" | "Global";
 export type EntityState = "idle" | "processing" | "complete";
 
@@ -33,17 +33,30 @@ const initialEntities: Record<Entity, EntityState> = {
   Global: "idle",
 };
 
+// Sim ticks 1–6 map to the five phases. Calendar labels are shown in PhaseGrid.
+//   tick 1     → Pre-Close (calendar Day -1 and before)
+//   ticks 2–3  → Execute (calendar Day 1-3)
+//   tick 4     → Consolidate (calendar Day 4)
+//   tick 5     → Validate (calendar Day 5-6)
+//   tick 6     → Gate (calendar Day 6)
 function phaseForDay(day: number): Phase | null {
   if (day <= 0) return null;
-  if (day <= 2) return "preclose";
-  if (day <= 4) return "execute";
-  if (day <= 5) return "validate";
-  if (day <= 6) return "gate";
+  if (day === 1) return "preclose";
+  if (day <= 3) return "execute";
+  if (day === 4) return "consolidate";
+  if (day === 5) return "validate";
+  if (day === 6) return "gate";
   return null;
 }
 
 function phaseLabel(p: Phase): string {
-  return { preclose: "Pre-Close", execute: "Execute", validate: "Validate", gate: "Gate" }[p];
+  return {
+    preclose: "Pre-Close",
+    execute: "Execute",
+    consolidate: "Consolidate",
+    validate: "Validate",
+    gate: "Gate",
+  }[p];
 }
 
 export const useCloseStore = create<CloseState>((set, get) => ({

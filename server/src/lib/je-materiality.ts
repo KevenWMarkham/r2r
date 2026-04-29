@@ -11,8 +11,8 @@ export interface MaterialityRouting {
 
 export function routeForApproval(totalAmount: number): MaterialityRouting {
   const amt = Math.abs(totalAmount);
-  if (amt < 100_000)    return { approver: "auto-approve", tier: "standard" };
-  if (amt < 1_000_000)  return { approver: "Rachel",       tier: "manager" };
-  if (amt < 10_000_000) return { approver: "Sarah",        tier: "controller" };
-  return { approver: "CFO", tier: "exec" };
+  if (amt < 100_000)    return { approver: "auto-post",       tier: "standard" };
+  if (amt < 1_000_000)  return { approver: "Senior Accountant", tier: "manager" };
+  if (amt < 5_000_000)  return { approver: "Manager",           tier: "controller" };
+  return { approver: "Manager + Director (dual)", tier: "exec" };
 }

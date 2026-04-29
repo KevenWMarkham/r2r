@@ -1,7 +1,7 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { getContract, submitJE, type ContractDetail, type ProposedJERecord } from "@/lib/api-client";
-import { agent, type AgentEvent } from "@/adapters";
+import { agent, type AgentEvent, type AgentStep } from "@/adapters";
 import { AccrualGapError, type AccrualPipelineResult } from "@/agents/accrual";
 import type { ContractAttributes } from "@/agents/contract-schema";
 import OllamaGuard from "@/components/OllamaGuard";
@@ -33,10 +33,9 @@ export default function AccrualProposal() {
     try {
       const c = await getContract(id);
       setContract(c);
-      // Hydrate prior run from metabase if available
-      if (c.proposed_je && typeof c.proposed_je === "object") {
-        // We only have the JE snapshot; inputs/calc would need to re-run
-      }
+      // Reflect prior agent runs (extract/risk/techAcct) so the step strip
+      // doesn't appear empty after navigating from the contract review screen.
+      setEvents(synthEventsFromStatus(c.agent_status));
     } catch (e) {
       setError(String(e));
     }
@@ -51,7 +50,7 @@ export default function AccrualProposal() {
     setRunning(true);
     setError(null);
     setMissing(null);
-    setEvents([]);
+    setEvents((prev) => prev.filter((e) => e.step !== "accrual"));
     const onEvent = (e: AgentEvent) => {
       setEvents((prev) => [...prev, e]);
       useUiStore.getState().pushAgentActivity(e, `accrual:${id}`);
@@ -244,4 +243,17 @@ export default function AccrualProposal() {
 function endOfCurrentMonth(): Date {
   const now = new Date();
   return new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+}
+
+function synthEventsFromStatus(status: Record<string, string> | null | undefined): AgentEvent[] {
+  if (!status) return [];
+  const steps: AgentStep[] = ["extract", "risk", "techAcct"];
+  const out: AgentEvent[] = [];
+  for (const step of steps) {
+    const s = status[step];
+    if (s === "done") out.push({ step, status: "done" });
+    else if (s === "partial") out.push({ step, status: "done", detail: "Partial extraction" });
+    else if (s === "error") out.push({ step, status: "error" });
+  }
+  return out;
 }

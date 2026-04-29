@@ -15,7 +15,7 @@ const phases: PhaseMeta[] = [
     key: "preclose",
     label: "Pre-Close",
     num: 1,
-    days: "Day 1-2",
+    days: "Day -1 and before",
     desc: "Scan SAP for open items. Foundry predicts at-risk accounts. Readiness report via Teams.",
     color: "var(--brand-accent)",
   },
@@ -23,24 +23,32 @@ const phases: PhaseMeta[] = [
     key: "execute",
     label: "Execute",
     num: 2,
-    days: "Day 2-4",
+    days: "Day 1-3",
     desc: "BlackLine Smart Close triggers SAP jobs. Event Grid monitoring. Exceptions routed.",
     color: "var(--status-amber)",
   },
   {
+    key: "consolidate",
+    label: "Consolidate",
+    num: 3,
+    days: "Day 4",
+    desc: "Subsidiary entries roll up. Eliminations and FX translation posted. Group totals locked.",
+    color: "var(--status-cyan)",
+  },
+  {
     key: "validate",
     label: "Validate",
-    num: 3,
-    days: "Day 4-5",
+    num: 4,
+    days: "Day 5-6",
     desc: "Balance validation. Recon agent checks. NOAH generates narrative.",
     color: "var(--status-green)",
   },
   {
     key: "gate",
     label: "Gate",
-    num: 4,
-    days: "Day 5-6",
-    desc: "Exceptions below materiality. Controller sign-off. Consolidation signaled.",
+    num: 5,
+    days: "Day 6",
+    desc: "Exceptions below materiality. Controller sign-off. Period closed.",
     color: "var(--status-purple)",
   },
 ];
@@ -49,7 +57,7 @@ export default function PhaseGrid() {
   const active = useCloseStore((s) => s.activePhase);
   const completed = useCloseStore((s) => s.completedPhases);
   return (
-    <div className="grid grid-cols-4 gap-[2px]">
+    <div className="grid grid-cols-5 gap-[2px]">
       {phases.map((p) => {
         const isActive = active === p.key;
         const isDone = completed.includes(p.key);

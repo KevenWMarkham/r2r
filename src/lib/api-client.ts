@@ -2,6 +2,7 @@ import { API_URL, IS_CANNED } from "@/config/env";
 import {
   cannedSubmitJE,
   cannedListJEQueue,
+  cannedListAllJEs,
   cannedListJEsForContract,
   cannedApproveJE,
   cannedRejectJE,
@@ -272,6 +273,12 @@ export async function listJEQueue(tier?: MaterialityTier): Promise<ProposedJERec
   return request(`/api/je/queue${qs}`);
 }
 
+export async function listAllJEs(tier?: MaterialityTier): Promise<ProposedJERecord[]> {
+  if (IS_CANNED) return cannedListAllJEs(tier);
+  const qs = tier ? `?tier=${tier}&all=1` : "?all=1";
+  return request(`/api/je/queue${qs}`);
+}
+
 export async function getJE(id: string): Promise<ProposedJERecord> {
   return request(`/api/je/${id}`);
 }
@@ -297,9 +304,12 @@ export async function rejectJE(id: string, reason: string, rejectedBy = "SG&A Ma
   });
 }
 
-export async function runReversals(): Promise<{ count: number; reversed: Array<{ id: string; reversal_ref: string }> }> {
-  if (IS_CANNED) return cannedRunReversals();
-  return request("/api/je/run-reversals", { method: "POST" });
+export async function runReversals(force = false): Promise<{ count: number; reversed: Array<{ id: string; reversal_ref: string }> }> {
+  if (IS_CANNED) return cannedRunReversals(force);
+  return request("/api/je/run-reversals", {
+    method: "POST",
+    body: JSON.stringify({ force }),
+  });
 }
 
 export async function recordAudit(ev: {

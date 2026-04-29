@@ -14,10 +14,10 @@ import { getFixtureContract } from "./fixtures";
 
 // ── Materiality routing matches the live Postgres rule (server/migrations) ──
 function routeByMateriality(amount: number): MaterialityTier {
-  if (amount < 100_000) return "standard";   // auto-approve
-  if (amount < 1_000_000) return "manager";  // SG&A Manager
-  if (amount < 10_000_000) return "controller"; // VP Controlling
-  return "exec";                             // CFO
+  if (amount < 100_000) return "standard";   // auto-post
+  if (amount < 1_000_000) return "manager";  // Senior Accountant
+  if (amount < 5_000_000) return "controller"; // Manager
+  return "exec";                             // Manager + Director (dual approval)
 }
 
 // ── HMR-survival state ──────────────────────────────────────────────────────
@@ -163,6 +163,13 @@ export function cannedListJEQueue(tier?: MaterialityTier): ProposedJERecord[] {
     .reverse();
 }
 
+export function cannedListAllJEs(tier?: MaterialityTier): ProposedJERecord[] {
+  return jes
+    .filter((j) => !tier || j.materiality_tier === tier)
+    .slice()
+    .reverse();
+}
+
 export function cannedListJEsForContract(contractId: string): ProposedJERecord[] {
   return jes
     .filter((j) => j.contract_id === contractId)
@@ -229,32 +236,40 @@ export function cannedRejectJE(id: string, reason: string, rejectedBy = "SG&A Ma
   return rec;
 }
 
-export function cannedRunReversals(): { count: number; reversed: Array<{ id: string; reversal_ref: string }> } {
-  // Demo mode: force-reverse every posted JE regardless of reversal_date.
-  // Real production logic would gate on `rec.reversal_date <= today`, but in
-  // canned mode all fixture JEs have reversal_date in the next period (typical
-  // accrual pattern), so a strict date gate would always find zero matches and
-  // the demo button would do nothing visible. The button's tooltip already
-  // calls this out as a "dev-only" simulator of the SAP auto-reversal batch.
+export function cannedRunReversals(force = false): { count: number; reversed: Array<{ id: string; reversal_ref: string }> } {
+  // Production policy: posted accruals auto-reverse on their reversal_date
+  // under the original approval — no separate human action.
+  // We sweep on every queue refresh; eligible records are those with a
+  // reversal_date that has arrived. `force=true` is the demo "advance the
+  // clock" hook so a presenter can show the flip without waiting for the
+  // calendar to roll over.
+  const today = new Date().toISOString().slice(0, 10);
   const reversed: Array<{ id: string; reversal_ref: string }> = [];
   for (const rec of jes) {
-    if (rec.status === "posted" && !rec.reversed_at) {
-      rec.status = "reversed";
-      rec.reversed_at = nowIso();
-      rec.reversal_ref = fakeSapDocNumber();
-      rec.updated_at = nowIso();
-      reversed.push({ id: rec.id, reversal_ref: rec.reversal_ref });
-      pushAudit({
-        event_type: "je_reversal",
-        contract_id: rec.contract_id,
-        agent: "Reversal-Batch",
-        confidence: 1.0,
-        payload: { je_id: rec.id, reversal_ref: rec.reversal_ref, original_doc: rec.posting_ref },
-        user_id: "auto-reversed",
-      });
-    }
+    if (rec.status !== "posted" || rec.reversed_at) continue;
+    if (!rec.reversal_date) continue; // no reversal scheduled (e.g., prepaid amortization)
+    if (!force && rec.reversal_date > today) continue;
+    rec.status = "reversed";
+    rec.reversed_at = nowIso();
+    rec.reversal_ref = fakeSapDocNumber();
+    rec.updated_at = nowIso();
+    reversed.push({ id: rec.id, reversal_ref: rec.reversal_ref });
+    pushAudit({
+      event_type: "je_reversal",
+      contract_id: rec.contract_id,
+      agent: "Reversal-Batch",
+      confidence: 1.0,
+      payload: {
+        je_id: rec.id,
+        reversal_ref: rec.reversal_ref,
+        original_doc: rec.posting_ref,
+        reversal_date: rec.reversal_date,
+        forced: force,
+      },
+      user_id: rec.approved_by ?? "auto-reversed",
+    });
   }
-  notify();
+  if (reversed.length > 0) notify();
   return { count: reversed.length, reversed };
 }
 

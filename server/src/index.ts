@@ -11,7 +11,9 @@ import { searchRouter } from "./routes/search.js";
 import { auditRouter } from "./routes/audit.js";
 import { metabaseRouter } from "./routes/metabase.js";
 import { jeRouter } from "./routes/je.js";
+import { kbRouter } from "./routes/kb.js";
 import { pool } from "./db.js";
+import { applyMigrations } from "./lib/migrations.js";
 
 const PORT = Number(process.env.PORT ?? 3001);
 
@@ -33,6 +35,7 @@ app.use("/api/metabase", metabaseRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/audit", auditRouter);
 app.use("/api/je", jeRouter);
+app.use("/api/kb", kbRouter);
 
 // 404 + error handlers
 app.use((_req, res) => res.status(404).json({ error: "Not found" }));
@@ -41,6 +44,15 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
   res.status(500).json({ error: err.message ?? "Internal server error" });
 });
 
-app.listen(PORT, () => {
-  console.log(`NOAH prototype server listening on http://localhost:${PORT}`);
-});
+async function start() {
+  try {
+    await applyMigrations();
+  } catch (e) {
+    console.warn(`Migrations skipped (DB may be unavailable): ${e instanceof Error ? e.message : String(e)}`);
+  }
+  app.listen(PORT, () => {
+    console.log(`NOAH prototype server listening on http://localhost:${PORT}`);
+  });
+}
+
+void start();

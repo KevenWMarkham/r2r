@@ -111,10 +111,10 @@
       "tcv": "$24,000,000",
       "lease_flagged": false,
       "derivative_flagged": false,
-      "risk_score": 78,
-      "risk_category": "High",
+      "risk_score": 68,
+      "risk_category": "Medium",
       "risk_reasons": [
-        "TCV > $10M ($24.0M)",
+        "TCV > $5M ($24.0M)",
         "Auto-renewal provision",
         "No liability cap",
         "Vendor concentration — top finance BPO provider"
@@ -207,10 +207,10 @@
       "tcv": "$15,000,000",
       "lease_flagged": false,
       "derivative_flagged": false,
-      "risk_score": 58,
+      "risk_score": 48,
       "risk_category": "Medium",
       "risk_reasons": [
-        "TCV > $10M ($15.0M)",
+        "TCV > $5M ($15.0M)",
         "Multi-year term with prepaid premium",
         "Indemnification obligations to insurer"
       ],
@@ -302,10 +302,10 @@
       "tcv": "$12,500,000",
       "lease_flagged": false,
       "derivative_flagged": false,
-      "risk_score": 82,
-      "risk_category": "High",
+      "risk_score": 72,
+      "risk_category": "Medium",
       "risk_reasons": [
-        "TCV > $10M ($12.5M)",
+        "TCV > $5M ($12.5M)",
         "Fixed-price construction with scope creep risk",
         "Performance bonds required",
         "Multiple milestone-based draws — schedule slippage penalty exposure"
@@ -400,7 +400,7 @@
       "risk_score": 85,
       "risk_category": "High",
       "risk_reasons": [
-        "TCV > $10M ($45.0M)",
+        "TCV > $25M ($45.0M)",
         "Auto-renewal provision",
         "Embedded pricing escalator indexed to CPI-U (ASC 815 review)",
         "Data-sovereignty obligations span 4 regions",
@@ -494,7 +494,7 @@
       "tcv": "$18,000,000",
       "lease_flagged": false,
       "derivative_flagged": false,
-      "risk_score": 38,
+      "risk_score": 28,
       "risk_category": "Low",
       "risk_reasons": [
         "TCV $18M but liability cap present (2x prior 12mo fees)",

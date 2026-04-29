@@ -163,6 +163,37 @@ CREATE TRIGGER trg_pje_touch
   FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
 
 -- =============================================================================
+-- noah_kb — knowledge base for the NOAH Help assistant
+-- =============================================================================
+-- First column (`content`) is the chunk text the user actually wants. Embedding
+-- column is HNSW-indexed for cosine search; metadata + keywords support
+-- topic filtering and BM25-style fallback when embeddings are unavailable.
+CREATE TABLE IF NOT EXISTS noah_kb (
+    id          TEXT PRIMARY KEY,
+    content     TEXT NOT NULL,
+    embedding   VECTOR(768),
+    title       TEXT NOT NULL,
+    topic       TEXT NOT NULL,
+    keywords    TEXT[] NOT NULL DEFAULT '{}',
+    metadata    JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_noah_kb_embedding ON noah_kb
+    USING hnsw (embedding vector_cosine_ops);
+CREATE INDEX IF NOT EXISTS idx_noah_kb_topic     ON noah_kb(topic);
+CREATE INDEX IF NOT EXISTS idx_noah_kb_keywords  ON noah_kb USING gin(keywords);
+
+DROP TRIGGER IF EXISTS trg_noah_kb_touch ON noah_kb;
+CREATE TRIGGER trg_noah_kb_touch
+  BEFORE UPDATE ON noah_kb
+  FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
+
+COMMENT ON TABLE noah_kb IS
+  'Knowledge base for NOAH Help. content column holds the fact text; embedding column is searched via cosine similarity. Seeded by server/src/scripts/seed-kb.ts from the shared TypeScript chunk file.';
+
+-- =============================================================================
 -- Dev convenience view — one-row summary per contract
 -- =============================================================================
 CREATE OR REPLACE VIEW v_contract_summary AS

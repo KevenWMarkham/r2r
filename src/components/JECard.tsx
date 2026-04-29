@@ -20,9 +20,11 @@ export default function JECard({ je }: { je: ProposedJE }) {
         </div>
         <div className="text-right">
           <div className="font-display text-[10px] uppercase text-brand-text-dim tracking-[2px]">
-            Reverses
+            {je.reversalDate ? "Reverses" : "Amortization"}
           </div>
-          <div className="font-mono text-xs text-brand-text">{je.reversalDate}</div>
+          <div className="font-mono text-xs text-brand-text">
+            {je.reversalDate ?? "no reversal — prepaid drawdown"}
+          </div>
         </div>
       </div>
 
