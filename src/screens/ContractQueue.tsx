@@ -520,8 +520,10 @@ export default function ContractQueue() {
                 <span className="text-sm text-brand-text-muted truncate">
                   {c.counterparty ?? "—"}
                 </span>
-                <span className="font-mono text-xs text-brand-text tabular-nums">
-                  {c.tcv ?? "—"}
+                <span className="font-mono text-xs tabular-nums">
+                  {isProcessed
+                    ? <span className="text-brand-text">{c.tcv ?? "—"}</span>
+                    : <span className="text-status-amber italic">pending</span>}
                 </span>
                 <span className="font-mono text-[10px] uppercase text-brand-text-dim">
                   {c.source.replace("sample_", "")}
