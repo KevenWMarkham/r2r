@@ -124,7 +124,7 @@ export default function Narrative() {
       <div className="space-y-8">
         <div>
           <h1 className="font-display text-4xl font-extrabold uppercase tracking-tight">
-            Narrative
+            Variance Analysis
           </h1>
           <p className="text-sm text-brand-text-muted mt-2 max-w-2xl">
             UC-18 Variance Commentary + UC-20 Executive Close Narrative. Both grounded in seeded

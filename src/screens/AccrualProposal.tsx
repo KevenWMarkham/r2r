@@ -220,7 +220,7 @@ export default function AccrualProposal() {
                       <div className="text-status-amber font-bold mb-1">AWAITING REVIEWER APPROVAL</div>
                       <div className="text-brand-text-muted">
                         Routed to the {submitted.materiality_tier} tier reviewer.
-                        Open the <Link to="/review" className="text-brand-accent hover:underline">Review Queue</Link> to approve.
+                        Open the <Link to="/review" className="text-brand-accent hover:underline">JE Review Queue</Link> to approve.
                       </div>
                     </div>
                   ) : null}

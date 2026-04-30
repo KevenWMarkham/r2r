@@ -148,7 +148,7 @@ export function buildCannedAnswers(ctx: AnswerContext): CannedAnswer[] {
       match: /(pending.*review|awaiting.*approval|to.*approve|review.*queue|pending.*manager|pending.*director)/i,
       reply:
         submitted.length === 0
-          ? "Review queue is empty — no JEs awaiting approval right now."
+          ? "JE Review Queue is empty — no JEs awaiting approval right now."
           : `${submitted.length} JE${submitted.length === 1 ? "" : "s"} awaiting approval: ${dualPending.length} dual-approval (>$5M), ${managerPending.length} Manager ($1M-$5M), ${seniorPending.length} Senior Accountant ($100K-$1M). Top pending: ${submitted.slice(0, 3).map(jeBrief).join("; ")}. Open /review to act.`,
     },
     {

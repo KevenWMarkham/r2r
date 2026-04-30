@@ -446,7 +446,7 @@ export default function ReviewQueue() {
     <div className="space-y-8">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="font-display text-4xl font-extrabold uppercase tracking-tight">Review Queue</h1>
+          <h1 className="font-display text-4xl font-extrabold uppercase tracking-tight">JE Review Queue</h1>
           <p className="text-sm text-brand-text-muted mt-2 max-w-2xl">
             Journal entries submitted by the Senior Accountant that need Manager (or Manager + Director) approval before posting to SAP via BlackLine.
             Below-threshold entries auto-post; reversals post automatically on their reversal date — approval is inherited from the original entry.

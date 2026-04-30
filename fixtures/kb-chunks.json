@@ -17,7 +17,7 @@
     "id": "kb-contracts-process",
     "title": "How to process contracts",
     "topic": "demo-flow",
-    "content": "On /contracts, tick the contracts you want and click 'Run selected (N)' to run extract → risk → tech-acct on each. A progress banner tracks 'Processing X of N — Counterparty — extracting…'. When the batch completes, a results modal opens grouped by risk (High / Medium / Low / Failed) with per-row Review and Accrual buttons. After running, click 'Calculate accruals (N)' to compute JEs without submitting; the modal then groups results by routing tier. Click 'Submit all' to send every calculated JE to the Review Queue with materiality routing attached.",
+    "content": "On /contracts, tick the contracts you want and click 'Run selected (N)' to run extract → risk → tech-acct on each. A progress banner tracks 'Processing X of N — Counterparty — extracting…'. When the batch completes, a results modal opens grouped by risk (High / Medium / Low / Failed) with per-row Review and Accrual buttons. After running, click 'Calculate accruals (N)' to compute JEs without submitting; the modal then groups results by routing tier. Click 'Submit all' to send every calculated JE to the JE Review Queue with materiality routing attached.",
     "keywords": ["how to", "process", "run", "workflow", "calculate accruals", "submit all", "extract", "batch"]
   },
   {
@@ -45,7 +45,7 @@
     "id": "kb-materiality-dual",
     "title": "Dual approval (>$5M) — current implementation",
     "topic": "materiality",
-    "content": "JEs over $5M show 'Manager + Director (Dual)' as their materiality routing label. In the current prototype this is label-only — a single Approve click still posts. Real two-signature gating with separate manager-approved and director-approved states is roadmap. The label communicates the policy; the mechanics are intentionally simple for the demo. To implement: add two boolean approval flags on proposed_journal_entries, post only when both are true, render two distinct sign-off buttons on the Review Queue row.",
+    "content": "JEs over $5M show 'Manager + Director (Dual)' as their materiality routing label. In the current prototype this is label-only — a single Approve click still posts. Real two-signature gating with separate manager-approved and director-approved states is roadmap. The label communicates the policy; the mechanics are intentionally simple for the demo. To implement: add two boolean approval flags on proposed_journal_entries, post only when both are true, render two distinct sign-off buttons on the JE Review Queue row.",
     "keywords": ["dual approval", "5m", "$5m", "manager director", "two signature", "policy"]
   },
   {
@@ -99,14 +99,14 @@
   },
   {
     "id": "kb-review-layout",
-    "title": "Review Queue layout",
+    "title": "JE Review Queue layout",
     "topic": "review",
-    "content": "The Review Queue (/review) splits JEs into two sections: Pending Review at the top (status='submitted', with Approve/Reject actions) and Recent Activity below (posted/reversed/rejected, read-only with status pills). Each row shows Company Code (1000 = Nike US), debit account number with name, debit amount, credit account number, credit amount — what an SAP reviewer actually checks. Click the chevron to expand a row in place: full multi-line JE table, lifecycle panel (Submitted / Approved / Posted / Reversal), and the calculation narrative with a Download button for an audit-ready tab-delimited worksheet.",
+    "content": "The JE Review Queue (/review) splits JEs into two sections: Pending Review at the top (status='submitted', with Approve/Reject actions) and Recent Activity below (posted/reversed/rejected, read-only with status pills). Each row shows Company Code (1000 = Nike US), debit account number with name, debit amount, credit account number, credit amount — what an SAP reviewer actually checks. Click the chevron to expand a row in place: full multi-line JE table, lifecycle panel (Submitted / Approved / Posted / Reversal), and the calculation narrative with a Download button for an audit-ready tab-delimited worksheet.",
     "keywords": ["review queue", "pending", "approve", "reject", "company code", "debit", "credit", "expand", "download"]
   },
   {
     "id": "kb-review-buttons",
-    "title": "Review Queue header buttons",
+    "title": "JE Review Queue header buttons",
     "topic": "review",
     "content": "/review header has two buttons: '(Demo) advance clock' force-flips any posted JE with a future reversal_date to Reversed status (presenter aid for live demos; production handles this automatically on the calendar reversal_date). 'Refresh' re-fetches the queue from the JE store (canned) or Postgres (live) and runs the date-gated reversal sweep. The flash banner under the title confirms what happened on each click.",
     "keywords": ["advance clock", "refresh", "demo button", "reversal sweep"]
@@ -122,7 +122,7 @@
     "id": "kb-demo-flow",
     "title": "Demo flow end-to-end",
     "topic": "demo-flow",
-    "content": "Recommended demo path (~30 min): 1) /contracts — Run selected to extract+score 11 contracts, then Calculate accruals -> Submit all to send JEs to Review Queue. 2) /review — expand a JE, show line detail + Download calc worksheet, Approve a JE, click (Demo) advance clock to flip a reversal. 3) /narrative — show Variance Commentary, Executive Summary, then Balance Sheet (note Accrued Liabilities is contract-driven). 4) /copilot — try the suggestion chips, demonstrate live answers update with state. 5) / (Close Cockpit) — Start the simulation, watch phases animate. Cockpit is shown LAST — it's the orchestration frame, not the entry point.",
+    "content": "Recommended demo path (~30 min): 1) /contracts — Run selected to extract+score 11 contracts, then Calculate accruals -> Submit all to send JEs to JE Review Queue. 2) /review — expand a JE, show line detail + Download calc worksheet, Approve a JE, click (Demo) advance clock to flip a reversal. 3) /narrative — show Variance Commentary, Executive Summary, then Balance Sheet (note Accrued Liabilities is contract-driven). 4) /copilot — try the suggestion chips, demonstrate live answers update with state. 5) / (Close Cockpit) — Start the simulation, watch phases animate. Cockpit is shown LAST — it's the orchestration frame, not the entry point.",
     "keywords": ["demo", "walkthrough", "flow", "script", "presentation", "step by step"]
   },
   {
@@ -171,14 +171,14 @@
     "id": "kb-batch-submit",
     "title": "Submit all month-end JEs together (batch flow)",
     "topic": "accruals",
-    "content": "Yes — submitting JEs one contract at a time is NOT the workflow. Once a contract has been through extract → risk → tech-acct (HITL review on /contracts), the batch flow takes over. On /contracts: tick the contracts you want to accrue (the header checkbox toggles all), click 'Calculate accruals (N)'. NOAH computes a JE for each in sequence; a results modal opens grouped by where each JE will route (Manager + Director dual >$5M, Manager $1M-$5M, Senior Accountant $100K-$1M, auto-post <$100K). At this point nothing has been submitted — review the routing and amounts. Click 'Submit all (N)' to push every calculated JE to the Review Queue with materiality routing already attached. Sub-$100K entries auto-post immediately to SAP and pick up doc numbers; larger entries land in /review for approval. One click submits the full month-end batch.",
+    "content": "Yes — submitting JEs one contract at a time is NOT the workflow. Once a contract has been through extract → risk → tech-acct (HITL review on /contracts), the batch flow takes over. On /contracts: tick the contracts you want to accrue (the header checkbox toggles all), click 'Calculate accruals (N)'. NOAH computes a JE for each in sequence; a results modal opens grouped by where each JE will route (Manager + Director dual >$5M, Manager $1M-$5M, Senior Accountant $100K-$1M, auto-post <$100K). At this point nothing has been submitted — review the routing and amounts. Click 'Submit all (N)' to push every calculated JE to the JE Review Queue with materiality routing already attached. Sub-$100K entries auto-post immediately to SAP and pick up doc numbers; larger entries land in /review for approval. One click submits the full month-end batch.",
     "keywords": ["submit all", "batch", "all jes", "month end", "month-end", "all contracts", "submit together", "one click", "multiple jes", "calculate accruals"]
   },
   {
     "id": "kb-review-tiers-count",
     "title": "How many contracts/JEs require which review tier",
     "topic": "materiality",
-    "content": "JEs route by total amount, not by contract: <$100K auto-posts (no human review); $100K-$1M routes to Senior Accountant; $1M-$5M routes to Manager; >$5M routes to Manager + Director (dual approval). Whether a contract requires Manager review depends on its accrual amount, not its TCV — a $50M contract paid quarterly might book a $4M accrual (Manager tier), while a $2M contract paid annually books $167K (Senior Accountant tier). To see the actual tier breakdown for the current period, calculate accruals on /contracts; the post-calc modal shows per-tier counts and totals. Once submitted, the Review Queue shows pending JEs grouped by tier.",
+    "content": "JEs route by total amount, not by contract: <$100K auto-posts (no human review); $100K-$1M routes to Senior Accountant; $1M-$5M routes to Manager; >$5M routes to Manager + Director (dual approval). Whether a contract requires Manager review depends on its accrual amount, not its TCV — a $50M contract paid quarterly might book a $4M accrual (Manager tier), while a $2M contract paid annually books $167K (Senior Accountant tier). To see the actual tier breakdown for the current period, calculate accruals on /contracts; the post-calc modal shows per-tier counts and totals. Once submitted, the JE Review Queue shows pending JEs grouped by tier.",
     "keywords": ["how many require manager", "how many require review", "manager review", "review tier", "approval count", "tier breakdown", "who approves", "review breakdown"]
   }
 ]

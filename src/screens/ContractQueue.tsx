@@ -1038,8 +1038,8 @@ function AccrualResultsModal({
         <div className="px-6 py-4 border-t border-brand-border flex items-center justify-between sticky bottom-0 bg-brand-surface">
           <div className="text-[11px] text-brand-text-dim font-mono">
             {hasCalculated
-              ? `Click Submit all to send ${calculated.length} JE${calculated.length === 1 ? "" : "s"} to the Review Queue. Auto-reversal will process on each entry's reversal date.`
-              : "Submitted JEs are waiting in the Review Queue. Auto-reversal will process on each entry's reversal date."}
+              ? `Click Submit all to send ${calculated.length} JE${calculated.length === 1 ? "" : "s"} to the JE Review Queue. Auto-reversal will process on each entry's reversal date.`
+              : "Submitted JEs are waiting in the JE Review Queue. Auto-reversal will process on each entry's reversal date."}
           </div>
           <div className="flex gap-2">
             {!hasCalculated && (submitted.length > 0 || autoPosted.length > 0) && (
@@ -1047,7 +1047,7 @@ function AccrualResultsModal({
                 to="/review"
                 className="px-4 py-2 bg-brand-surface-alt border border-brand-border font-display font-bold uppercase text-[11px] tracking-wider hover:border-brand-accent hover:text-brand-accent cursor-pointer"
               >
-                Open Review Queue →
+                Open JE Review Queue →
               </Link>
             )}
             {hasCalculated && (

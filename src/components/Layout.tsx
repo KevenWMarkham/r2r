@@ -9,8 +9,8 @@ import LiveConsoleDock from "./LiveConsoleDock";
 
 const navItems = [
   { to: "/contracts", label: "Contracts" },
-  { to: "/review", label: "Review Queue" },
-  { to: "/narrative", label: "Narrative" },
+  { to: "/review", label: "JE Review Queue" },
+  { to: "/narrative", label: "Variance Analysis" },
   { to: "/copilot", label: "NOAH Help" },
   { to: "/", label: "Close Cockpit", end: true, pushRight: true },
 ];
