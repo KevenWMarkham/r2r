@@ -61,15 +61,20 @@ export function scoreRules(i: RiskInputs): { points: number; reasons: string[] }
   const reasons: string[] = [];
 
   if (i.tcv !== null) {
+    // Format millions: "$45M" for whole numbers, "$12.5M" only when there's a
+    // fractional part. Avoids the "$45.0M → $450M" visual confusion at small
+    // sizes where the period collapses between digits.
+    const tcvM = i.tcv / 1_000_000;
+    const tcvLabel = `$${Number.isInteger(tcvM) ? tcvM : tcvM.toFixed(1)}M`;
     if (i.tcv > 25_000_000) {
       points += 25;
-      reasons.push(`TCV > $25M ($${(i.tcv / 1_000_000).toFixed(1)}M)`);
+      reasons.push(`TCV > $25M (${tcvLabel})`);
     } else if (i.tcv > 5_000_000) {
       points += 15;
-      reasons.push(`TCV > $5M ($${(i.tcv / 1_000_000).toFixed(1)}M)`);
+      reasons.push(`TCV > $5M (${tcvLabel})`);
     } else if (i.tcv > 1_000_000) {
       points += 5;
-      reasons.push(`TCV > $1M ($${(i.tcv / 1_000_000).toFixed(1)}M)`);
+      reasons.push(`TCV > $1M (${tcvLabel})`);
     }
   }
   if (i.autoRenewal === true) {

@@ -114,7 +114,7 @@
       "risk_score": 68,
       "risk_category": "Medium",
       "risk_reasons": [
-        "TCV > $5M ($24.0M)",
+        "TCV > $5M ($24M)",
         "Auto-renewal provision",
         "No liability cap",
         "Vendor concentration — top finance BPO provider"
@@ -210,7 +210,7 @@
       "risk_score": 48,
       "risk_category": "Medium",
       "risk_reasons": [
-        "TCV > $5M ($15.0M)",
+        "TCV > $5M ($15M)",
         "Multi-year term with prepaid premium",
         "Indemnification obligations to insurer"
       ],
@@ -400,7 +400,7 @@
       "risk_score": 85,
       "risk_category": "High",
       "risk_reasons": [
-        "TCV > $25M ($45.0M)",
+        "TCV > $25M ($45M)",
         "Auto-renewal provision",
         "Embedded pricing escalator indexed to CPI-U (ASC 815 review)",
         "Data-sovereignty obligations span 4 regions",
