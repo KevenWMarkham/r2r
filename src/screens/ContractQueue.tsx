@@ -38,6 +38,28 @@ interface AccrualResult {
 
 const ROW_GRID = "grid-cols-[36px_24px_1fr_1fr_130px_90px_110px_120px_90px]";
 
+// Session-scoped store of contract IDs that have been processed in THIS browser
+// tab. The fixtures ship with full risk/flag data; this overlay lets the demo
+// open with all rows in a "pending" state until the controller runs the
+// agentic chain — then the rows reveal their risk badges + R/Y/G coloring.
+const PROCESSED_KEY = "noah_processed_contract_ids";
+function readProcessedIds(): Set<string> {
+  if (typeof window === "undefined") return new Set();
+  try {
+    const raw = sessionStorage.getItem(PROCESSED_KEY);
+    return new Set(raw ? (JSON.parse(raw) as string[]) : []);
+  } catch {
+    return new Set();
+  }
+}
+function writeProcessedIds(ids: Set<string>): void {
+  try {
+    sessionStorage.setItem(PROCESSED_KEY, JSON.stringify([...ids]));
+  } catch {
+    /* ignore */
+  }
+}
+
 export default function ContractQueue() {
   const [contracts, setContracts] = useState<ContractSummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,7 +70,25 @@ export default function ContractQueue() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [runResults, setRunResults] = useState<RunResult[] | null>(null);
   const [accrualResults, setAccrualResults] = useState<AccrualResult[] | null>(null);
+  // Session-scoped processed-state overlay. Empty on first load → all rows
+  // render as "pending" with no risk/flag data shown. Run selected populates
+  // this set, revealing the risk badges + R/Y/G row coloring.
+  const [processedIds, setProcessedIds] = useState<Set<string>>(() => readProcessedIds());
   const navigate = useNavigate();
+
+  const markProcessed = (ids: string[]) => {
+    setProcessedIds((prev) => {
+      const next = new Set(prev);
+      for (const id of ids) next.add(id);
+      writeProcessedIds(next);
+      return next;
+    });
+  };
+
+  const resetProcessed = () => {
+    setProcessedIds(new Set());
+    writeProcessedIds(new Set());
+  };
 
   const refresh = async () => {
     try {
@@ -89,11 +129,6 @@ export default function ContractQueue() {
   useEffect(() => {
     void refresh();
   }, []);
-
-  const isComplete = (c: ContractSummary): boolean => {
-    const s = c.agent_status ?? {};
-    return s.extract === "done" && s.risk === "done" && s.techAcct === "done";
-  };
 
   const allSelected = useMemo(
     () => contracts.length > 0 && contracts.every((c) => selectedIds.has(c.id)),
@@ -144,6 +179,9 @@ export default function ContractQueue() {
           setRunProgress({ current: i + 1, total: targets.length, label: `${label} — tech-acct flagging…` });
           await agent.flagTechnicalAccounting(c.id, attributes as unknown as ContractAttributes, detail.full_text, pushActivity);
           results.push({ contract: c, status: "ok" });
+          // Reveal this contract's risk + flags + R/Y/G row tint as soon as
+          // its run completes — the next iteration of the loop will paint it.
+          markProcessed([c.id]);
         } catch (e) {
           const msg = e instanceof Error ? e.message : String(e);
           console.error(`Run failed for ${c.id}:`, e);
@@ -306,8 +344,23 @@ export default function ContractQueue() {
         <div>
           <h1 className="font-display text-4xl font-extrabold uppercase tracking-tight">Contracts</h1>
           <p className="text-sm text-brand-text-muted mt-2 max-w-2xl">
-            Risk-ranked contract queue. Tick the contracts you want to process, then click Run selected — NOAH extracts 27 attributes, scores risk, and flags technical accounting (ASC 840/842/815) on each.
+            Risk-ranked contract queue. Tick the contracts you want to process, then click Run selected — NOAH extracts 27 attributes, scores risk, and flags technical accounting (ASC 840/842/815) on each. Rows reveal a R/Y/G band as agents complete.
           </p>
+          {contracts.length > 0 && (
+            <div className="text-[11px] font-mono text-brand-text-dim mt-2">
+              {processedIds.size} of {contracts.length} processed this session
+              {processedIds.size > 0 && (
+                <button
+                  type="button"
+                  onClick={resetProcessed}
+                  className="ml-3 underline hover:text-brand-accent"
+                  title="Clear the session-scoped processed-state overlay so the queue renders unprocessed for a fresh demo"
+                >
+                  reset to unprocessed
+                </button>
+              )}
+            </div>
+          )}
         </div>
         <div className="flex gap-2 flex-shrink-0 relative z-10">
           <button
@@ -428,7 +481,19 @@ export default function ContractQueue() {
         ) : (
           contracts.map((c) => {
             const checked = selectedIds.has(c.id);
-            const complete = isComplete(c);
+            const isProcessed = processedIds.has(c.id);
+            // R/Y/G row tinting only applies post-processing. Unprocessed rows
+            // stay neutral so the controller sees a clean queue before agents
+            // reveal the risk picture.
+            const rowTint = isProcessed
+              ? c.risk_category === "High"
+                ? "border-l-4 border-l-status-red bg-status-red/[0.04]"
+                : c.risk_category === "Medium"
+                  ? "border-l-4 border-l-status-amber bg-status-amber/[0.04]"
+                  : c.risk_category === "Low"
+                    ? "border-l-4 border-l-status-green bg-status-green/[0.04]"
+                    : ""
+              : "border-l-4 border-l-transparent";
             return (
               <div
                 key={c.id}
@@ -436,7 +501,8 @@ export default function ContractQueue() {
                 className={clsx(
                   "grid gap-2 px-4 py-3 items-center border-b border-brand-border hover:bg-brand-accent-dim transition-colors cursor-pointer",
                   ROW_GRID,
-                  checked && "bg-brand-accent-dim/30"
+                  rowTint,
+                  checked && "ring-1 ring-brand-accent/30"
                 )}
               >
                 <span data-no-navigate className="flex items-center">
@@ -446,10 +512,10 @@ export default function ContractQueue() {
                     onChange={() => toggleOne(c.id)}
                     onClick={(e) => e.stopPropagation()}
                     className="cursor-pointer accent-brand-accent"
-                    title={complete ? "Already processed — re-run will refresh outputs" : "Pending — will run extract → risk → tech-acct"}
+                    title={isProcessed ? "Already processed in this session — re-run will refresh outputs" : "Pending — will run extract → risk → tech-acct"}
                   />
                 </span>
-                <FileText size={16} className="text-brand-text-dim" />
+                <FileText size={16} className={isProcessed ? "text-brand-text-dim" : "text-brand-text-dim/60"} />
                 <span className="text-sm truncate">{c.filename}</span>
                 <span className="text-sm text-brand-text-muted truncate">
                   {c.counterparty ?? "—"}
@@ -461,7 +527,7 @@ export default function ContractQueue() {
                   {c.source.replace("sample_", "")}
                 </span>
                 <span>
-                  {c.risk_category ? (
+                  {isProcessed && c.risk_category ? (
                     <span
                       className={clsx(
                         "font-display text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 border",
@@ -477,26 +543,29 @@ export default function ContractQueue() {
                       {c.risk_score !== null ? ` · ${c.risk_score}` : ""}
                     </span>
                   ) : (
-                    <span className="text-[10px] text-brand-text-dim font-mono">—</span>
+                    <span className="text-[10px] text-brand-text-dim font-mono italic">unscored</span>
                   )}
                 </span>
                 <span className="flex flex-wrap gap-1">
-                  {c.lease_flagged && (
+                  {isProcessed && c.lease_flagged && (
                     <span className="font-display text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 border text-status-amber border-status-amber/60 bg-status-amber/10">
                       Lease
                     </span>
                   )}
-                  {c.derivative_flagged && (
+                  {isProcessed && c.derivative_flagged && (
                     <span className="font-display text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 border text-status-purple border-status-purple/60 bg-status-purple/10">
                       Deriv
                     </span>
                   )}
-                  {!c.lease_flagged && !c.derivative_flagged && (
-                    <span className="text-[10px] text-brand-text-dim font-mono">—</span>
+                  {(!isProcessed || (!c.lease_flagged && !c.derivative_flagged)) && (
+                    <span className="text-[10px] text-brand-text-dim font-mono">{isProcessed ? "—" : "pending"}</span>
                   )}
                 </span>
-                <span className="font-mono text-[10px] text-brand-text-dim uppercase">
-                  {c.agent_status.extract ?? "pending"}
+                <span className={clsx(
+                  "font-mono text-[10px] uppercase",
+                  isProcessed ? "text-status-green" : "text-status-amber"
+                )}>
+                  {isProcessed ? "done" : "pending"}
                 </span>
               </div>
             );
