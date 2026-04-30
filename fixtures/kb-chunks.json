@@ -85,17 +85,17 @@
   },
   {
     "id": "kb-narrative-tabs",
-    "title": "Narrative tab — three views",
+    "title": "Variance Analysis tab — three views",
     "topic": "narrative",
-    "content": "/narrative has three tabs. Variance Commentary draws line-item commentary on each P&L row using Claude (or Qwen in local mode); deterministic generation, ~2-3 sentences per line, CFO-memo tone. Executive Summary drafts a board-ready close summary using top-3 variances + close metrics from the Cockpit (or a 5.2-day baseline if Cockpit idle). Balance Sheet shows Period End vs Prior Year End for 13 line items including a contract-driven Accrued Liabilities row that updates live as JEs are submitted on /contracts.",
-    "keywords": ["narrative", "variance", "commentary", "executive", "exec summary", "balance sheet"]
+    "content": "/narrative has three tabs. P&L Variance Analysis draws line-item commentary on each P&L row using Claude (or Qwen in local mode); deterministic generation, ~2-3 sentences per line, CFO-memo tone. B/S Variance Analysis shows Period End vs Prior Year End for 13 balance-sheet line items including a contract-driven Accrued Liabilities row that updates live as JEs are submitted on /contracts. Executive Summary drafts a board-ready close summary using top-3 variances + close metrics from the Cockpit (or a 5.2-day baseline if Cockpit idle). Tab order: P&L Variance Analysis, B/S Variance Analysis, Executive Summary.",
+    "keywords": ["narrative", "variance", "commentary", "executive", "exec summary", "balance sheet", "p&l", "b/s"]
   },
   {
     "id": "kb-narrative-balance-sheet",
-    "title": "Balance Sheet — Accrued Liabilities is contract-driven",
+    "title": "B/S Variance Analysis — Accrued Liabilities is contract-driven",
     "topic": "narrative",
-    "content": "On /narrative -> Balance Sheet, the Accrued Liabilities row is special: its current period balance equals a seeded BAU base ($5,950M) PLUS the live sum of credits to GL 2310 from JEs submitted on /contracts. Variance and percent are recomputed from that live total. Clicking Generate on that row produces a deterministic commentary that names contributing contracts, materiality routing breakdown, scheduled auto-reversals, and ASC 842/815 flags from the contracts. Other rows use seeded driver text + auto-flag lines with >10% YoY variance for disclosure consideration.",
-    "keywords": ["balance sheet", "accrued liabilities", "contract driven", "gl 2310", "live"]
+    "content": "On /narrative -> B/S Variance Analysis, the Accrued Liabilities row is special: its current period balance equals a seeded BAU base ($5,950M) PLUS the live sum of credits to GL 2310 from JEs submitted on /contracts. Variance and percent are recomputed from that live total. Clicking Generate on that row produces a deterministic commentary that names contributing contracts, materiality routing breakdown, scheduled auto-reversals, and ASC 842/815 flags from the contracts. Other rows use seeded driver text + auto-flag lines with >10% YoY variance for disclosure consideration.",
+    "keywords": ["b/s", "balance sheet", "bs variance", "accrued liabilities", "contract driven", "gl 2310", "live"]
   },
   {
     "id": "kb-review-layout",

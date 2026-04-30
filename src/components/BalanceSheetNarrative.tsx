@@ -332,7 +332,7 @@ function BalanceSheetTable({
     <div className="bg-brand-surface border border-brand-border">
       <div className="flex items-center justify-between px-4 py-3 border-b border-brand-border">
         <div className="font-display text-sm font-bold uppercase tracking-wider">
-          Balance Sheet · Period End vs Prior Year End
+          B/S Variance · Period End vs Prior Year End
           {loading && <Loader2 size={11} className="inline-block ml-2 animate-spin text-brand-text-dim" />}
         </div>
         <button

@@ -195,7 +195,7 @@ const liveHandlers: LiveHandler[] = [
       }
     }
     if (total === 0) return "No accrued-expense balance from reviewed contracts yet. Tick contracts on /contracts and click Calculate accruals → Submit all.";
-    return `Total accrued expense from reviewed contracts: ${fmt(total)} (${fmt(posted)} posted, ${fmt(pending)} pending review). See /narrative → Balance Sheet for the line-item breakdown.`;
+    return `Total accrued expense from reviewed contracts: ${fmt(total)} (${fmt(posted)} posted, ${fmt(pending)} pending review). See /narrative → B/S Variance Analysis for the line-item breakdown.`;
   },
 
   // Pending review

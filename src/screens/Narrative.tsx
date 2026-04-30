@@ -127,20 +127,20 @@ export default function Narrative() {
             Variance Analysis
           </h1>
           <p className="text-sm text-brand-text-muted mt-2 max-w-2xl">
-            UC-18 Variance Commentary + UC-20 Executive Close Narrative. Both grounded in seeded
-            P&L data — prompts forbid number fabrication.
+            P&amp;L variance, B/S variance, and executive close narrative — all grounded in
+            seeded financials and reviewed-contract JEs. Prompts forbid number fabrication.
           </p>
         </div>
 
         <div className="flex border-b border-brand-border">
           <TabButton active={tab === "variance"} onClick={() => setTab("variance")}>
-            Variance Commentary
+            P&amp;L Variance Analysis
+          </TabButton>
+          <TabButton active={tab === "balance-sheet"} onClick={() => setTab("balance-sheet")}>
+            B/S Variance Analysis
           </TabButton>
           <TabButton active={tab === "exec"} onClick={() => setTab("exec")}>
             Executive Summary
-          </TabButton>
-          <TabButton active={tab === "balance-sheet"} onClick={() => setTab("balance-sheet")}>
-            Balance Sheet
           </TabButton>
         </div>
 

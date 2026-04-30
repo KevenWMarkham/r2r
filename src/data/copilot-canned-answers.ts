@@ -142,7 +142,7 @@ export function buildCannedAnswers(ctx: AnswerContext): CannedAnswer[] {
       reply:
         accruedTotal === 0
           ? "No accrued-expense balance from reviewed contracts yet. Tick contracts on /contracts and click Calculate accruals → Submit all to populate."
-          : `Total accrued expense from reviewed contracts: ${fmt(accruedTotal)}. ${posted.length} posted, ${submitted.length} pending review, ${reversed.length} already auto-reversed. See the Balance Sheet tab on /narrative for the line-item breakdown.`,
+          : `Total accrued expense from reviewed contracts: ${fmt(accruedTotal)}. ${posted.length} posted, ${submitted.length} pending review, ${reversed.length} already auto-reversed. See the B/S Variance Analysis tab on /narrative for the line-item breakdown.`,
     },
     {
       match: /(pending.*review|awaiting.*approval|to.*approve|review.*queue|pending.*manager|pending.*director)/i,
@@ -200,12 +200,12 @@ export function buildCannedAnswers(ctx: AnswerContext): CannedAnswer[] {
     {
       match: /(variance|p.?and.?l|p\&l|biggest.*move|top.*variance|line.*item)/i,
       reply:
-        `Top 3 P&L variances: ${topVar.map((v) => `${v.lineItem} ${v.variance >= 0 ? "+" : ""}${fmtCompact(v.variance)} (${v.variancePct >= 0 ? "+" : ""}${v.variancePct.toFixed(1)}%)`).join("; ")}. Open /narrative → Variance Commentary and click Generate to draft commentary. P&L total revenue ${fmtCompact(seedPnL.filter(l => l.category === "Revenue").reduce((s, l) => s + l.currentPeriod, 0))} this period.`,
+        `Top 3 P&L variances: ${topVar.map((v) => `${v.lineItem} ${v.variance >= 0 ? "+" : ""}${fmtCompact(v.variance)} (${v.variancePct >= 0 ? "+" : ""}${v.variancePct.toFixed(1)}%)`).join("; ")}. Open /narrative → P&L Variance Analysis and click Generate to draft commentary. P&L total revenue ${fmtCompact(seedPnL.filter(l => l.category === "Revenue").reduce((s, l) => s + l.currentPeriod, 0))} this period.`,
     },
     {
       match: /(balance.*sheet|accrued.*liab|assets|liabilities|bs)/i,
       reply:
-        `Balance Sheet view is on /narrative → Balance Sheet tab. Accrued Liabilities is contract-driven: base + ${fmt(accruedTotal)} from ${posted.length + submitted.length} reviewed-contract JE${posted.length + submitted.length === 1 ? "" : "s"}. Click any line to generate commentary.`,
+        `B/S variance view is on /narrative → B/S Variance Analysis. Accrued Liabilities is contract-driven: base + ${fmt(accruedTotal)} from ${posted.length + submitted.length} reviewed-contract JE${posted.length + submitted.length === 1 ? "" : "s"}. Click any line to generate commentary.`,
     },
     {
       match: /(exec.*summary|executive|board|cfo.*memo|narrative)/i,
