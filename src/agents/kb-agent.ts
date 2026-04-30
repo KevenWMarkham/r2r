@@ -13,6 +13,7 @@ import { IS_CANNED, API_URL } from "@/config/env";
 import { KB_CHUNKS, type KBChunk } from "@/data/kb-chunks";
 import { seedPnL } from "@/data/seed-pnl";
 import { seedBalanceSheet } from "@/data/seed-balance-sheet";
+import { getFixtureContract } from "@/lib/fixtures";
 import type { ContractSummary, ProposedJERecord } from "@/lib/api-client";
 
 export interface KBSource {
@@ -195,9 +196,11 @@ const liveHandlers: LiveHandler[] = [
     return `${flagged.length} contract${flagged.length === 1 ? "" : "s"} flagged for ASC 815: ${flagged.map(briefContract).join("; ")}.`;
   },
 
-  // Total accrued expense
+  // Total accrued expense — submitted/posted now, plus a projection from
+  // pre-computed fixture proposed_je amounts so users get a useful answer
+  // BEFORE they run the workflow.
   (q, ctx) => {
-    if (!/(total.*accru|accru.*total|accrued.*expense|accrued.*balance)/i.test(q)) return null;
+    if (!/(total.*accru|accru.*total|accrued.*expense|accrued.*balance|how much.*accrued|how much.*record.*accrued|record.*accru)/i.test(q)) return null;
     let total = 0;
     let posted = 0;
     let pending = 0;
@@ -212,8 +215,34 @@ const liveHandlers: LiveHandler[] = [
         else pending += credit;
       }
     }
-    if (total === 0) return "No accrued-expense balance from reviewed contracts yet. Tick contracts on /contracts and click Calculate accruals → Submit all.";
-    return `Total accrued expense from reviewed contracts: ${fmt(total)} (${fmt(posted)} posted, ${fmt(pending)} pending review). See /narrative → B/S Variance Analysis for the line-item breakdown.`;
+
+    // Projection: walk the fixtures for each contract and sum proposed_je
+    // credits to accrued accounts. This is what WOULD post if the user ran
+    // Calculate accruals → Submit all on every reviewed contract.
+    let projected = 0;
+    let projectedCount = 0;
+    for (const c of ctx.contracts) {
+      const detail = getFixtureContract(c.id);
+      const pje = detail?.proposed_je as { lines?: Array<{ account: string; credit?: number }> } | null;
+      if (!pje?.lines) continue;
+      for (const ln of pje.lines) {
+        if (!ACCRUED_ACCOUNTS.has(ln.account)) continue;
+        const credit = ln.credit ?? 0;
+        if (credit > 0) {
+          projected += credit;
+          projectedCount++;
+        }
+      }
+    }
+
+    if (total === 0) {
+      // Empty queue — give the user the projection + workflow pointer
+      const projectionStr = projected > 0
+        ? ` Projected: if you tick all reviewed contracts on /contracts and run Calculate accruals → Submit all, ~${fmtC(projected)} would post to GL 2310 (Accrued Liabilities) across ${projectedCount} JE${projectedCount === 1 ? "" : "s"}.`
+        : "";
+      return `No accrued-expense balance from reviewed contracts yet — the JE Review Queue is empty.${projectionStr} Seeded BAU baseline on /narrative → B/S Variance Analysis is $5.8B; the contract-driven additions are recomputed live from credits to GL 2310 as JEs are submitted. Walk through: /contracts → tick contracts → Calculate accruals → Submit all → /review.`;
+    }
+    return `Total accrued expense from reviewed contracts: ${fmtC(total)} (${fmtC(posted)} posted, ${fmtC(pending)} pending review). See /narrative → B/S Variance Analysis for the line-item breakdown. The seeded BAU base of $5.8B plus this live total drives the displayed Accrued Liabilities current period balance.`;
   },
 
   // Pending review

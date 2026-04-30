@@ -441,6 +441,13 @@
     "keywords": ["checkbox", "select all", "select", "selection", "run all", "calculate accruals", "batch", "submit all"]
   },
   {
+    "id": "kb-noah-help-data-sources",
+    "title": "How NOAH Help loads — KB sources vs. live data",
+    "topic": "architecture",
+    "content": "NOAH Help mixes two data sources at query time. STATIC knowledge base (loaded once at app start): ~50 chunks defined in fixtures/kb-chunks.json — definitions, policies, architecture, feature descriptions, contract metadata, P&L/B/S line definitions, workflows, SOX/audit, model and performance specs, the 12-week PoV scope. In live mode these are seeded to the noah_kb Postgres table with nomic-embed-text 768-dim vectors and searched via pgvector cosine similarity. In canned mode (the demo default) the same chunks are searched via BM25-style keyword scoring. LIVE state (computed on every query): contract counts and risk distribution from listContracts(); JE queue state, materiality tier breakdown, accrual totals from listAllJEs(); P&L line values from seedPnL; B/S line values from seedBalanceSheet; close phase from useCloseStore. Live answers are computed by intent matchers (kb-agent.ts) that run BEFORE KB retrieval — these are the answers that update as you click through the demo. To get a non-zero accrual figure, you must run the workflow: /contracts → tick → Calculate accruals → Submit all. The KB itself does NOT store live amounts; that's intentional so the KB doesn't go stale. To extend the KB, add chunks to fixtures/kb-chunks.json (canned + live both read it) and re-seed Postgres via `cd server && pnpm seed:kb` for live mode.",
+    "keywords": ["kb", "knowledge base", "data sources", "how to load", "what data", "static", "live", "rag", "noah help", "extend kb", "where data comes from", "seed kb"]
+  },
+  {
     "id": "kb-feature-advance-clock",
     "title": "(Demo) Advance clock — fast-forward auto-reversals",
     "topic": "review",
