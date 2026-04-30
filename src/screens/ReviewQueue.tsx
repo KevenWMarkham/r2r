@@ -418,12 +418,25 @@ export default function ReviewQueue() {
     return { pending: p, history: h };
   }, [allJEs]);
 
+  // Reviewer title is derived from the JE's materiality tier so the audit
+  // trail records the actual approver role: Senior Accountant for $100K-$1M,
+  // Manager for $1M-$5M, dual approval for >$5M.
+  const reviewerTitleFor = (je: ProposedJERecord): string => {
+    switch (je.materiality_tier) {
+      case "manager": return "Senior Accountant";
+      case "controller": return "Manager";
+      case "exec": return "Manager + Director";
+      default: return "Reviewer";
+    }
+  };
+
   const approve = async (je: ProposedJERecord) => {
     try {
-      const updated = await approveJE(je.id, "Manager");
+      const reviewer = reviewerTitleFor(je);
+      const updated = await approveJE(je.id, reviewer);
       const note = updated.reversal_date
-        ? `${je.filename ?? "JE"}: Approved + posted ${fmt(je.total_amount)} · SAP ${updated.posting_ref} · auto-reversal scheduled ${updated.reversal_date}`
-        : `${je.filename ?? "JE"}: Approved + posted ${fmt(je.total_amount)} · SAP ${updated.posting_ref}`;
+        ? `${je.filename ?? "JE"}: Approved by ${reviewer} + posted ${fmt(je.total_amount)} · SAP ${updated.posting_ref} · auto-reversal scheduled ${updated.reversal_date}`
+        : `${je.filename ?? "JE"}: Approved by ${reviewer} + posted ${fmt(je.total_amount)} · SAP ${updated.posting_ref}`;
       pushEvent(note, "approval");
       await refresh();
     } catch (e) { setError(String(e)); }
@@ -432,8 +445,9 @@ export default function ReviewQueue() {
   const reject = async (je: ProposedJERecord) => {
     if (!rejectReason.trim()) return;
     try {
-      await rejectJE(je.id, rejectReason, "Manager");
-      pushEvent(`${je.filename ?? "JE"}: Rejected by Manager — ${rejectReason}`, "info");
+      const reviewer = reviewerTitleFor(je);
+      await rejectJE(je.id, rejectReason, reviewer);
+      pushEvent(`${je.filename ?? "JE"}: Rejected by ${reviewer} — ${rejectReason}`, "info");
       setRejectingId(null);
       setRejectReason("");
       await refresh();
