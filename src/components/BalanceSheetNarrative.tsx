@@ -40,13 +40,19 @@ interface Commentary {
 
 function fmt(n: number): string {
   const abs = Math.abs(n);
-  if (abs >= 1_000_000_000) return `$${(n / 1_000_000_000).toFixed(2)}B`;
-  if (abs >= 1_000_000) return `$${(n / 1_000_000).toFixed(0)}M`;
-  if (abs >= 1_000) return `$${(n / 1_000).toFixed(0)}K`;
-  return `$${n.toFixed(0)}`;
-}
-function fmtFull(n: number): string {
-  return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  const sign = n < 0 ? "-" : "";
+  // Billions — 1 decimal unless >= 100B (rare)
+  if (abs >= 1_000_000_000) {
+    const v = abs / 1_000_000_000;
+    return `${sign}$${v >= 100 ? Math.round(v) : v.toFixed(1)}B`;
+  }
+  // Millions — keep 1 decimal under 10M so $1.25M doesn't render as "$1M"
+  if (abs >= 1_000_000) {
+    const v = abs / 1_000_000;
+    return `${sign}$${v >= 10 ? Math.round(v) : v.toFixed(1)}M`;
+  }
+  if (abs >= 1_000) return `${sign}$${Math.round(abs / 1_000)}K`;
+  return `${sign}$${Math.round(abs)}`;
 }
 
 function pctColor(pct: number): string {
@@ -102,7 +108,7 @@ function commentaryForAccrued(
   const variancePct = line.variancePct;
   const top3 = contributions.slice(0, 3);
   const topStr = top3
-    .map((c) => `${c.je.counterparty ?? c.je.filename ?? "—"} (${fmtFull(c.amount)})`)
+    .map((c) => `${c.je.counterparty ?? c.je.filename ?? "—"} (${fmt(c.amount)})`)
     .join(", ");
   const byTier: Record<string, number> = {};
   let scheduledRev = 0;
@@ -129,11 +135,11 @@ function commentaryForAccrued(
 
   const sentences: string[] = [];
   sentences.push(
-    `Accrued Liabilities of ${fmtFull(line.currentPeriod)} at period end (${variance >= 0 ? "+" : ""}${fmtFull(variance)}, ${variancePct >= 0 ? "+" : ""}${variancePct.toFixed(1)}% vs prior year end of ${fmtFull(line.priorPeriod)}).`
+    `Accrued Liabilities of ${fmt(line.currentPeriod)} at period end (${variance >= 0 ? "+" : ""}${fmt(variance)}, ${variancePct >= 0 ? "+" : ""}${variancePct.toFixed(1)}% vs prior year end of ${fmt(line.priorPeriod)}).`
   );
   if (live > 0) {
     sentences.push(
-      `${fmtFull(live)} of the balance is driven by ${contractIds.size} reviewed contract${contractIds.size === 1 ? "" : "s"} processed through the agentic pipeline this period.`
+      `${fmt(live)} of the balance is driven by ${contractIds.size} reviewed contract${contractIds.size === 1 ? "" : "s"} processed through the agentic pipeline this period.`
     );
     if (top3.length > 0) {
       sentences.push(`Largest contributors: ${topStr}.`);
@@ -160,7 +166,7 @@ function commentaryForAccrued(
       .map((c) => `${c.counterparty ?? c.filename}${c.tcv ? ` (${c.tcv})` : ""}`)
       .join(", ");
     sentences.push(
-      `Underlying contract portfolio: ${reviewed.length} reviewed contract${reviewed.length === 1 ? "" : "s"} totaling ${fmtFull(totalTcv)} TCV — ${high.length} High risk, ${medium.length} Medium, ${low.length} Low.${flagParts.length ? " " + flagParts.join("; ") + "." : ""} Top by TCV: ${portfolioStr}.`
+      `Underlying contract portfolio: ${reviewed.length} reviewed contract${reviewed.length === 1 ? "" : "s"} totaling ${fmt(totalTcv)} TCV — ${high.length} High risk, ${medium.length} Medium, ${low.length} Low.${flagParts.length ? " " + flagParts.join("; ") + "." : ""} Top by TCV: ${portfolioStr}.`
     );
     if (pendingPipeline.length > 0 && live === 0) {
       sentences.push(
@@ -175,19 +181,19 @@ function commentaryForAccrued(
 
   const drivers: string[] = [];
   if (live > 0) {
-    drivers.push(`Contract-driven additions: ${fmtFull(live)} across ${contributions.length} JE${contributions.length === 1 ? "" : "s"}`);
-    if ((byTier.exec ?? 0) > 0) drivers.push(`Manager + Director (dual) tier: ${fmtFull(byTier.exec)}`);
-    if ((byTier.controller ?? 0) > 0) drivers.push(`Manager tier: ${fmtFull(byTier.controller)}`);
-    if ((byTier.manager ?? 0) > 0) drivers.push(`Senior Accountant tier: ${fmtFull(byTier.manager)}`);
-    if ((byTier.standard ?? 0) > 0) drivers.push(`Auto-posted (<$100K): ${fmtFull(byTier.standard)}`);
-    drivers.push(`Top contributor: ${top3[0]?.je.counterparty ?? "—"} (${fmtFull(top3[0]?.amount ?? 0)})`);
+    drivers.push(`Contract-driven additions: ${fmt(live)} across ${contributions.length} JE${contributions.length === 1 ? "" : "s"}`);
+    if ((byTier.exec ?? 0) > 0) drivers.push(`Manager + Director (dual) tier: ${fmt(byTier.exec)}`);
+    if ((byTier.controller ?? 0) > 0) drivers.push(`Manager tier: ${fmt(byTier.controller)}`);
+    if ((byTier.manager ?? 0) > 0) drivers.push(`Senior Accountant tier: ${fmt(byTier.manager)}`);
+    if ((byTier.standard ?? 0) > 0) drivers.push(`Auto-posted (<$100K): ${fmt(byTier.standard)}`);
+    drivers.push(`Top contributor: ${top3[0]?.je.counterparty ?? "—"} (${fmt(top3[0]?.amount ?? 0)})`);
   } else {
     drivers.push("No new contract-driven accruals this period");
-    drivers.push(`Net change ${variance >= 0 ? "+" : ""}${fmtFull(variance)} is from routine BAU accruals + reversals`);
+    drivers.push(`Net change ${variance >= 0 ? "+" : ""}${fmt(variance)} is from routine BAU accruals + reversals`);
   }
   // Always include portfolio-level drivers so the controller sees the underlying analysis
   if (reviewed.length > 0) {
-    drivers.push(`Reviewed contract portfolio: ${reviewed.length} contracts · ${fmtFull(totalTcv)} aggregate TCV`);
+    drivers.push(`Reviewed contract portfolio: ${reviewed.length} contracts · ${fmt(totalTcv)} aggregate TCV`);
     drivers.push(`Risk distribution: ${high.length} High / ${medium.length} Medium / ${low.length} Low`);
     if (top3Tcv.length > 0) {
       drivers.push(`Top by TCV: ${top3Tcv.map((c) => `${c.counterparty ?? c.filename} ${c.tcv ?? ""}`).join("; ")}`);
@@ -232,15 +238,15 @@ function commentaryForLine(line: BalanceSheetLine): Commentary {
 
   const sentences: string[] = [];
   sentences.push(
-    `${line.lineItem} ${direction} to ${fmtFull(line.currentPeriod)} at period end, ${variance >= 0 ? "+" : ""}${fmtFull(variance)} (${variancePct >= 0 ? "+" : ""}${variancePct.toFixed(1)}%) versus prior year end of ${fmtFull(line.priorPeriod)}.`
+    `${line.lineItem} ${direction} to ${fmt(line.currentPeriod)} at period end, ${variance >= 0 ? "+" : ""}${fmt(variance)} (${variancePct >= 0 ? "+" : ""}${variancePct.toFixed(1)}%) versus prior year end of ${fmt(line.priorPeriod)}.`
   );
   sentences.push(line.driver);
 
   const drivers: string[] = [
     `Category: ${line.category}`,
-    `Current period end: ${fmtFull(line.currentPeriod)}`,
-    `Prior year end: ${fmtFull(line.priorPeriod)}`,
-    `YoY change: ${variance >= 0 ? "+" : ""}${fmtFull(variance)} (${variancePct >= 0 ? "+" : ""}${variancePct.toFixed(1)}%)`,
+    `Current period end: ${fmt(line.currentPeriod)}`,
+    `Prior year end: ${fmt(line.priorPeriod)}`,
+    `YoY change: ${variance >= 0 ? "+" : ""}${fmt(variance)} (${variancePct >= 0 ? "+" : ""}${variancePct.toFixed(1)}%)`,
   ];
 
   const flags: string[] = [];
