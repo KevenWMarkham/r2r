@@ -12,6 +12,7 @@
 import { IS_CANNED, API_URL } from "@/config/env";
 import { KB_CHUNKS, type KBChunk } from "@/data/kb-chunks";
 import { seedPnL } from "@/data/seed-pnl";
+import { seedBalanceSheet } from "@/data/seed-balance-sheet";
 import type { ContractSummary, ProposedJERecord } from "@/lib/api-client";
 
 export interface KBSource {
@@ -225,6 +226,83 @@ const liveHandlers: LiveHandler[] = [
     const sr = submitted.filter((j) => j.materiality_tier === "manager").length;
     const top = submitted.slice(0, 3).map((j) => `${j.counterparty ?? j.filename} ${fmt(parseFloat(j.total_amount))}`).join("; ");
     return `${submitted.length} JE${submitted.length === 1 ? "" : "s"} awaiting approval: ${dual} dual-approval (>$5M), ${mgr} Manager ($1M-$5M), ${sr} Senior Accountant ($100K-$1M). Top pending: ${top}. Open /review.`;
+  },
+
+  // Specific contract lookup by counterparty name (or filename keyword)
+  (q, ctx) => {
+    if (!/(tell me|tell us|what.*about|what is|describe|details|info on|info about)/i.test(q)) return null;
+    // Match counterparty by lowercase token overlap
+    const qLower = q.toLowerCase();
+    const found = ctx.contracts.find((c) => {
+      const cp = (c.counterparty ?? "").toLowerCase();
+      const fn = c.filename.toLowerCase();
+      // Match common short names
+      const tokens = [cp, fn,
+        cp.split(/[\s,.&-]+/)[0],
+        fn.split(/[\s_.,&-]+/)[0],
+      ].filter(Boolean);
+      return tokens.some((t) => t.length >= 3 && qLower.includes(t));
+    });
+    if (!found) return null;
+    const fmtTcv = found.tcv ?? "—";
+    const flags: string[] = [];
+    if (found.lease_flagged) flags.push("ASC 842 lease flag");
+    if (found.derivative_flagged) flags.push("ASC 815 derivative flag");
+    const flagStr = flags.length ? ` Tech-acct flags: ${flags.join(", ")}.` : "";
+    const riskStr = found.risk_category && found.risk_score != null
+      ? `${found.risk_category} risk (score ${found.risk_score}).`
+      : "Not yet scored.";
+    return `${found.counterparty ?? found.filename}: TCV ${fmtTcv}, ${riskStr}${flagStr} Source file: ${found.filename}. Click into the contract on /contracts (Review button) for the full risk panel, technical-accounting findings, and 27-attribute checklist with confidence scores and source page references.`;
+  },
+
+  // P&L line lookup by name (DTC, wholesale, marketing, R&D, etc.)
+  (q) => {
+    const qLower = q.toLowerCase();
+    const lineMap: Record<string, string> = {
+      "dtc": "rev-dtc", "direct to consumer": "rev-dtc", "direct-to-consumer": "rev-dtc",
+      "wholesale": "rev-wholesale",
+      "licensing": "rev-licensing", "royalty": "rev-licensing",
+      "product cost": "cogs-product", "cogs product": "cogs-product",
+      "logistics": "cogs-logistics", "distribution": "cogs-logistics", "freight": "cogs-logistics",
+      "marketing": "opex-demand-creation", "demand creation": "opex-demand-creation", "advertising spend": "opex-demand-creation",
+      "r&d": "opex-rd", "research": "opex-rd", "research and development": "opex-rd",
+      "store ops": "opex-store-ops", "store operations": "opex-store-ops",
+      "depreciation": "opex-da", "amortization": "opex-da", "d&a": "opex-da",
+      "interest expense": "below-interest", "net interest": "below-interest",
+      "other income": "below-other", "fx translation": "below-other",
+      "income tax": "below-tax", "tax expense": "below-tax",
+    };
+    const matched = Object.entries(lineMap).find(([key]) => qLower.includes(key));
+    if (!matched) return null;
+    if (!/how much|what.*was|what is|tell me|tell us|current period|this period/i.test(q)) return null;
+    const line = seedPnL.find((l) => l.id === matched[1]);
+    if (!line) return null;
+    return `${line.lineItem} (${line.category}) this period: ${fmtC(line.currentPeriod)} vs prior ${fmtC(line.priorPeriod)} — ${line.variance >= 0 ? "+" : ""}${fmtC(line.variance)} (${line.variancePct >= 0 ? "+" : ""}${line.variancePct.toFixed(1)}%) YoY. Driver: ${line.driver}. Entity split: NA ${fmtC(line.entitySplit.NA)}, EMEA ${fmtC(line.entitySplit.EMEA)}, GC ${fmtC(line.entitySplit.GC)}, APLA ${fmtC(line.entitySplit.APLA)}.`;
+  },
+
+  // B/S line lookup by name (cash, AR, inventory, debt, equity, etc.)
+  (q) => {
+    const qLower = q.toLowerCase();
+    const bsMap: Record<string, string> = {
+      "cash": "ca-cash", "cash and equivalents": "ca-cash", "cash & equivalents": "ca-cash",
+      "ar": "ca-ar", "receivable": "ca-ar", "accounts receivable": "ca-ar",
+      "inventory": "ca-inventory", "inventories": "ca-inventory",
+      "prepaid": "ca-prepaid",
+      "ppe": "nca-ppe", "pp&e": "nca-ppe", "property plant": "nca-ppe", "fixed assets": "nca-ppe",
+      "rou": "nca-rou", "right of use": "nca-rou", "right-of-use": "nca-rou", "lease asset": "nca-rou",
+      "goodwill": "nca-other", "intangibles": "nca-other",
+      "ap": "cl-ap", "payable": "cl-ap", "accounts payable": "cl-ap",
+      "tax payable": "cl-itax", "income tax payable": "cl-itax",
+      "long term debt": "ncl-debt", "long-term debt": "ncl-debt", "debt": "ncl-debt", "bonds": "ncl-debt",
+      "lease liability": "ncl-lease", "lease liabilities": "ncl-lease",
+      "equity": "eq-total", "shareholders equity": "eq-total", "stockholders equity": "eq-total", "shareholders' equity": "eq-total",
+    };
+    const matched = Object.entries(bsMap).find(([key]) => qLower.includes(key));
+    if (!matched) return null;
+    if (!/how much|what.*was|what is|tell me|tell us|current period|period end|balance/i.test(q)) return null;
+    const line = seedBalanceSheet.find((l) => l.id === matched[1]);
+    if (!line) return null;
+    return `${line.lineItem} at period end: ${fmtC(line.currentPeriod)} vs prior year end ${fmtC(line.priorPeriod)} — ${line.variance >= 0 ? "+" : ""}${fmtC(line.variance)} (${line.variancePct >= 0 ? "+" : ""}${line.variancePct.toFixed(1)}%). ${line.driver}.`;
   },
 
   // SG&A expense (or any specific P&L line by keyword)

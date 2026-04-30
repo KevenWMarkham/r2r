@@ -17,13 +17,13 @@ interface Message {
 
 const suggestions = [
   "How many contracts?",
-  "Which contracts are over $10M?",
   "How much SG&A this period?",
-  "How many require Manager review?",
+  "What is wholesale revenue?",
+  "How much cash do we have?",
+  "Tell me about AWS",
   "Highest-risk contract?",
   "Total accrued",
-  "Can I change the GL account on a JE?",
-  "How does auto-reversal work?",
+  "What's the 12-week PoV?",
 ];
 
 export default function CopilotPanel() {

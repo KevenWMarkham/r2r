@@ -187,5 +187,264 @@
     "topic": "materiality",
     "content": "JEs route by total amount, not by contract: <$100K auto-posts (no human review); $100K-$1M routes to Senior Accountant; $1M-$5M routes to Manager; >$5M routes to Manager + Director (dual approval). Whether a contract requires Manager review depends on its accrual amount, not its TCV — a $50M contract paid quarterly might book a $4M accrual (Manager tier), while a $2M contract paid annually books $167K (Senior Accountant tier). To see the actual tier breakdown for the current period, calculate accruals on /contracts; the post-calc modal shows per-tier counts and totals. Once submitted, the JE Review Queue shows pending JEs grouped by tier.",
     "keywords": ["how many require manager", "how many require review", "manager review", "review tier", "approval count", "tier breakdown", "who approves", "review breakdown"]
+  },
+  {
+    "id": "kb-pnl-revenue-summary",
+    "title": "Total revenue + gross margin (Q2 FY26)",
+    "topic": "narrative",
+    "content": "Total revenue this period: $7,107M ($7.1B) vs prior period $7,133M — essentially flat at -$26M (-0.4%). Three revenue lines roll up: Direct-to-Consumer $2,845M (+$135M / +5.0%), Wholesale $4,120M (-$175M / -4.1% on NA key-account destocking), Licensing & Royalty $142M (+$14M / +10.9% on Greater China licensee expansion). Total COGS this period: $4,225M ($3,840M product + $385M logistics). Gross profit: $2,882M; gross margin 40.6% versus 42.0% prior — about 140 bps of compression driven by mix shift to premium and freight headwinds offset by ocean rate relief.",
+    "keywords": ["total revenue", "revenue", "gross margin", "gross profit", "gm", "top line", "sales", "total sales", "q2 fy26 revenue", "how much revenue"]
+  },
+  {
+    "id": "kb-pnl-dtc",
+    "title": "Direct-to-Consumer (DTC) revenue",
+    "topic": "narrative",
+    "content": "DTC revenue this period: $2,845M ($2.8B) vs prior $2,710M — a $135M (+5.0%) YoY increase. Driver: volume +3%, price +2%, mix +0.5%, FX headwind -0.5%. Entity split (current period): NA $1,280M, EMEA $720M, GC $515M, APLA $330M. DTC continues to outperform wholesale this period — the +5% DTC growth offsets the -4.1% wholesale decline on the top line. This is the largest single-line YoY positive variance and lands in the top-3 dollar movers used by the Executive Summary draft.",
+    "keywords": ["dtc", "direct to consumer", "direct-to-consumer", "ecommerce revenue", "consumer revenue", "how much dtc"]
+  },
+  {
+    "id": "kb-pnl-wholesale",
+    "title": "Wholesale revenue",
+    "topic": "narrative",
+    "content": "Wholesale revenue this period: $4,120M ($4.1B) vs prior $4,295M — a -$175M (-4.1%) YoY decline. Driver: volume -2%, key-account destocking in NA, EMEA resilient. Entity split (current period): NA $1,740M, EMEA $1,190M, GC $750M, APLA $440M. Wholesale is the largest single revenue line and the largest YoY dollar decline this period. Land this carefully in narrative: the wholesale weakness is mostly NA-specific; EMEA and APLA grew. This line is a top-3 variance on the Executive Summary.",
+    "keywords": ["wholesale", "wholesale revenue", "key account", "destocking", "how much wholesale"]
+  },
+  {
+    "id": "kb-pnl-licensing",
+    "title": "Licensing & Royalty revenue",
+    "topic": "narrative",
+    "content": "Licensing & Royalty revenue this period: $142M vs prior $128M — a +$14M (+10.9%) YoY increase. Smallest revenue line but highest growth rate. Driver: new licensee expansion in Greater China, royalty rate mix favorable. Entity split (current period): NA $42M, EMEA $35M, GC $48M, APLA $17M. GC is the largest entity for this line, reflecting the licensee expansion.",
+    "keywords": ["licensing", "royalty", "licensee", "how much licensing"]
+  },
+  {
+    "id": "kb-pnl-cogs",
+    "title": "COGS — Product + Logistics",
+    "topic": "narrative",
+    "content": "Total COGS this period: $4,225M (Product $3,840M + Logistics & Distribution $385M). Product COGS $3,840M vs prior $3,715M — a +$125M (+3.4%) YoY increase. Driver: material deflation -1.5% offset by higher freight rates and mix shift to premium product. Logistics & Distribution $385M vs prior $420M — a -$35M (-8.3%) decrease driven by reduced ocean freight rates and improved EMEA DC throughput. Net: COGS +$90M (+2.2%) on essentially flat revenue produces gross-margin compression.",
+    "keywords": ["cogs", "cost of sales", "cost of goods sold", "product cost", "logistics", "distribution", "freight"]
+  },
+  {
+    "id": "kb-pnl-marketing",
+    "title": "Demand Creation (Marketing) spend",
+    "topic": "narrative",
+    "content": "Demand Creation (Marketing) spend this period: $1,180M ($1.2B) vs prior $1,050M — a +$130M (+12.4%) YoY increase. Driver: campaign investment for Q2 product launch, digital spend +18% YoY. Entity split: NA $485M, EMEA $340M, GC $220M, APLA $135M. This is one of the top-3 dollar movers and a flagged risk on the Executive Summary — spend ran ahead of plan and ROAS validation is recommended before Q3 commitments. Sits inside the Opex bucket alongside SG&A, R&D, Store Operations, and D&A.",
+    "keywords": ["marketing", "demand creation", "advertising", "campaign", "media spend", "roas", "digital spend"]
+  },
+  {
+    "id": "kb-pnl-rd",
+    "title": "R&D — Research, Design & Development",
+    "topic": "narrative",
+    "content": "R&D (Research, Design & Development) spend this period: $178M vs prior $162M — a +$16M (+9.9%) YoY increase. Driver: innovation center expansion, new materials science initiative. Entity split: NA $102M, EMEA $38M, GC $24M, APLA $14M. NA-concentrated; reflects HQ-led innovation programs.",
+    "keywords": ["r&d", "rd", "research and development", "innovation", "design", "materials science"]
+  },
+  {
+    "id": "kb-pnl-store-ops",
+    "title": "Store Operations expense",
+    "topic": "narrative",
+    "content": "Store Operations expense this period: $412M vs prior $395M — a +$17M (+4.3%) YoY increase. Driver: lease expense +4% from renewals, labor +3% at minimum-wage locations. Entity split: NA $168M, EMEA $112M, GC $95M, APLA $37M. Note: the lease component flows through both Store Ops (P&L expense) and the Operating Lease ROU + Liability lines on the balance sheet — Atlas Realty Partners is the contract example in the reviewed portfolio.",
+    "keywords": ["store operations", "store ops", "retail operations", "store labor", "store lease"]
+  },
+  {
+    "id": "kb-pnl-da",
+    "title": "Depreciation & Amortization (D&A)",
+    "topic": "narrative",
+    "content": "D&A (Depreciation & Amortization) this period: $214M vs prior $198M — a +$16M (+8.1%) YoY increase. Driver: tech modernization capex coming online, DC automation rollouts. Entity split: NA $92M, EMEA $58M, GC $42M, APLA $22M. Non-cash expense; the increase reflects PP&E additions over the past 12 months (PP&E grew from $4.94B to $5.14B per the balance sheet).",
+    "keywords": ["d&a", "da", "depreciation", "amortization", "depreciation and amortization", "non-cash"]
+  },
+  {
+    "id": "kb-pnl-below-line",
+    "title": "Below-line items — interest, other income, tax",
+    "topic": "narrative",
+    "content": "Below-line items: Net Interest Expense $48M (+$13M / +37.1% YoY) on higher short-term borrowings and elevated rate environment. Other Income/(Expense) -$22M vs +$18M prior — a -$40M swing (-222.2%) driven by FX translation losses on APLA exposure plus a prior-period gain on asset sale that didn't repeat. Income Tax Expense $228M vs $242M prior — a -$14M (-5.8%) decrease. Effective tax rate 20.8% vs 21.6% prior on discrete benefits in EMEA. The Other Income swing is the single largest YoY dollar move in below-line items and is flagged on the Executive Summary.",
+    "keywords": ["interest expense", "interest", "other income", "fx translation", "tax", "income tax", "effective rate", "below the line", "below-line"]
+  },
+  {
+    "id": "kb-bs-current-assets",
+    "title": "Current Assets — Cash, AR, Inventory, Prepaid",
+    "topic": "narrative",
+    "content": "Current assets at period end: Cash & Equivalents $10.5B (-$200M / -1.9% on share repurchases and dividends offsetting strong operating cash); Accounts Receivable $5.1B (+$200M / +4.1%, DSO flat at 38 days); Inventories $7.5B (-$700M / -8.5% — successful destocking program, channel inventory normalized); Prepaid Expenses & Other $1.4B (+$100M / +7.6% on annual insurance premium prepayment plus higher cloud-services prepaid — Olympic Insurance is the prepaid example in the reviewed contract portfolio). Inventory destocking is the largest favorable working-capital movement.",
+    "keywords": ["cash", "cash and equivalents", "ar", "accounts receivable", "inventory", "inventories", "prepaid", "current assets", "dso", "working capital"]
+  },
+  {
+    "id": "kb-bs-noncurrent-assets",
+    "title": "Non-Current Assets — PP&E, ROU, Goodwill",
+    "topic": "narrative",
+    "content": "Non-current assets at period end: Property, Plant & Equipment (net) $5.1B (+$200M / +4.1%, DC automation capex + new innovation center, net of D&A); Operating Lease ROU Assets $3.2B (+$200M / +6.6%, renewals at higher rates plus new flagship leases in EMEA + GC — Atlas Realty Partners is the reviewed-contract example); Goodwill, Intangibles & Other LT Assets $2.0B (+$140M / +7.7%, deferred tax asset growth + minor brand acquisition in Q1).",
+    "keywords": ["ppe", "pp&e", "property plant equipment", "fixed assets", "rou", "right of use", "goodwill", "intangibles", "deferred tax", "long term assets"]
+  },
+  {
+    "id": "kb-bs-current-liabilities",
+    "title": "Current Liabilities — AP, Income Tax Payable",
+    "topic": "narrative",
+    "content": "Current liabilities at period end: Accounts Payable $2.5B (-$200M / -7.4%, supplier payment-terms standardization plus strategic AP financing); Accrued Liabilities $5.95B (+$150M / +2.6%) — this is the contract-driven row, see kb-narrative-balance-sheet; Income Taxes Payable $520M (+$105M / +25.3% on higher pre-tax income plus APLA discrete items). Accrued Liabilities is the only line on the balance sheet that's recomputed live from the JE Review Queue — the seeded BAU base of $5,800M plus the live sum of GL 2310 credits from submitted JEs equals the displayed current period balance.",
+    "keywords": ["ap", "accounts payable", "accrued liabilities", "income taxes payable", "tax payable", "current liabilities"]
+  },
+  {
+    "id": "kb-bs-noncurrent-liabilities",
+    "title": "Non-Current Liabilities — Long-Term Debt, Lease Liabilities",
+    "topic": "narrative",
+    "content": "Non-current liabilities at period end: Long-Term Debt $8.9B (+$20M / +0.2%, no new issuances; minor mark-to-market on hedged tranches); Operating Lease Liabilities (LT) $2.7B (+$100M / +3.8%, mirrors the ROU asset growth, renewal pipeline in EMEA). The lease liability balance is paired with the ROU asset on the asset side — they grow together as new leases are signed.",
+    "keywords": ["long term debt", "lt debt", "debt", "bonds", "lease liabilities", "non-current liabilities", "long-term"]
+  },
+  {
+    "id": "kb-bs-equity",
+    "title": "Total Shareholders' Equity",
+    "topic": "narrative",
+    "content": "Total Shareholders' Equity at period end: $23.2B vs prior $20.3B — a +$2.9B (+14.3%) YoY increase. Driver: net income plus other comprehensive income, partially offset by share buybacks and dividends. This is the largest single-line absolute movement on the balance sheet this period and is a one-line reflection of profit retention plus market-driven OCI.",
+    "keywords": ["equity", "shareholders equity", "shareholder equity", "retained earnings", "stockholders equity", "net worth"]
+  },
+  {
+    "id": "kb-contract-aws",
+    "title": "AWS Enterprise contract",
+    "topic": "contracts",
+    "content": "Amazon Web Services, Inc. — TCV $45M, High risk (score 85). Contract type: enterprise cloud services. Auto-renewal: yes. Liability cap: present. Embedded derivative: yes — pricing escalator indexed to CPI-U triggers ASC 815 review. Contract spans multiple regions, with data-sovereignty obligations and a minimum-commitment structure with true-up. Risk score factors: TCV >$25M (+25), auto-renewal (+10), embedded derivative (+10) — plus LLM-flagged factors including the CPI escalator, multi-region data-sovereignty span, and minimum-commitment with true-up. Largest contract by TCV in the portfolio. ASC 815 derivative review required. File: Contract_5_AWS_Enterprise.docx.",
+    "keywords": ["aws", "amazon web services", "amazon", "cloud", "asc 815", "cpi escalator"]
+  },
+  {
+    "id": "kb-contract-accenture",
+    "title": "Accenture LLP contract",
+    "topic": "contracts",
+    "content": "Accenture LLP — TCV $24M, Medium risk (score 68). Contract type: Managed Services Agreement (Finance back-office BPO — AP processing, AR collections, close support per defined SLAs). Term: 2026-01-01 through 2028-12-31 (36 months). Fee schedule: $667K monthly base + T&M overages. Auto-renewal: yes. Liability cap: NO (notable risk factor). Minimum commitment: $8M annual floor. Period accrual: $667K straight-line monthly. Risk reasons: TCV >$5M, auto-renewal, no liability cap, vendor concentration — top finance BPO provider. File: Contract_2_Professional_Services_Outsourcing.docx.",
+    "keywords": ["accenture", "bpo", "managed services", "outsourcing", "professional services"]
+  },
+  {
+    "id": "kb-contract-turner",
+    "title": "Turner Construction contract",
+    "topic": "contracts",
+    "content": "Turner Construction — TCV $12.5M, Medium risk (score 72). Contract type: construction services for retail remodel. Auto-renewal: no. Liability cap: NO. Risk reasons include the no-liability-cap exposure plus construction-specific factors. The Summit Builders contract ($8.5M, retail buildout) is structurally similar with a milestone-certified accrual. Both are construction contracts that book to GL 1810 (Construction in Progress) rather than to accrued liabilities — they are CIP capitalizations, not period-end accruals. File: Contract_4_Construction_Retail_Remodel.docx.",
+    "keywords": ["turner", "construction", "retail remodel", "cip", "construction in progress", "summit"]
+  },
+  {
+    "id": "kb-contract-nexus",
+    "title": "Nexus Cloud SaaS Renewal contract",
+    "topic": "contracts",
+    "content": "Nexus Cloud Inc. — TCV $1.35M, High risk (score 71) despite small TCV. Contract type: SaaS Renewal. Auto-renewal: yes. Liability cap: limited (prior 12 months fees, with IP/confidentiality carve-outs). Embedded derivative: yes — flagged for ASC 815 review. Why the High score on a small-TCV deal: the qualitative LLM signal flagged enough concerning factors (auto-renewal, derivative, carve-out structure) to push it over the threshold. Demonstrates that risk is not a TCV-only function. File: Golden_B_Nexus_SaaS_Renewal.docx.",
+    "keywords": ["nexus", "saas", "saas renewal", "cloud subscription", "golden b"]
+  },
+  {
+    "id": "kb-contract-atlas",
+    "title": "Atlas Realty office lease (ASC 842)",
+    "topic": "contracts",
+    "content": "Atlas Realty Partners, LP — TCV $3.6M, Medium risk (score 58). Contract type: multi-year office lease. Lease component: YES — flagged for ASC 842 lease review. Liability cap: limited (landlord liability limited to interest in Building). Auto-renewal: no. The lease creates an ROU asset and a corresponding lease liability on the balance sheet rather than a period accrual. The reviewed contract is the demonstration example for ASC 842 treatment in the prototype. File: Golden_C_Atlas_Office_Lease.docx.",
+    "keywords": ["atlas", "atlas realty", "lease", "office lease", "asc 842", "rou", "real estate"]
+  },
+  {
+    "id": "kb-contract-olympic",
+    "title": "Olympic Insurance — prepaid amortization (not accrual)",
+    "topic": "contracts",
+    "content": "Olympic Insurance Group, Inc. — TCV $2.25M, Low risk (score 32). Multi-year P&C insurance with annual premium prepaid up-front. The proposed JE is a prepaid amortization (DR Insurance Expense $62.5K, CR Prepaid Insurance $62.5K), NOT an accrual: there is no reversal — reversal_date is null. The JE Card explicitly reads 'Amortization · no reversal — prepaid drawdown' for this case. Year-1 annual premium $750K paid 2026-01-01, amortized $62.5K/month (4 months elapsed = $250K cumulative through period end). Demonstrates the prepaid-vs-accrual distinction. File: Golden_E_Olympic_Insurance_MultiYear.docx.",
+    "keywords": ["olympic", "insurance", "prepaid", "amortization", "no reversal", "p&c"]
+  },
+  {
+    "id": "kb-contract-others",
+    "title": "Other reviewed contracts",
+    "topic": "contracts",
+    "content": "Remaining reviewed contracts in the portfolio: Wieden+Kennedy LLC $8.4M Medium (62) — advertising campaign services, no liability cap. Chubb Commercial Insurance $15M Medium (48) — multi-year property & casualty insurance, prepaid premium component. Summit Builders LLC $8.5M Medium (65) — construction milestone certification, books to GL 1810 (CIP). Meridian Solutions Inc. $18M Low (28) — advisory services, liability cap (2x prior 12mo fees), 100% extraction confidence (golden reference document). TechFlow Consulting LLC $2.4M Low (24) — Master Services Agreement, smallest TCV in the portfolio. All 11 contracts in the portfolio are accessible from /contracts.",
+    "keywords": ["wieden", "kennedy", "advertising", "chubb", "summit builders", "meridian", "techflow", "all contracts", "list contracts"]
+  },
+  {
+    "id": "kb-entities",
+    "title": "Entities in scope (NA, EMEA, GC, APLA, Corporate, Global)",
+    "topic": "phases",
+    "content": "Six entities run in parallel through the close cycle: NA (North America — leads, currently in Execute), EMEA (Europe Middle East Africa), GC (Greater China), APLA (Asia Pacific Latin America), Corporate, Global. The cockpit visualizes entity progression — NA leads, EMEA next, GC and APLA queued, Corporate and Global fold in at consolidation. P&L reporting splits revenue and major Opex lines across the four operating regions (NA, EMEA, GC, APLA); Corporate and Global handle eliminations + consolidation entries. Today the agentic prototype is scoped to NA / Global only — EMEA, GC, APLA are architecturally blocked under the current model and are part of the expansion roadmap.",
+    "keywords": ["entities", "regions", "na", "north america", "emea", "gc", "greater china", "apla", "corporate", "global", "geographies"]
+  },
+  {
+    "id": "kb-workflow-approve",
+    "title": "How to approve a JE",
+    "topic": "review",
+    "content": "Approving a JE: go to /review (JE Review Queue) → find the JE in the Pending review section → click Approve. Single click. NOAH's Posting Agent calls BlackLine which calls SAP BAPI_ACC_DOCUMENT_POST. Original entry posts immediately with a fresh SAP doc number, visible in the lifecycle panel. Reviewer title is auto-derived from the materiality tier — Senior Accountant for $100K-$1M, Manager for $1M-$5M, Manager + Director for >$5M. The audit trail records under that title. If the JE has a reversal_date, that reversal is scheduled (auto-posts on the reversal date, no separate sign-off). Optional: click the chevron first to expand the row and see the full multi-line JE table + lifecycle + supporting calculation before approving.",
+    "keywords": ["approve", "approve je", "how to approve", "approval workflow", "click approve", "posting agent"]
+  },
+  {
+    "id": "kb-workflow-reject",
+    "title": "How to reject a JE",
+    "topic": "review",
+    "content": "Rejecting a JE: go to /review (JE Review Queue) → find the JE → click Reject. An inline reason input appears (required) → enter the rejection reason → click Send. JE moves to Rejected status with the reason and rejecter name in the audit trail. The Senior Accountant who prepared the JE sees the rejection and can recalculate with corrected inputs. Common rejection reasons: incorrect GL account, missing supporting documentation, period-mismatch, accrual not yet earned, contract terminated. Rejecter title is auto-derived from the materiality tier (same logic as approval).",
+    "keywords": ["reject", "reject je", "how to reject", "rejection", "reject reason"]
+  },
+  {
+    "id": "kb-workflow-extract",
+    "title": "How to run extraction (or any agent step) on a contract",
+    "topic": "demo-flow",
+    "content": "Three ways to run extraction: (1) Batch on /contracts — tick the contracts you want and click 'Run selected (N)' to run extract → risk → tech-acct in sequence. (2) Single contract — click into the contract from /contracts, then click 'Run full chain' on the contract detail page. (3) Single step — on the contract detail page, click 'Risk only' or 'Tech-Acct only' if attributes are already extracted. In canned mode each step has a synthetic dwell of about a second. In live mode each step calls Claude (or Qwen via Ollama in local mode); extraction takes 30-90s per contract on Qwen 7B CPU.",
+    "keywords": ["extract", "run extraction", "extractor", "run agents", "run chain", "extract attributes", "27 attributes"]
+  },
+  {
+    "id": "kb-workflow-upload",
+    "title": "How to upload a new contract",
+    "topic": "demo-flow",
+    "content": "Uploading a new contract: drop a .pdf or .docx into the upload zone on /contracts (or click to choose files). Multiple files can be uploaded together. The server extracts text, generates a vector embedding via nomic-embed-text (768 dims), and stores the contract in the contract_metabase table. New contracts appear in the queue with empty agent_status — run extract → risk → tech-acct via Run selected to populate. NOTE: upload is disabled in canned mode (the demo runs on fixtures); in live mode, the server route POST /api/contracts handles ingestion.",
+    "keywords": ["upload", "upload contract", "add contract", "ingest", "new contract", "import"]
+  },
+  {
+    "id": "kb-workflow-export",
+    "title": "Export options — JE worksheet, exec summary slide, copy buttons",
+    "topic": "review",
+    "content": "Available exports today: (1) JE calculation worksheet — expand any JE row in /review and click 'Download'. Tab-delimited .txt file with the full JE body, lifecycle metadata, and the supporting calculation reasoning. Drop into BlackLine work papers. (2) Executive Summary slide — on /narrative → Executive Summary, click 'Create slide' to open a 16:9 preview, then 'Save as PDF / Print' to print just the slide. (3) Copy buttons on Variance Commentary, Executive Summary, and B/S Variance commentary panels copy the formatted text to clipboard for paste into Word/Outlook/Teams. PNG/PPTX export is roadmap (would require html-to-image or pptxgenjs library).",
+    "keywords": ["export", "download", "save", "print", "copy", "worksheet", "pdf", "ppt", "powerpoint"]
+  },
+  {
+    "id": "kb-sox-controls",
+    "title": "SOX compliance + controls",
+    "topic": "audit",
+    "content": "SOX-compliant design baked into the prototype: (1) Segregation of duties — Senior Accountant prepares JEs, Manager/Director approves, Posting Agent posts. The same user cannot prepare and approve. (2) Materiality routing — automatic per-JE based on amount (<$100K auto-post, $100K-$1M Senior Accountant, $1M-$5M Manager, >$5M dual approval) so no JE bypasses appropriate review. (3) Audit trail — every state transition (je_submit, je_approve, je_post, je_reject, je_reversal) writes to audit_events with timestamp, user_id, agent_id, confidence, and full payload. (4) Inherited approval for reversals — the original approval covers the reversal under the same user_id, preserving accountability. (5) Reviewer title derived from tier — audit log records the actual approver role, not a hardcoded value. Production engagement includes governance framework with full audit trail per the 12-week PoV scope.",
+    "keywords": ["sox", "compliance", "controls", "segregation", "audit", "internal controls", "auditor", "audit trail"]
+  },
+  {
+    "id": "kb-tech-models",
+    "title": "AI models — Claude (production), Qwen (local), nomic embeddings",
+    "topic": "architecture",
+    "content": "Models in use: Claude (Anthropic API on Azure AI Foundry) is the production target for chat completion — extraction, risk LLM signal, narrative drafting. Qwen 2.5 7B via Ollama is the local-eval option for offline development and IT-restricted environments; takes 30-90s per contract on CPU. nomic-embed-text via Ollama produces 768-dim vector embeddings for the contract semantic-search index and the noah_kb knowledge base. Both Claude and Qwen are configured via system prompts that explicitly forbid number fabrication; JSON schema validation rejects malformed output. In canned mode (the demo default), agent calls return pre-baked fixtures with synthetic dwell — no model is actually invoked.",
+    "keywords": ["model", "claude", "anthropic", "qwen", "ollama", "nomic", "embeddings", "llm", "what model", "which model"]
+  },
+  {
+    "id": "kb-tech-performance",
+    "title": "Performance — extraction time + scale",
+    "topic": "architecture",
+    "content": "Performance characteristics: Canned mode — 1-2s synthetic dwell per agent step, ~5s for full chain per contract, ~55s for batch of 11 contracts sequentially. Live mode on Qwen 7B CPU — 30-90s per extract step, 30-60s per risk step, 30-60s per tech-acct step. ~3-5 minutes per contract end-to-end. Production target on Anthropic API + Foundry GPU — sub-30s per contract end-to-end with parallelization (concurrent calls per contract, configurable concurrency limit per tenant). Scaling notes: HNSW vector index handles 100K+ embeddings without degradation; pgvector cosine similarity is sub-100ms for typical semantic searches. The architectural scaling-curve change is the value: AI-native extraction cost approaches zero as contract volume rises, breaking the linear-FTE-scaling regime of manual review.",
+    "keywords": ["performance", "speed", "how fast", "latency", "extraction time", "scale", "throughput", "how long"]
+  },
+  {
+    "id": "kb-tech-database",
+    "title": "Database schema — Postgres + pgvector",
+    "topic": "architecture",
+    "content": "PostgreSQL 16 with pgvector extension on port 5434 (docker-compose). Core tables: contracts (blob storage, sha256 dedup); contract_metabase (27 attributes JSONB, risk score/category, tech-acct flags, full text, vector(768) embedding HNSW-indexed for cosine similarity); proposed_journal_entries (JE lifecycle with status, materiality_tier, posting_ref, reversal_date, reversed_at); audit_events (SOX traceability — event_type, contract_id, agent, confidence, payload JSONB, user_id, ts); pnl_lines (seed P&L for narrative); noah_kb (knowledge base — content TEXT, embedding VECTOR(768), title, topic, keywords TEXT[]). Init script in docker/init.sql. Idempotent migrations applied at server boot via server/src/lib/migrations.ts.",
+    "keywords": ["database", "postgres", "postgresql", "pgvector", "schema", "tables", "contracts table", "audit table"]
+  },
+  {
+    "id": "kb-roadmap-pov",
+    "title": "12-week PoV (proof of value) scope",
+    "topic": "architecture",
+    "content": "The ask in the deck: greenlight a $0 PoV (proof of value) — 12 weeks, 3 production agents, deployed in Nike's environment. Immediate next step is a 2-week discovery workshop. What Nike provides: SAP read access (CDS views for GL/AP/AR/FA), AWS Bedrock workspace, 2-3 part-time finance SMEs (Controller rep, AP/AR lead, IT liaison), VP-level steering sponsor for bi-weekly reviews, current SOX control matrix and testing methodology. What Deloitte delivers: 2-week Discovery Workshop, three production agents (Reconciliation, JE Anomaly, GL) deployed and operational, NOAH Orchestrator as the connecting layer between agents and SAP, SOX-compliant agent governance with full audit trail, phased plan to scale from 3 agents to 23 agents over 12-18 months. $0 cost to Nike — Deloitte absorbs the engagement risk.",
+    "keywords": ["pov", "proof of value", "poc", "12 week", "12-week", "mvp", "pilot", "engagement", "deloitte ask", "free", "$0", "nothing"]
+  },
+  {
+    "id": "kb-roadmap-scale",
+    "title": "Scaling plan — 3 agents to 23, global expansion",
+    "topic": "architecture",
+    "content": "Post-PoV scaling plan: phased expansion from 3 production agents (Reconciliation, JE Anomaly, GL — proven during the PoV) to 23 agents over 12-18 months. Includes: AI Contract Review (Document Intelligence, ASC 840/842/815), Accrual Calc & JE Prep, Consolidation & IC, Reporting & Analysis (variance commentary, flux, dashboards), Close Orchestrator. Geographic expansion follows: today scoped to NA / Global; phased rollout to EMEA, Greater China, APLA, Converse over the same 12-18 months. The architectural scaling — agents scale on demand without proportional headcount — is what enables global expansion in the first place. Linear FTE scaling has been the ceiling that blocked these geographies under the current model.",
+    "keywords": ["scale", "scaling", "expansion", "23 agents", "global rollout", "emea", "china", "apla", "converse", "roadmap"]
+  },
+  {
+    "id": "kb-feature-create-slide",
+    "title": "Create Slide — exec summary as a 16:9 deck slide",
+    "topic": "narrative",
+    "content": "On /narrative → Executive Summary, after generating the close narrative, click 'Create slide' to open a 16:9 slide preview modal. Layout: brand-accent left rail, dark navy header band with eyebrow + date, large headline (the generated hook sentence), two-column body (Key Highlights with brand-accent ▸ bullets and Risks in amber column), Recommendation footer with brand-accent rule, Deloitte / Nike Controlling brand footer. Toolbar above the slide: 'Save as PDF / Print' triggers a print stylesheet that hides everything except the slide and forces landscape orientation, so the user gets a single 16:9 PDF page. Close button or Esc closes the modal. PNG/PPTX export is roadmap.",
+    "keywords": ["create slide", "slide", "exec slide", "executive slide", "deck", "presentation", "16:9", "save as pdf"]
+  },
+  {
+    "id": "kb-feature-checkboxes",
+    "title": "Contract selection model + Run all / Calculate accruals / Submit all",
+    "topic": "demo-flow",
+    "content": "Contracts queue (/contracts) supports per-row + select-all checkboxes (header checkbox is tri-state: indeterminate when partially selected). Default on first load: all selected. Subsequent refreshes preserve selection. Two batch actions in the header drive off the same selection: 'Run selected (N)' runs extract → risk → tech-acct on each selected contract; 'Calculate accruals (N)' computes a JE per selected contract and opens a results modal grouped by routing tier. From the calculate-accruals modal, 'Submit all' sends every calculated JE to the JE Review Queue with materiality routing pre-attached. Sub-$100K entries auto-post immediately; larger entries land in /review. Clicking a row navigates to the contract detail; clicking a checkbox stops propagation and only toggles selection.",
+    "keywords": ["checkbox", "select all", "select", "selection", "run all", "calculate accruals", "batch", "submit all"]
+  },
+  {
+    "id": "kb-feature-advance-clock",
+    "title": "(Demo) Advance clock — fast-forward auto-reversals",
+    "topic": "review",
+    "content": "On /review (JE Review Queue), the '(Demo) advance clock' button is a presenter aid only — explicitly labeled (Demo). In production the calendar drives reversal posting on the reversal_date. For the demo, the button force-flips any posted JE with a future reversal_date to Reversed status with a fresh SAP doc, simulating what the calendar would do automatically. The flash banner under the title confirms what happened: '{N} JEs auto-reversed' or 'No posted JEs with a scheduled reversal_date to advance' (Olympic prepaid amortization and Summit Builders CIP have null reversal_dates and are not eligible).",
+    "keywords": ["advance clock", "demo button", "fast forward", "fast-forward", "simulate", "demo aid"]
   }
 ]
