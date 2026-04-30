@@ -83,10 +83,18 @@ function buildContractContributions(
   return out;
 }
 
+function tcvNumber(c: ContractSummary): number {
+  if (!c.tcv) return 0;
+  return parseFloat(c.tcv.replace(/[^0-9.]/g, "")) || 0;
+}
+
 // Commentary for the live, contract-driven Accrued Liabilities row.
+// `contracts` is the full reviewed-contract portfolio so we can describe the
+// underlying analysis even when no JEs have been submitted yet.
 function commentaryForAccrued(
   line: BalanceSheetLine,
-  contributions: ContractContribution[]
+  contributions: ContractContribution[],
+  contracts: ContractSummary[]
 ): Commentary {
   const today = new Date().toISOString().slice(0, 10);
   const live = contributions.reduce((s, c) => s + c.amount, 0);
@@ -105,6 +113,19 @@ function commentaryForAccrued(
     byTier[t] = (byTier[t] ?? 0) + c.amount;
     if (c.je.reversal_date && c.je.reversal_date > today && !c.je.reversed_at) scheduledRev++;
   }
+
+  // ── Underlying portfolio analysis (always shown) ────────────────────────────
+  const reviewed = contracts.filter((c) => c.agent_status?.extract === "done");
+  const high = reviewed.filter((c) => c.risk_category === "High");
+  const medium = reviewed.filter((c) => c.risk_category === "Medium");
+  const low = reviewed.filter((c) => c.risk_category === "Low");
+  const leaseFlaggedContracts = reviewed.filter((c) => c.lease_flagged);
+  const derivFlaggedContracts = reviewed.filter((c) => c.derivative_flagged);
+  const portfolioByTcv = [...reviewed].sort((a, b) => tcvNumber(b) - tcvNumber(a));
+  const top3Tcv = portfolioByTcv.slice(0, 3);
+  const totalTcv = reviewed.reduce((s, c) => s + tcvNumber(c), 0);
+  const submittedContractIds = new Set(contributions.map((c) => c.je.contract_id));
+  const pendingPipeline = reviewed.filter((c) => !submittedContractIds.has(c.id));
 
   const sentences: string[] = [];
   sentences.push(
@@ -126,6 +147,32 @@ function commentaryForAccrued(
     );
   }
 
+  // Always-on "underlying contracts" paragraph: portfolio composition + ASC flags
+  if (reviewed.length > 0) {
+    const flagParts: string[] = [];
+    if (leaseFlaggedContracts.length > 0) {
+      flagParts.push(`${leaseFlaggedContracts.length} flagged for ASC 842 lease review (${leaseFlaggedContracts.slice(0, 2).map((c) => c.counterparty ?? c.filename).join(", ")})`);
+    }
+    if (derivFlaggedContracts.length > 0) {
+      flagParts.push(`${derivFlaggedContracts.length} flagged for ASC 815 embedded-derivative review (${derivFlaggedContracts.slice(0, 2).map((c) => c.counterparty ?? c.filename).join(", ")})`);
+    }
+    const portfolioStr = top3Tcv
+      .map((c) => `${c.counterparty ?? c.filename}${c.tcv ? ` (${c.tcv})` : ""}`)
+      .join(", ");
+    sentences.push(
+      `Underlying contract portfolio: ${reviewed.length} reviewed contract${reviewed.length === 1 ? "" : "s"} totaling ${fmtFull(totalTcv)} TCV — ${high.length} High risk, ${medium.length} Medium, ${low.length} Low.${flagParts.length ? " " + flagParts.join("; ") + "." : ""} Top by TCV: ${portfolioStr}.`
+    );
+    if (pendingPipeline.length > 0 && live === 0) {
+      sentences.push(
+        `${pendingPipeline.length} reviewed contract${pendingPipeline.length === 1 ? " has" : "s have"} no accrual JE submitted this period — once the controller runs Calculate accruals → Submit all on /contracts, the corresponding GL 2310 credits will flow into this balance.`
+      );
+    } else if (pendingPipeline.length > 0 && live > 0) {
+      sentences.push(
+        `${pendingPipeline.length} additional reviewed contract${pendingPipeline.length === 1 ? "" : "s"} ${pendingPipeline.length === 1 ? "is" : "are"} not yet contributing — accruals can be calculated and submitted on /contracts to roll them in.`
+      );
+    }
+  }
+
   const drivers: string[] = [];
   if (live > 0) {
     drivers.push(`Contract-driven additions: ${fmtFull(live)} across ${contributions.length} JE${contributions.length === 1 ? "" : "s"}`);
@@ -138,22 +185,40 @@ function commentaryForAccrued(
     drivers.push("No new contract-driven accruals this period");
     drivers.push(`Net change ${variance >= 0 ? "+" : ""}${fmtFull(variance)} is from routine BAU accruals + reversals`);
   }
+  // Always include portfolio-level drivers so the controller sees the underlying analysis
+  if (reviewed.length > 0) {
+    drivers.push(`Reviewed contract portfolio: ${reviewed.length} contracts · ${fmtFull(totalTcv)} aggregate TCV`);
+    drivers.push(`Risk distribution: ${high.length} High / ${medium.length} Medium / ${low.length} Low`);
+    if (top3Tcv.length > 0) {
+      drivers.push(`Top by TCV: ${top3Tcv.map((c) => `${c.counterparty ?? c.filename} ${c.tcv ?? ""}`).join("; ")}`);
+    }
+    if (pendingPipeline.length > 0) {
+      drivers.push(`Pipeline: ${pendingPipeline.length} reviewed contract${pendingPipeline.length === 1 ? "" : "s"} not yet accrued`);
+    }
+  }
 
   const flags: string[] = [];
   if (scheduledRev > 0) {
     flags.push(`${scheduledRev} auto-reversal${scheduledRev === 1 ? "" : "s"} pending — will post in the next period without separate sign-off.`);
   }
-  const leaseFlagged = contributions.filter((c) => c.contract?.lease_flagged).length;
-  if (leaseFlagged > 0) {
-    flags.push(`${leaseFlagged} contributing contract${leaseFlagged === 1 ? "" : "s"} flagged for ASC 842 lease review.`);
+  // Surface ASC flags from BOTH contributing JEs and the broader portfolio so
+  // the controller sees lease/derivative exposure even when nothing has posted.
+  const leaseInPortfolio = leaseFlaggedContracts.length;
+  const derivInPortfolio = derivFlaggedContracts.length;
+  if (leaseInPortfolio > 0) {
+    flags.push(`${leaseInPortfolio} reviewed contract${leaseInPortfolio === 1 ? "" : "s"} flagged for ASC 842 lease review — verify accrual basis when these post.`);
   }
-  const derivFlagged = contributions.filter((c) => c.contract?.derivative_flagged).length;
-  if (derivFlagged > 0) {
-    flags.push(`${derivFlagged} contributing contract${derivFlagged === 1 ? "" : "s"} flagged for ASC 815 embedded-derivative review.`);
+  if (derivInPortfolio > 0) {
+    flags.push(`${derivInPortfolio} reviewed contract${derivInPortfolio === 1 ? "" : "s"} flagged for ASC 815 embedded-derivative review.`);
   }
   const pendingHigh = contributions.filter((c) => c.je.status === "submitted" && c.je.materiality_tier === "exec");
   if (pendingHigh.length > 0) {
     flags.push(`${pendingHigh.length} entr${pendingHigh.length === 1 ? "y" : "ies"} > $5M still pending dual approval.`);
+  }
+  // High-risk contracts in the portfolio with no accrual yet — disclosure exposure
+  const highRiskNoJE = high.filter((c) => !submittedContractIds.has(c.id));
+  if (highRiskNoJE.length > 0) {
+    flags.push(`${highRiskNoJE.length} High-risk contract${highRiskNoJE.length === 1 ? "" : "s"} (${highRiskNoJE.slice(0, 2).map((c) => c.counterparty ?? c.filename).join(", ")}) have no accrual submitted — confirm whether period-end recognition is required.`);
   }
 
   return { commentary: sentences.join(" "), drivers, flags };
@@ -255,7 +320,7 @@ export default function BalanceSheetNarrative() {
     // Deterministic — no LLM call. Tiny dwell to mimic the variance UX.
     window.setTimeout(() => {
       const c = line.contractDriven
-        ? commentaryForAccrued(line, contributions)
+        ? commentaryForAccrued(line, contributions, contracts)
         : commentaryForLine(line);
       setCommentaries((prev) => ({ ...prev, [line.id]: c }));
       setRunningIds((s) => {
