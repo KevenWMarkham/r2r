@@ -175,6 +175,13 @@
     "keywords": ["submit all", "batch", "all jes", "month end", "month-end", "all contracts", "submit together", "one click", "multiple jes", "calculate accruals"]
   },
   {
+    "id": "kb-sga-expense",
+    "title": "SG&A expense recorded this period",
+    "topic": "narrative",
+    "content": "SG&A (Selling, General & Administrative) expense recorded this period: $1,745,000,000 ($1.7B) vs prior period $1,692,000,000 ($1.7B), a +$53M (+3.1%) YoY increase. Driver: corporate headcount investment ~+4%, FX-neutral wage inflation ~3%. Entity split (current period): NA $820M, EMEA $460M, GC $285M, APLA $180M. SG&A sits inside the Opex bucket alongside Demand Creation (Marketing) $1.180B, R&D $178M, Store Operations $412M, D&A $214M. Total Opex this period: $3.729B. Contract-driven accruals from /contracts post to GL 6810 (Services Expense) which rolls up into SG&A; the 11 reviewed contracts represent the services/professional-fees portion of the SG&A line. Source: seedPnL.ts, line opex-sga.",
+    "keywords": ["sga", "sg&a", "selling general administrative", "opex", "sg and a expense", "how much sga", "sga total", "operating expense", "g&a", "selling general", "6810", "services expense"]
+  },
+  {
     "id": "kb-review-tiers-count",
     "title": "How many contracts/JEs require which review tier",
     "topic": "materiality",

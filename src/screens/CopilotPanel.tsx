@@ -18,11 +18,11 @@ interface Message {
 const suggestions = [
   "How many contracts?",
   "Which contracts are over $10M?",
+  "How much SG&A this period?",
   "How many require Manager review?",
   "Highest-risk contract?",
   "Total accrued",
   "Can I change the GL account on a JE?",
-  "Submit all JEs at once?",
   "How does auto-reversal work?",
 ];
 

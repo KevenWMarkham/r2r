@@ -11,6 +11,7 @@
 
 import { IS_CANNED, API_URL } from "@/config/env";
 import { KB_CHUNKS, type KBChunk } from "@/data/kb-chunks";
+import { seedPnL } from "@/data/seed-pnl";
 import type { ContractSummary, ProposedJERecord } from "@/lib/api-client";
 
 export interface KBSource {
@@ -43,6 +44,22 @@ interface JEBody { lines?: Array<{ account: string; debit?: number; credit?: num
 
 function fmt(n: number): string {
   return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+}
+
+// Compact dollar format ($1.7B, $45M, $850K) — matches the B/S commentary
+function fmtC(n: number): string {
+  const abs = Math.abs(n);
+  const sign = n < 0 ? "-" : "";
+  if (abs >= 1_000_000_000) {
+    const v = abs / 1_000_000_000;
+    return `${sign}$${v >= 100 ? Math.round(v) : v.toFixed(1)}B`;
+  }
+  if (abs >= 1_000_000) {
+    const v = abs / 1_000_000;
+    return `${sign}$${v >= 10 ? Math.round(v) : v.toFixed(1)}M`;
+  }
+  if (abs >= 1_000) return `${sign}$${Math.round(abs / 1_000)}K`;
+  return `${sign}$${Math.round(abs)}`;
 }
 
 function tcvNumber(c: ContractSummary): number {
@@ -208,6 +225,22 @@ const liveHandlers: LiveHandler[] = [
     const sr = submitted.filter((j) => j.materiality_tier === "manager").length;
     const top = submitted.slice(0, 3).map((j) => `${j.counterparty ?? j.filename} ${fmt(parseFloat(j.total_amount))}`).join("; ");
     return `${submitted.length} JE${submitted.length === 1 ? "" : "s"} awaiting approval: ${dual} dual-approval (>$5M), ${mgr} Manager ($1M-$5M), ${sr} Senior Accountant ($100K-$1M). Top pending: ${top}. Open /review.`;
+  },
+
+  // SG&A expense (or any specific P&L line by keyword)
+  (q) => {
+    if (!/(sga|sg&a|sg.?and.?a|selling.*general|g&a|how much.*sga|how much.*sg&a|opex|operating expense)/i.test(q)) return null;
+    const sga = seedPnL.find((l) => l.id === "opex-sga");
+    if (!sga) return null;
+    const opexLines = seedPnL.filter((l) => l.category === "Opex");
+    const totalOpex = opexLines.reduce((s, l) => s + l.currentPeriod, 0);
+    const isSpecific = /(sga|sg&a|sg.?and.?a|selling.*general|g&a)/i.test(q);
+    if (isSpecific) {
+      return `SG&A (Selling, General & Administrative) recorded this period: ${fmtC(sga.currentPeriod)} vs prior period ${fmtC(sga.priorPeriod)} — ${sga.variance >= 0 ? "+" : ""}${fmtC(sga.variance)} (${sga.variancePct >= 0 ? "+" : ""}${sga.variancePct.toFixed(1)}%) YoY. Driver: ${sga.driver}. Entity split: NA ${fmtC(sga.entitySplit.NA)}, EMEA ${fmtC(sga.entitySplit.EMEA)}, GC ${fmtC(sga.entitySplit.GC)}, APLA ${fmtC(sga.entitySplit.APLA)}. Contract-driven accruals from /contracts post to GL 6810 (Services Expense) which rolls into SG&A — the 11 reviewed contracts cover the services/professional-fees portion of this line.`;
+    }
+    // Total opex
+    const breakdown = opexLines.map((l) => `${l.lineItem} ${fmtC(l.currentPeriod)}`).join("; ");
+    return `Total Opex this period: ${fmtC(totalOpex)} across ${opexLines.length} line items. Breakdown: ${breakdown}.`;
   },
 
   // Close status
